@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - VisionED</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #17a2b8;
+            --secondary-color: #2c3e50;
+            --background-color: #f8f9fa;
+            --text-color: #343a40;
+            --light-text-color: #6c757d;
+            --white-color: #ffffff;
+            --border-radius: 12px;
+            --border-color: #e9ecef;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Navbar (Consistent with other pages) --- */
+        .navbar {
+            background-color: var(--white-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--secondary-color) !important;
+        }
+
+        .navbar-brand .ed {
+            color: var(--primary-color);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-logout {
+            background-color: #dc3545;
+            color: var(--white-color);
+            font-weight: 500;
+            padding: 0.5rem 1.2rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background-color: #c82333;
+            color: var(--white-color);
+            transform: translateY(-2px);
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 60px 0;
+        }
+
+        /* --- MODIFICATION: Redesigned Welcome Card --- */
+        .welcome-card {
+            text-align: center;
+            background: linear-gradient(135deg, var(--secondary-color), #34495e);
+            color: var(--white-color);
+            padding: 40px 30px;
+            border-radius: var(--border-radius);
+            margin-bottom: 50px;
+            box-shadow: 0 10px 30px rgba(44, 62, 80, 0.2);
+        }
+
+        .welcome-card h1 {
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-card p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto 1.5rem auto;
+        }
+
+        /* --- Dashboard Cards --- */
+        .dashboard-card {
+            background: var(--white-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-card .card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .dashboard-card .card-title {
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .dashboard-card .card-text {
+            color: var(--light-text-color);
+            flex-grow: 1;
+        }
+
+        .dashboard-card .btn {
+            border-radius: 50px;
+            padding: 10px 25px;
+            font-weight: 500;
+            margin-top: 20px;
+        }
+
+        .dashboard-card .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        /* --- Footer (Consistent with other pages) --- */
+        .footer {
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+            padding: 60px 0 20px 0;
+            flex-shrink: 0;
+        }
+
+        .footer .navbar-brand {
+            color: var(--white-color) !important;
+        }
+
+        .footer .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            padding: 0.5rem 1rem;
+        }
+
+        .footer .nav-link:hover {
+            color: var(--white-color);
+        }
+
+        .footer .social-icon {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0 12px;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer .social-icon:hover {
+            color: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        .footer .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Vision<span class="ed">ED</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active"
+                            href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
+                    <li class="nav-item"><a class="btn btn-logout" href="{{ url_for('logout') }}">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show mb-4" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <div class="welcome-card text-center">
+                <h1>Welcome, <span class="text-primary">{{ user_name or "Admin" }}!</span></h1>
+                <p>This is your administrator dashboard. Manage users, content, and application settings.</p>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-4 col-md-6">
+                    <a href="{{ url_for('profile_admin') }}" class="text-decoration-none">
+                        <div class="dashboard-card">
+                            <div class="card-icon"><i class="fas fa-user-shield"></i></div>
+                            <h5 class="card-title">My Profile</h5>
+                            <p class="card-text">View and update your administrator profile and security settings.</p>
+                            <span class="btn btn-primary">Manage Profile</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <a href="{{ url_for('registered_users') }}" class="text-decoration-none">
+                        <div class="dashboard-card">
+                            <div class="card-icon"><i class="fas fa-users-cog"></i></div>
+                            <h5 class="card-title">Registered Users</h5>
+                            <p class="card-text">View, manage, and monitor all registered student accounts on the
+                                platform.</p>
+                            <span class="btn btn-primary">Manage Users</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <a href="{{ url_for('material_uploader') }}" class="text-decoration-none">
+                        <div class="dashboard-card">
+                            <div class="card-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                            <h5 class="card-title">Materials Uploader</h5>
+                            <p class="card-text">Upload and manage educational materials, notes, and resources for
+                                students.</p>
+                            <span class="btn btn-primary">Upload Files</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <a href="{{ url_for('query_solver') }}" class="text-decoration-none">
+                        <div class="dashboard-card">
+                            <div class="card-icon"><i class="fas fa-headset"></i></div>
+                            <h5 class="card-title">Query Solver</h5>
+                            <p class="card-text">Moderate the community Q&A forum, view discussions, and manage content.
+                            </p>
+                            <span class="btn btn-primary">View Forum</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <a href="{{ url_for('admin_announcements') }}" class="text-decoration-none">
+                        <div class="dashboard-card">
+                            <div class="card-icon"><i class="fas fa-bullhorn"></i></div>
+                            <h5 class="card-title">Announcements</h5>
+                            <p class="card-text">Create and publish important announcements for all student users.</p>
+                            <span class="btn btn-primary">Create Announcement</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Vision<span class="ed">ED</span></a>
+            <ul class="nav justify-content-center my-4">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+            <div class="mb-4">
+                <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="social-icon" title="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+            <p class="copyright">&copy; 2025 VisionED - Admin Portal. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

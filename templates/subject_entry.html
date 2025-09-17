@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisionED - Performance Analytics</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #17a2b8;
+            --secondary-color: #2c3e50;
+            --background-color: #f8f9fa;
+            --text-color: #343a40;
+            --light-text-color: #6c757d;
+            --white-color: #ffffff;
+            --border-radius: 12px;
+            --border-color: #e9ecef;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: var(--white-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--secondary-color) !important;
+        }
+
+        .navbar-brand .ed {
+            color: var(--primary-color);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-logout {
+            background-color: #dc3545;
+            color: var(--white-color);
+            font-weight: 500;
+            padding: 0.5rem 1.2rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background-color: #c82333;
+            color: var(--white-color);
+            transform: translateY(-2px);
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 60px 0;
+        }
+
+        .results-container {
+            background: var(--white-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
+            padding: 40px;
+        }
+
+        .results-header,
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .results-header h1,
+        .form-header h1 {
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .charts-container-grid,
+        .attendance-charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+        
+        .attendance-charts-grid {
+             grid-template-columns: 1fr 1fr;
+             margin-top: 30px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background-color: #f8f9fa;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 25px;
+        }
+
+        .card h2 {
+            font-size: 1.25em;
+            font-weight: 600;
+            color: var(--secondary-color);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            padding: 12px 5px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            color: var(--light-text-color);
+            font-weight: 500;
+        }
+
+        td b {
+            color: var(--text-color);
+            font-size: 1.1em;
+        }
+
+        .analysis-card h3 {
+            font-size: 1.5em;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+        }
+
+        .level-Top {
+            color: var(--primary-color);
+        }
+
+        .level-Good {
+            color: #28a745;
+        }
+
+        .level-Average {
+            color: #ffc107;
+        }
+
+        .level-Below {
+            color: #dc3545;
+        }
+
+        .analysis-card p {
+            font-size: 1em;
+            line-height: 1.6;
+            color: var(--light-text-color);
+        }
+
+        @media (max-width: 992px) {
+
+            .results-grid,
+            .charts-container-grid,
+            .attendance-charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .modal-body h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .modal-body fieldset {
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .modal-body legend {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body label {
+            font-weight: 500;
+            color: var(--light-text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(23, 162, 184, 0.3);
+        }
+
+        .action-btn {
+            cursor: pointer;
+            background-color: #e9ecef;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .action-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .remove-btn {
+            background-color: #fff1f1;
+            color: #d94848;
+            border-color: #f5c6cb;
+        }
+
+        .remove-btn:hover {
+            background-color: #d94848;
+            color: white;
+            border-color: #d94848;
+        }
+
+        .remove-btn.is-hidden {
+            visibility: hidden;
+            cursor: default;
+        }
+
+        .dynamic-entry {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            gap: 10px;
+        }
+
+        .input-wrapper {
+            flex-grow: 1;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .custom-modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1060;
+        }
+
+        .custom-modal-content {
+            background: var(--white-color);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeInScale 0.3s ease-out;
+        }
+
+        .custom-modal-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .custom-modal-title {
+            font-weight: 600;
+            font-size: 1.25rem;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .custom-modal-message {
+            color: var(--light-text-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer {
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+            padding: 60px 0 20px 0;
+            flex-shrink: 0;
+        }
+
+        .footer .navbar-brand {
+            color: var(--white-color) !important;
+        }
+
+        .footer .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            padding: 0.5rem 1rem;
+        }
+
+        .footer .nav-link:hover {
+            color: var(--white-color);
+        }
+
+        .footer .social-icon {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0 12px;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer .social-icon:hover {
+            color: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        .footer .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('student_dashboard') }}">Vision<span class="ed">ED</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_student') }}">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('my_courses') }}">My Courses</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('subject_entry') }}">Performance
+                            Analytics</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('ask_query') }}">Ask Query</a></li>
+                    <li class="nav-item"><a class="nav-link"
+                            href="{{ url_for('student_announcements') }}">Announcements</a></li>
+                    <li class="nav-item"><a class="btn btn-logout" href="{{ url_for('logout') }}">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show mb-4" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <div id="predictionResults" class="results-container" {% if not predictions %}style="display:none;" {% endif
+                %}>
+                <div class="results-header">
+                    <h1>Your Performance Analysis 📈</h1>
+                </div>
+
+                <div class="charts-container-grid">
+                    <div class="card">
+                        <h2>Predicted Marks Overview</h2>
+                        <div class="chart-container">
+                            <canvas id="marksChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h2>Subject Contribution (%)</h2>
+                        <div class="chart-container">
+                            <canvas id="contributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="attendance-charts-grid">
+                    <div class="card">
+                        <h2>Previous Semester Attendance (%)</h2>
+                        <div class="chart-container">
+                            <canvas id="prevAttendanceChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h2>Predicted Attendance Trend (%)</h2>
+                        <div class="chart-container">
+                            <canvas id="predictedAttendanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results-grid">
+                    <div class="card analysis-card">
+                        <h2>Overall Analysis</h2>
+                        <h3 class="level-{{ level.split(' ')[0] if level else '' }}">{{ level }}</h3>
+                        <p>Your predicted average score is <b>{{ avg_score }} out of 70</b>.</p>
+                    </div>
+                    <div class="card analysis-card">
+                        <h2>💡 Personalized Tips</h2>
+                        <p>{{ tips }}</p>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 30px;">
+                    <h2>Detailed Subject Breakdown</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Expected Marks (out of 70)</th>
+                                <th>Performance Level</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if predictions %}
+                            {% for subject, data in predictions.items() %}
+                            <tr>
+                                <td>{{ subject }}</td>
+                                <td><b>{{ data.mark }}</b></td>
+                                <td><span class="level-{{ data.level.split(' ')[0] }}">{{ data.level }}</span></td>
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#marksModal">Edit Your
+                        Marks</button>
+                </div>
+            </div>
+
+            <div id="noDataMessage" class="results-container mt-4 text-center" style="display:none;">
+                <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                <h2 class="text-muted">Welcome to Performance Analytics</h2>
+                <p class="lead text-muted">To get started, please provide your academic marks. We'll use this data to
+                    predict your future performance.</p>
+                <button class="btn btn-primary btn-lg mt-3" data-bs-toggle="modal" data-bs-target="#marksModal">
+                    <i class="fas fa-plus-circle me-2"></i>Add Your Marks
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="marksModal" tabindex="-1" aria-labelledby="marksModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="marksModalLabel">Enter Your Academic Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url_for('subject_entry') }}" method="post">
+
+                        {% if student_info.sem > 1 %}
+                        <h2>Semester {{ student_info.sem - 1 }}<sup>{{ get_ordinal_suffix(student_info.sem - 1)
+                                }}</sup> Marks (out of 70)</h2>
+                        <fieldset>
+                            {% for subject in prev_subjects %}
+                            <div class="mb-3">
+                                <label for="{{ subject.id }}">{{ subject.name }}</label>
+                                <input type="number" class="form-control" name="{{ subject.id }}" id="{{ subject.id }}"
+                                    min="0" max="70" value="{{ saved_marks.get(subject.id, '') }}" required>
+                            </div>
+                            {% endfor %}
+                        </fieldset>
+                        {% endif %}
+
+                        <h2>Semester {{ student_info.sem }}<sup>{{ get_ordinal_suffix(student_info.sem) }}</sup> Class
+                            Tests (out of 20)</h2>
+                        {% for subject in current_subjects %}
+                        <fieldset>
+                            <legend>{{ subject.name }}<button type="button" class="action-btn add-btn"
+                                    onclick="addEntry('{{ subject.id }}_tests', '{{ subject.id }}_ct', 20, 'Class Test Score')">+</button>
+                            </legend>
+                            <div id="{{ subject.id }}_tests">
+                                {% set ns_ct = namespace(max_index=0) %}
+                                {% for key in saved_marks.keys() %}{% if key.startswith(subject.id + '_ct_') %}{% set
+                                num = key.split('_')[-1]|int %}{% if num > ns_ct.max_index %}{% set ns_ct.max_index =
+                                num %}{% endif %}{% endif %}{% endfor %}
+                                {% set num_ct_boxes = ns_ct.max_index if ns_ct.max_index > 0 else 1 %}
+                                {% for i in range(1, num_ct_boxes + 1) %}
+                                <div class="dynamic-entry">
+                                    <div class="input-wrapper">
+                                        {% set current_key = subject.id ~ '_ct_' ~ i %}
+                                        <input type="number" name="{{ current_key }}" min="0" max="20"
+                                            value="{{ saved_marks.get(current_key, '') }}" class="form-control"
+                                            placeholder="Class Test Score {{ i }}">
+                                    </div>
+                                    <button type="button" class="action-btn remove-btn"
+                                        onclick="removeEntry(this)">&minus;</button>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </fieldset>
+                        {% endfor %}
+
+                        <h2>Past Attendance Records (%)</h2>
+                        <fieldset>
+                            <legend>Semester Attendance<button type="button" class="action-btn add-btn"
+                                    onclick="addEntry('attendance_entries', 'prev_attendance', 100, 'Semester Attendance %')">+</button>
+                            </legend>
+                            <div id="attendance_entries">
+                                {% set ns_att = namespace(max_index=0) %}
+                                {% for key in saved_marks.keys() %}{% if key.startswith('prev_attendance_') %}{% set num
+                                = key.split('_')[-1]|int %}{% if num > ns_att.max_index %}{% set ns_att.max_index = num
+                                %}{% endif %}{% endif %}{% endfor %}
+                                {% set num_att_boxes = ns_att.max_index if ns_att.max_index > 0 else 1 %}
+                                {% for i in range(1, num_att_boxes + 1) %}
+                                <div class="dynamic-entry">
+                                    <div class="input-wrapper">
+                                        {% set current_key = 'prev_attendance_' ~ i %}
+                                        <input type="number" name="{{ current_key }}" min="0" max="100"
+                                            value="{{ saved_marks.get(current_key, '') }}" class="form-control"
+                                            placeholder="Semester {{ i }} Attendance %">
+                                    </div>
+                                    <button type="button" class="action-btn remove-btn"
+                                        onclick="removeEntry(this)">&minus;</button>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </fieldset>
+
+                        <button type="submit" class="btn btn-submit">Analyze & Predict Performance</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="customAlertModal" class="custom-modal-backdrop">
+        <div class="custom-modal-content">
+            <h3 class="custom-modal-icon"><i class="fas fa-exclamation-circle text-warning"></i></h3>
+            <h5 class="custom-modal-title">Limit Reached</h5>
+            <p id="customAlertMessage" class="custom-modal-message"></p>
+            <button type="button" class="btn btn-primary" onclick="closeCustomAlert()">OK</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <a class="navbar-brand" href="{{ url_for('student_dashboard') }}">Vision<span class="ed">ED</span></a>
+            <ul class="nav justify-content-center my-4">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_student') }}">Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('my_courses') }}">My Courses</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('subject_entry') }}">Performance Analytics</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('ask_query') }}">Ask Query</a></li>
+                <li class="nav-item"><a class="nav-link"
+                        href="{{ url_for('student_announcements') }}">Announcements</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+            <div class="mb-4">
+                <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="social-icon" title="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+            <p class="copyright">&copy; 2025 VisionED - Student Performance Prediction. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        let predictionChart = null;
+        let contributionChart = null;
+        let prevAttendanceChart = null;
+        let predictedAttendanceChart = null;
+
+        function renderPredictionChart() {
+            const predictionsData = {{ predictions | tojson | safe}};
+            if (!predictionsData) return;
+
+            const ctx = document.getElementById('marksChart').getContext('2d');
+            const labels = Object.keys(predictionsData);
+            const marks = labels.map(label => predictionsData[label].mark);
+
+            const colors = ['rgba(23, 162, 184, 0.6)', 'rgba(44, 62, 80, 0.6)', 'rgba(243, 156, 18, 0.6)', 'rgba(46, 204, 113, 0.6)', 'rgba(155, 89, 182, 0.6)'];
+            const borderColors = ['rgba(23, 162, 184, 1)', 'rgba(44, 62, 80, 1)', 'rgba(243, 156, 18, 1)', 'rgba(46, 204, 113, 1)', 'rgba(155, 89, 182, 1)'];
+
+            if (predictionChart) predictionChart.destroy();
+
+            predictionChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Predicted Marks (out of 70)',
+                        data: marks,
+                        backgroundColor: colors,
+                        borderColor: borderColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { x: { beginAtZero: true, max: 70 } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        function renderContributionChart() {
+            const predictionsData = {{ predictions | tojson | safe}};
+            if (!predictionsData) return;
+
+            const ctx = document.getElementById('contributionChart').getContext('2d');
+            const labels = Object.keys(predictionsData);
+            const marks = labels.map(label => predictionsData[label].mark);
+            
+            if (contributionChart) contributionChart.destroy();
+
+            contributionChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Contribution %',
+                        data: marks,
+                        backgroundColor: [
+                            'rgba(23, 162, 184, 0.7)', 'rgba(44, 62, 80, 0.7)',
+                            'rgba(243, 156, 18, 0.7)', 'rgba(46, 204, 113, 0.7)',
+                            'rgba(155, 89, 182, 0.7)', 'rgba(231, 76, 60, 0.7)'
+                        ],
+                        borderColor: [
+                           '#17a2b8', '#2c3e50', '#f39c12', '#2ecc71', '#9b59b6', '#e74c3c'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.label || '';
+                                    if (label) { label += ': '; }
+                                    const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                    const value = context.parsed;
+                                    const percentage = total > 0 ? (value / total * 100).toFixed(2) : 0;
+                                    return `${label}${percentage}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function renderPrevAttendanceChart() {
+            {% set attendance_data = {} %}
+            {% for key, value in saved_marks.items() %}
+                {% if key.startswith('prev_attendance_') and value %}
+                    {% set num = key.split('_')[-1] | int %}
+                    {% set _ = attendance_data.update({num: value}) %}
+                {% endif %}
+            {% endfor %}
+            const prevAttendanceData = {{ attendance_data | tojson | safe }};
+
+            const sortedKeys = Object.keys(prevAttendanceData).sort((a, b) => a - b);
+            if(sortedKeys.length === 0) return;
+            
+            const labels = sortedKeys.map(key => `Semester ${key}`);
+            const data = sortedKeys.map(key => prevAttendanceData[key]);
+            
+            const ctx = document.getElementById('prevAttendanceChart').getContext('2d');
+
+            if (prevAttendanceChart) prevAttendanceChart.destroy();
+
+            const gradient = ctx.createLinearGradient(0, 0, 0, 350);
+            gradient.addColorStop(0, 'rgba(44, 62, 80, 0.5)');
+            gradient.addColorStop(1, 'rgba(44, 62, 80, 0)');
+
+            prevAttendanceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Attendance %',
+                        data: data,
+                        borderColor: 'rgba(44, 62, 80, 1)',
+                        backgroundColor: gradient,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: 'rgba(44, 62, 80, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverRadius: 7,
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(44, 62, 80, 1)',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, max: 100 } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+        
+        function renderPredictedAttendanceChart() {
+             {% set attendance_data = {} %}
+            {% for key, value in saved_marks.items() %}
+                {% if key.startswith('prev_attendance_') and value %}
+                    {% set num = key.split('_')[-1] | int %}
+                    {% set _ = attendance_data.update({num: value | int}) %}
+                {% endif %}
+            {% endfor %}
+            const attendanceValues = Object.values({{ attendance_data | tojson | safe }});
+
+            if(attendanceValues.length === 0) return;
+
+            const lastAttendance = attendanceValues[attendanceValues.length - 1];
+            const avgAttendance = attendanceValues.reduce((a, b) => a + b, 0) / attendanceValues.length;
+            const isUpwardTrend = avgAttendance >= lastAttendance;
+
+            const ctx = document.getElementById('predictedAttendanceChart').getContext('2d');
+
+            if (predictedAttendanceChart) predictedAttendanceChart.destroy();
+
+            const gradient = ctx.createLinearGradient(0, 0, 0, 350);
+             if (isUpwardTrend) {
+                gradient.addColorStop(0, 'rgba(46, 204, 113, 0.6)');
+                gradient.addColorStop(1, 'rgba(46, 204, 113, 0)');
+            } else {
+                gradient.addColorStop(0, 'rgba(231, 76, 60, 0.6)');
+                gradient.addColorStop(1, 'rgba(231, 76, 60, 0)');
+            }
+            const borderColor = isUpwardTrend ? 'rgba(46, 204, 113, 1)' : 'rgba(231, 76, 60, 1)';
+
+
+            predictedAttendanceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [`Semester ${attendanceValues.length}`, `Predicted Sem ${attendanceValues.length + 1}`],
+                    datasets: [{
+                        label: 'Attendance %',
+                        data: [lastAttendance, avgAttendance],
+                        borderColor: borderColor,
+                        backgroundColor: gradient,
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 3,
+                        borderDash: [5, 5],
+                        pointBackgroundColor: borderColor,
+                        pointBorderColor: '#fff',
+                        pointRadius: 5,
+                        pointHoverRadius: 8,
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: borderColor,
+                        pointHoverBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { 
+                        y: { 
+                            beginAtZero: true, 
+                            max: 100,
+                            ticks: {
+                                callback: function(value) { return value + '%'; }
+                            }
+                        } 
+                    },
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            padding: 10,
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 12 },
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) { label += ': '; }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y.toFixed(2) + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const hasPredictions = {{ (predictions and predictions | length > 0) | tojson }};
+            const hasSavedMarks = {{ (saved_marks and saved_marks | length > 0) | tojson }};
+
+            if (hasPredictions) {
+                document.getElementById('predictionResults').style.display = 'block';
+                document.getElementById('noDataMessage').style.display = 'none';
+                renderPredictionChart();
+                renderContributionChart();
+                renderPrevAttendanceChart();
+                renderPredictedAttendanceChart();
+            } else {
+                document.getElementById('predictionResults').style.display = 'none';
+                document.getElementById('noDataMessage').style.display = 'block';
+
+                if (!hasSavedMarks) {
+                    const marksModal = new bootstrap.Modal(document.getElementById('marksModal'));
+                    marksModal.show();
+                }
+            }
+
+            document.querySelectorAll('[id$="_tests"], #attendance_entries').forEach(container => {
+                updateRemoveButtons(container.id);
+            });
+        });
+
+        function addEntry(containerId, namePrefix, maxVal, placeholderText) {
+            const container = document.getElementById(containerId);
+            const maxAllowed = containerId.includes('attendance') ? ({{ student_info.sem }} - 1) : 5;
+
+            if (maxAllowed > 0 && container.children.length >= maxAllowed) {
+                showCustomAlert(`You can add a maximum of ${maxAllowed} entries.`);
+                return;
+            }
+
+            const newIndex = container.children.length + 1;
+            const entryDiv = document.createElement('div');
+            entryDiv.className = 'dynamic-entry';
+            entryDiv.innerHTML = `
+                <div class="input-wrapper">
+                    <input type="number" name="${namePrefix}_${newIndex}" min="0" max="${maxVal}" class="form-control" placeholder="${placeholderText} ${newIndex}">
+                </div>
+                <button type="button" class="action-btn remove-btn" onclick="removeEntry(this)">&minus;</button>
+            `;
+            container.appendChild(entryDiv);
+            updateRemoveButtons(container.id);
+        }
+
+        function removeEntry(button) {
+            const entryDiv = button.parentElement;
+            const container = entryDiv.parentElement;
+            if (container.children.length > 1) {
+                container.removeChild(entryDiv);
+                updateRemoveButtons(container.id);
+            }
+        }
+
+        function updateRemoveButtons(containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const entries = container.getElementsByClassName('dynamic-entry');
+            const isAttendance = containerId.includes('attendance');
+            const placeholderText = isAttendance ? 'Semester Attendance %' : 'Class Test Score';
+            const namePrefix = isAttendance ? 'prev_attendance' : containerId.replace('_tests', '_ct');
+
+            for (let i = 0; i < entries.length; i++) {
+                const input = entries[i].querySelector('input[type="number"]');
+                const removeBtn = entries[i].querySelector('.remove-btn');
+                const newIndex = i + 1;
+
+                if (input) {
+                    input.name = `${namePrefix}_${newIndex}`;
+                    input.placeholder = `${placeholderText} ${newIndex}`;
+                }
+                if (removeBtn) {
+                    removeBtn.classList.toggle('is-hidden', entries.length <= 1);
+                }
+            }
+        }
+
+        function showCustomAlert(message) {
+            document.getElementById('customAlertMessage').textContent = message;
+            document.getElementById('customAlertModal').style.display = 'flex';
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('customAlertModal').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>
+

@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisionED - Material Uploader</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #17a2b8;
+            --secondary-color: #2c3e50;
+            --background-color: #f8f9fa;
+            --text-color: #343a40;
+            --light-text-color: #6c757d;
+            --white-color: #ffffff;
+            --border-radius: 12px;
+            --border-color: #e9ecef;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            background-color: var(--white-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--secondary-color) !important;
+        }
+
+        .navbar-brand .ed {
+            color: var(--primary-color);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-logout {
+            background-color: #dc3545;
+            color: var(--white-color);
+            font-weight: 500;
+            padding: 0.5rem 1.2rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background-color: #c82333;
+            color: var(--white-color);
+            transform: translateY(-2px);
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 60px 0;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-section h1 {
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .content-card {
+            background: var(--white-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-tabs .nav-link {
+            color: var(--light-text-color);
+            font-weight: 600;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-bottom-color: var(--white-color);
+        }
+
+        .form-control,
+        .form-select {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(23, 162, 184, .2);
+        }
+
+        .btn-submit {
+            background-image: linear-gradient(to right, #17a2b8, #148a9c);
+            color: var(--white-color);
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(23, 162, 184, 0.2);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(23, 162, 184, 0.3);
+        }
+
+        .list-group-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+        }
+
+        .action-btn-group .btn,
+        .action-btn-group .d-inline {
+            margin-left: 5px;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+            padding: 60px 0 20px 0;
+            flex-shrink: 0;
+        }
+
+        .footer .navbar-brand {
+            color: var(--white-color) !important;
+        }
+
+        .footer .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            padding: 0.5rem 1rem;
+        }
+
+        .footer .nav-link:hover {
+            color: var(--white-color);
+        }
+
+        .footer .social-icon {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0 12px;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer .social-icon:hover {
+            color: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        .footer .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .guidelines-list {
+            list-style-type: decimal;
+            padding-left: 20px;
+        }
+
+        .guidelines-list li {
+            margin-bottom: 10px;
+        }
+
+        #previewTable {
+            width: 100%;
+        }
+
+        #previewTable th,
+        #previewTable td {
+            padding: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .preview-iframe {
+            width: 100%;
+            height: 75vh;
+            border: none;
+        }
+
+        /* --- Custom Alert Modal --- */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .custom-modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1060;
+            /* Higher than Bootstrap's modal z-index (1055) */
+        }
+
+        .custom-modal-content {
+            background: var(--white-color);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeInScale 0.3s ease-out;
+        }
+
+        .custom-modal-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .custom-modal-title {
+            font-weight: 600;
+            font-size: 1.25rem;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .custom-modal-message {
+            color: var(--light-text-color);
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Vision<span class="ed">ED</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_admin') }}">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('registered_users') }}">Registered
+                            Users</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('material_uploader') }}">Material
+                            Uploader</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('query_solver') }}">Query Solver</a></li>
+                    <li class="nav-item"><a class="nav-link"
+                            href="{{ url_for('admin_announcements') }}">Announcements</a></li>
+                    <li class="nav-item"><a class="btn btn-logout" href="{{ url_for('logout') }}">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="header-section">
+                <h1>Material & Data Uploader</h1>
+                <p>Manage study materials and analytics data for students.</p>
+            </div>
+
+            <div class="content-card">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                <ul class="nav nav-tabs" id="uploadTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="notes-tab" data-bs-toggle="tab"
+                            data-bs-target="#notes-tab-pane" type="button" role="tab">
+                            <i class="fas fa-book-open me-2"></i>Upload Study Notes
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="analytics-tab" data-bs-toggle="tab"
+                            data-bs-target="#analytics-tab-pane" type="button" role="tab">
+                            <i class="fas fa-chart-bar me-2"></i>Upload Analytics Data
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content p-4" id="uploadTabsContent">
+                    <div class="tab-pane fade show active" id="notes-tab-pane" role="tabpanel">
+                        <h4 class="mb-4">Upload New Study Material</h4>
+                        <form action="{{ url_for('material_uploader') }}" method="POST" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="branchFilter" class="form-label">Branch</label>
+                                    <select class="form-select" id="branchFilter" {% if admin_department
+                                        !='ALL_BRANCHES' %}disabled{% endif %}>
+                                        {% if admin_department == 'ALL_BRANCHES' %}
+                                        <option value="">Select Branch</option>
+                                        {% for branch in all_subjects_dict.keys() %}
+                                        <option value="{{ branch }}">{{ branch }}</option>
+                                        {% endfor %}
+                                        {% else %}
+                                        <option value="{{ admin_department }}" selected>{{ admin_department }}</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="semesterFilter" class="form-label">Semester</label>
+                                    <select class="form-select" id="semesterFilter" disabled>
+                                        <option value="">Select Semester</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="subject_id" class="form-label">Subject</label>
+                                <select class="form-select" id="subject_id" name="subject_id" required disabled>
+                                    <option value="">First, select branch and semester</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label for="file" class="form-label">Upload File</label>
+                                <input type="file" class="form-control" id="file" name="file" required>
+                                <small class="form-text text-muted">Allowed formats: PDF, DOCX, PPTX, etc.</small>
+                            </div>
+                            <button type="submit" class="btn btn-submit w-100">Upload Note</button>
+                        </form>
+                        <hr class="my-5">
+                        <h4 class="mb-4">Uploaded Notes</h4>
+                        <ul class="list-group list-group-flush">
+                            {% if notes %}
+                            {% for note in notes %}
+                            <li class="list-group-item">
+                                <div>
+                                    <h6><i class="fas fa-file-alt me-2 text-primary"></i>{{ note.file_name }}</h6>
+                                    <p class="text-muted mb-0 small">By: {{ note.uploader_user.fullname }} | Subject: {{
+                                        note.subject_id }} | Uploaded {{ time_ago(note.upload_date) }}</p>
+                                </div>
+                                <div class="action-btn-group">
+                                    <a href="{{ url_for('download_note', filename=note.file_name) }}"
+                                        class="btn btn-sm btn-outline-success"><i class="fas fa-download"></i>
+                                        Download</a>
+                                    {% if admin_department == 'ALL_BRANCHES' or note.user_id == session['user_id'] %}
+                                    <button type="button" class="btn btn-sm btn-outline-danger btn-delete"
+                                        data-action="{{ url_for('delete_note', note_id=note.id) }}"
+                                        data-item-name="{{ note.file_name }}">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </li>
+                            {% endfor %}
+                            {% else %}
+                            <li class="list-group-item text-center text-muted">No notes uploaded yet.</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="tab-pane fade" id="analytics-tab-pane" role="tabpanel">
+                        <div id="guidelines-section" class="text-center">
+                            <h4 class="mb-3">Upload Student Analytics Data</h4>
+                            <p class="text-muted">Please read the format requirements carefully before uploading.</p>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#guidelinesModal">
+                                <i class="fas fa-info-circle me-2"></i>Show CSV/Excel Format Guidelines
+                            </button>
+                        </div>
+
+                        <div id="upload-form-section" style="display:none;">
+                            <h4 class="mb-4">Upload Analytics File</h4>
+                            <form action="{{ url_for('upload_analytics_data') }}" method="POST"
+                                enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="analyticsBranch" class="form-label">Branch</label>
+                                        <select class="form-select" id="analyticsBranch" name="branch" required {% if
+                                            admin_department !='ALL_BRANCHES' %}disabled{% endif %}>
+                                            {% if admin_department == 'ALL_BRANCHES' %}
+                                            <option value="">Select Branch</option>
+                                            {% for branch in all_subjects_dict.keys() %}
+                                            <option value="{{ branch }}">{{ branch }}</option>
+                                            {% endfor %}
+                                            {% else %}
+                                            <option value="{{ admin_department }}" selected>{{ admin_department }}
+                                            </option>
+                                            {% endif %}
+                                        </select>
+                                        {% if admin_department != 'ALL_BRANCHES' %}
+                                        <input type="hidden" name="branch" value="{{ admin_department }}">
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="analyticsSem" class="form-label">Semester</label>
+                                        <select class="form-select" id="analyticsSem" name="sem" required>
+                                            <option value="">Select Semester</option>
+                                            {% for i in range(1, 7) %}
+                                            <option value="{{i}}">{{i}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="csv_file" class="form-label">Upload CSV or Excel File</label>
+                                    <input type="file" class="form-control" id="csv_file" name="file"
+                                        accept=".csv, .xlsx" required>
+                                </div>
+                                <button type="submit" class="btn btn-submit w-100">Upload Analytics Data</button>
+                            </form>
+                        </div>
+                        <hr class="my-5">
+                        <h4 class="mb-4">Uploaded Analytics Files</h4>
+                        <ul class="list-group list-group-flush">
+                            {% if uploaded_csvs %}
+                            {% for file in uploaded_csvs %}
+                            <li class="list-group-item">
+                                <div>
+                                    <h6><i class="fas fa-file-csv me-2 text-success"></i>{{ file.file_name }}</h6>
+                                    <p class="text-muted mb-0 small">By: {{ file.uploader_user.fullname }} | Uploaded {{
+                                        time_ago(file.upload_date) }}</p>
+                                </div>
+                                <div class="action-btn-group">
+                                    <button class="btn btn-sm btn-outline-secondary preview-csv-btn"
+                                        data-filename="{{ file.file_name }}">
+                                        <i class="fas fa-eye"></i> Preview
+                                    </button>
+                                    <a href="{{ url_for('download_analytics_data', filename=file.file_name) }}"
+                                        class="btn btn-sm btn-outline-success"><i class="fas fa-download"></i>
+                                        Download</a>
+                                    {% if admin_department == 'ALL_BRANCHES' or file.user_id == session['user_id'] %}
+                                    <button type="button" class="btn btn-sm btn-outline-danger btn-delete"
+                                        data-action="{{ url_for('delete_analytics_data', filename=file.file_name) }}"
+                                        data-item-name="{{ file.file_name }}">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </li>
+                            {% endfor %}
+                            {% else %}
+                            <li class="list-group-item text-center text-muted">No analytics files uploaded yet.</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="guidelinesModal" tabindex="-1" aria-labelledby="guidelinesModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="guidelinesModalLabel">CSV/Excel Upload Guidelines</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5><i class="fas fa-table text-primary me-2"></i>Required Column Structure</h5>
+                    <p>For the analytics model to work correctly, your data file (CSV or Excel) must contain exactly
+                        <strong>16 columns</strong> in the following order:
+                    </p>
+                    <ol class="guidelines-list">
+                        <li><strong>Previous Semester Subject 1 Marks</strong> (External, out of 70)</li>
+                        <li><strong>Previous Semester Subject 2 Marks</strong> (External, out of 70)</li>
+                        <li><strong>Previous Semester Subject 3 Marks</strong> (External, out of 70)</li>
+                        <li><strong>Previous Semester Subject 4 Marks</strong> (External, out of 70)</li>
+                        <li><strong>Previous Semester Subject 5 Marks</strong> (External, out of 70)</li>
+                        <li><strong>Current Semester Subject 1 Class Test Average</strong> (out of 20)</li>
+                        <li><strong>Current Semester Subject 2 Class Test Average</strong> (out of 20)</li>
+                        <li><strong>Current Semester Subject 3 Class Test Average</strong> (out of 20)</li>
+                        <li><strong>Current Semester Subject 4 Class Test Average</strong> (out of 20)</li>
+                        <li><strong>Current Semester Subject 5 Class Test Average</strong> (out of 20)</li>
+                        <li><strong>Previous Semesters' Average Attendance</strong> (in %)</li>
+                        <li><strong>Final Current Semester Subject 1 Marks</strong> (External, out of 70)</li>
+                        <li><strong>Final Current Semester Subject 2 Marks</strong> (External, out of 70)</li>
+                        <li><strong>Final Current Semester Subject 3 Marks</strong> (External, out of 70)</li>
+                        <li><strong>Final Current Semester Subject 4 Marks</strong> (External, out of 70)</li>
+                        <li><strong>Final Current Semester Subject 5 Marks</strong> (External, out of 70)</li>
+                    </ol>
+                    <div class="alert alert-warning mt-4">
+                        <strong>Note:</strong> The system will automatically name the uploaded file based on the Branch
+                        and Semester you select on the upload form. You do not need to name the file yourself.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="proceedToUploadBtn">I Understand, Proceed to
+                        Upload</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="previewModalLabel">File Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="previewSpinner" class="text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div id="preview-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center p-4">
+                    <h3 class="custom-modal-icon"><i class="fas fa-trash-alt text-danger"></i></h3>
+                    <h5 class="custom-modal-title">Confirm Deletion</h5>
+                    <p class="custom-modal-message" id="confirmDeleteText"></p>
+                    <form id="deleteForm" method="POST" class="d-inline">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Vision<span class="ed">ED</span></a>
+            <ul class="nav justify-content-center my-4">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_admin') }}">Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('registered_users') }}">Registered Users</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('material_uploader') }}">Materials
+                        Uploader</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('query_solver') }}">Query Solver</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_announcements') }}">Announcements</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+            <div class="mb-4">
+                <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="social-icon" title="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+            <p class="copyright">&copy; 2025 VisionED - Admin Portal. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const subjectsData = {{ all_subjects_dict| tojson | safe
+        }};
+        const branchFilter = document.getElementById('branchFilter');
+        const semesterFilter = document.getElementById('semesterFilter');
+        const subjectSelect = document.getElementById('subject_id');
+        const guidelinesSection = document.getElementById('guidelines-section');
+        const uploadFormSection = document.getElementById('upload-form-section');
+        const proceedToUploadBtn = document.getElementById('proceedToUploadBtn');
+        const guidelinesModal = new bootstrap.Modal(document.getElementById('guidelinesModal'));
+        const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
+        const previewSpinner = document.getElementById('previewSpinner');
+        const previewContent = document.getElementById('preview-content');
+        const adminDepartment = "{{ admin_department }}";
+
+        function updateSemesters() {
+            const selectedBranch = branchFilter.value;
+            semesterFilter.innerHTML = '<option value="">Select Semester</option>';
+            subjectSelect.innerHTML = '<option value="">First, select branch and semester</option>';
+            semesterFilter.disabled = true;
+            subjectSelect.disabled = true;
+
+            if (selectedBranch && subjectsData[selectedBranch]) {
+                const semesters = Object.keys(subjectsData[selectedBranch]);
+                semesters.forEach(sem => {
+                    const option = document.createElement('option');
+                    option.value = sem;
+                    option.textContent = sem;
+                    semesterFilter.appendChild(option);
+                });
+                semesterFilter.disabled = false;
+            }
+        }
+
+        function updateSubjects() {
+            const selectedBranch = branchFilter.value;
+            const selectedSem = semesterFilter.value;
+            subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+            subjectSelect.disabled = true;
+
+            if (selectedBranch && selectedSem && subjectsData[selectedBranch][selectedSem]) {
+                const subjects = subjectsData[selectedBranch][selectedSem];
+                subjects.forEach(subject => {
+                    const option = document.createElement('option');
+                    option.value = subject.id;
+                    option.textContent = subject.name;
+                    subjectSelect.appendChild(option);
+                });
+                subjectSelect.disabled = false;
+            }
+        }
+
+        branchFilter.addEventListener('change', updateSemesters);
+        semesterFilter.addEventListener('change', updateSubjects);
+
+        if (adminDepartment !== 'ALL_BRANCHES') {
+            updateSemesters();
+        }
+
+        proceedToUploadBtn.addEventListener('click', function () {
+            guidelinesSection.style.display = 'none';
+            uploadFormSection.style.display = 'block';
+            guidelinesModal.hide();
+        });
+
+        document.querySelectorAll('.preview-csv-btn').forEach(button => {
+            button.addEventListener('click', async function () {
+                const filename = this.dataset.filename;
+                previewModal.show();
+                previewSpinner.style.display = 'block';
+                previewContent.innerHTML = '';
+                document.getElementById('previewModalLabel').textContent = `Preview: ${filename}`;
+
+                try {
+                    const response = await fetch(`/admin/preview_analytics_data/${filename}`);
+                    const data = await response.json();
+
+                    if (data.error) {
+                        previewContent.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+                    } else {
+                        let tableHTML = '<div class="table-responsive"><table id="previewTable" class="table table-striped table-bordered"><thead><tr>';
+                        data.headers.forEach(header => {
+                            tableHTML += `<th>${header}</th>`;
+                        });
+                        tableHTML += '</tr></thead><tbody>';
+                        data.rows.forEach(row => {
+                            tableHTML += '<tr>';
+                            row.forEach(cell => {
+                                tableHTML += `<td>${cell}</td>`;
+                            });
+                            tableHTML += '</tr>';
+                        });
+                        tableHTML += '</tbody></table></div>';
+                        previewContent.innerHTML = tableHTML;
+                    }
+                } catch (error) {
+                    previewContent.innerHTML = `<div class="alert alert-danger">Failed to load file preview.</div>`;
+                } finally {
+                    previewSpinner.style.display = 'none';
+                }
+            });
+        });
+
+        // --- MODIFICATION START: JavaScript for the custom delete modal ---
+        const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+        const deleteForm = document.getElementById('deleteForm');
+        const confirmDeleteText = document.getElementById('confirmDeleteText');
+
+        document.querySelectorAll('.btn-delete').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent the form from submitting immediately
+                const action = this.dataset.action;
+                const itemName = this.dataset.itemName;
+
+                confirmDeleteText.textContent = `Are you sure you want to permanently delete the file: ${itemName}?`;
+                deleteForm.action = action;
+                confirmDeleteModal.show();
+            });
+        });
+            // --- MODIFICATION END ---
+        });
+    </script>
+</body>
+
+</html>

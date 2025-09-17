@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisionED - Admin Announcements</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #17a2b8;
+            --secondary-color: #2c3e50;
+            --danger-color: #dc3545;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --admin-highlight-bg: #e8f7f9;
+            --pinned-highlight-bg: #fff8e1;
+            --background-color: #f8f9fa;
+            --text-color: #343a40;
+            --light-text-color: #6c757d;
+            --white-color: #ffffff;
+            --border-radius: 12px;
+            --border-color: #e9ecef;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: var(--white-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--secondary-color) !important;
+        }
+
+        .navbar-brand .ed {
+            color: var(--primary-color);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-logout {
+            background-color: #dc3545;
+            color: var(--white-color);
+            font-weight: 500;
+            padding: 0.5rem 1.2rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background-color: #c82333;
+            color: var(--white-color);
+            transform: translateY(-2px);
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 60px 0;
+        }
+
+        .header-section {
+            background-image: linear-gradient(rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0.9)), url('https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=2670&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            color: var(--white-color);
+            padding: 80px 20px;
+            text-align: center;
+            border-radius: var(--border-radius);
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-section h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header-section p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .content-card {
+            background: var(--white-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
+            padding: 40px;
+        }
+
+        .form-control,
+        .form-select {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(23, 162, 184, .2);
+        }
+
+        .btn-submit {
+            background-image: linear-gradient(to right, #17a2b8, #148a9c);
+            color: var(--white-color);
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(23, 162, 184, 0.2);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(23, 162, 184, 0.3);
+        }
+
+        .announcement-list-item {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s;
+        }
+
+        .announcement-list-item:hover {
+            background-color: #f1f7f9;
+        }
+
+        .announcement-list-item:last-child {
+            border-bottom: none;
+        }
+
+        .announcement-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .announcement-content {
+            flex-grow: 1;
+        }
+
+        .announcement-content h6 {
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .announcement-meta {
+            font-size: 0.85rem;
+            color: var(--light-text-color);
+        }
+
+        .announcement-actions {
+            margin-left: 20px;
+        }
+
+        .announcement-actions button {
+            color: #dc3545;
+            background: none;
+            border: none;
+            padding: 5px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .announcement-actions button:hover {
+            opacity: 1;
+        }
+
+        .no-announcements-message {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: #e9f5f7;
+            border-radius: var(--border-radius);
+            border: 1px dashed var(--primary-color);
+        }
+
+        .no-announcements-message h4 {
+            color: var(--primary-color);
+        }
+
+        .no-announcements-message p {
+            color: var(--light-text-color);
+        }
+
+        .footer {
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+            padding: 60px 0 20px 0;
+            flex-shrink: 0;
+        }
+
+        .footer .navbar-brand {
+            color: var(--white-color) !important;
+        }
+
+        .footer .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            padding: 0.5rem 1rem;
+        }
+
+        .footer .nav-link:hover {
+            color: var(--white-color);
+        }
+
+        .footer .social-icon {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0 12px;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer .social-icon:hover {
+            color: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        .footer .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Styles for attached files section */
+        .attached-files {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .file-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 12px;
+            background-color: #f1f3f5;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            text-decoration: none;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: background-color 0.2s;
+        }
+
+        .file-link:hover {
+            background-color: #e2e6ea;
+            color: var(--primary-color);
+        }
+
+        .file-link i {
+            margin-right: 8px;
+        }
+
+        .file-link:hover i {
+            color: var(--primary-color);
+        }
+
+        .btn-edit {
+            color: var(--secondary-color);
+            opacity: 0.7;
+            transition: color 0.2s, opacity 0.2s;
+        }
+
+        .btn-edit:hover {
+            color: var(--primary-color);
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Vision<span class="ed">ED</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_admin') }}">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('registered_users') }}">Registered
+                            Users</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('material_uploader') }}">Materials
+                            Uploader</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('query_solver') }}">Query Solver</a></li>
+                    <li class="nav-item"><a class="nav-link active"
+                            href="{{ url_for('admin_announcements') }}">Announcements</a></li>
+                    <li class="nav-item"><a class="btn btn-logout" href="{{ url_for('logout') }}">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="header-section">
+                <h1>Manage Announcements</h1>
+                <p>Create and manage announcements for students based on their department and semester.</p>
+            </div>
+
+            <div class="content-card">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                <h4 class="mb-4">Create New Announcement</h4>
+                <form action="{{ url_for('admin_announcements') }}" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Announcement Title</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="department" class="form-label">Target Department</label>
+                            <select class="form-select" id="department" name="department" required>
+                                {% if admin_department == 'ALL_BRANCHES' %}
+                                <option value="ALL_BRANCHES" selected>All Branches</option>
+                                {% for branch in all_branches %}
+                                <option value="{{ branch }}">{{ branch }}</option>
+                                {% endfor %}
+                                {% else %}
+                                <option value="{{ admin_department }}" selected>{{ admin_department }}</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="semester" class="form-label">Target Semester</label>
+                            <select class="form-select" id="semester" name="semester" required>
+                                <option value="0" selected>All Semesters</option>
+                                <option value="1">Semester 1</option>
+                                <option value="2">Semester 2</option>
+                                <option value="3">Semester 3</option>
+                                <option value="4">Semester 4</option>
+                                <option value="5">Semester 5</option>
+                                <option value="6">Semester 6</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="content" class="form-label">Announcement Content</label>
+                        <textarea class="form-control" id="content" name="content" rows="4" required></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="file_upload" class="form-label">Attach Files (Optional)</label>
+                        <input type="file" class="form-control" id="file_upload" name="files[]" multiple
+                            accept=".pdf, .doc, .docx, .ppt, .pptx, .xlsx, .xls, .png, .jpg, .jpeg, .gif">
+                    </div>
+
+                    <button type="submit" class="btn btn-submit w-100">Post Announcement</button>
+                </form>
+
+                <hr class="my-5">
+
+                <h4 class="mb-4">Recent Announcements</h4>
+                {% if announcements %}
+                <ul class="list-unstyled">
+                    {% for announcement in announcements %}
+                    <li class="announcement-list-item">
+                        <div class="announcement-header">
+                            <div class="announcement-content">
+                                <h6>{{ announcement.title }}</h6>
+                                <p class="text-muted mb-0">{{ announcement.content }}</p>
+                                {% if announcement.attached_files %}
+                                <div class="attached-files">
+                                    {% for file in announcement.attached_files.split(',') %}
+                                    {% set file_extension = file.split('.')[-1].lower() %}
+                                    {% if file_extension == 'pdf' %}
+                                    <a href="{{ url_for('download_announcement_file', filename=file) }}"
+                                        class="file-link" target="_blank">
+                                        <i class="fas fa-file-pdf"></i>
+                                        <span>{{ file }}</span>
+                                    </a>
+                                    {% elif file_extension == 'doc' or file_extension == 'docx' %}
+                                    <a href="{{ url_for('download_announcement_file', filename=file) }}"
+                                        class="file-link" target="_blank">
+                                        <i class="fas fa-file-word"></i>
+                                        <span>{{ file }}</span>
+                                    </a>
+                                    {% elif file_extension == 'ppt' or file_extension == 'pptx' %}
+                                    <a href="{{ url_for('download_announcement_file', filename=file) }}"
+                                        class="file-link" target="_blank">
+                                        <i class="fas fa-file-powerpoint"></i>
+                                        <span>{{ file }}</span>
+                                    </a>
+                                    {% elif file_extension == 'xls' or file_extension == 'xlsx' %}
+                                    <a href="{{ url_for('download_announcement_file', filename=file) }}"
+                                        class="file-link" target="_blank">
+                                        <i class="fas fa-file-excel"></i>
+                                        <span>{{ file }}</span>
+                                    </a>
+                                    {% elif file_extension in ['png', 'jpg', 'jpeg', 'gif'] %}
+                                    <a href="{{ url_for('download_announcement_file', filename=file) }}"
+                                        class="file-link" target="_blank">
+                                        <i class="fas fa-image"></i>
+                                        <span>{{ file }}</span>
+                                    </a>
+                                    {% else %}
+                                    <a href="{{ url_for('download_announcement_file', filename=file) }}"
+                                        class="file-link" target="_blank">
+                                        <i class="fas fa-file"></i>
+                                        <span>{{ file }}</span>
+                                    </a>
+                                    {% endif %}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% set is_super_admin = current_admin_info and current_admin_info.department ==
+                            'ALL_BRANCHES' %}
+                            <div class="announcement-actions">
+                                {% if announcement.user_id == session['user_id'] %}
+                                <button type="button" class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal"
+                                    data-bs-target="#editAnnouncementModal" data-announcement-id="{{ announcement.id }}"
+                                    data-announcement-title="{{ announcement.title }}"
+                                    data-announcement-content="{{ announcement.content }}"
+                                    data-attached-files="{{ announcement.attached_files | default('') }}">
+                                    <i class="fas fa-edit me-1"></i> Edit
+                                </button>
+                                {% endif %}
+                                {% if is_super_admin or announcement.user_id == session['user_id'] %}
+                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#confirmDeleteModal"
+                                    data-action="{{ url_for('delete_announcement', announcement_id=announcement.id) }}">
+                                    <i class="fas fa-trash me-1"></i> Delete
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="announcement-meta">
+                            <small>
+                                <i class="fas fa-bullhorn me-1"></i>
+                                <strong>Target:</strong>
+                                {{ announcement.department }} /
+                                {% if announcement.semester == 0 or not announcement.semester %}
+                                All Semesters
+                                {% else %}
+                                Semester {{ announcement.semester }}
+                                {% endif %}
+                            </small>
+                            <span class="mx-2">|</span>
+                            <small>
+                                <i class="fas fa-user-shield me-1"></i>
+                                <strong>Posted by:</strong> {{ announcement.user.fullname }}
+                                {% if announcement.user.role == 'administrator' %}
+                                {% if announcement.user.admin_info and announcement.user.admin_info.department ==
+                                'ALL_BRANCHES' %}
+                                (Super Admin)
+                                {% else %}
+                                (Admin)
+                                {% endif %}
+                                {% endif %}
+                                <span class="ms-1">{{ time_ago(announcement.timestamp) }}</span>
+                                {% if announcement.edited %}<span class="fst-italic ms-1">(edited)</span>{% endif %}
+                            </small>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="no-announcements-message">
+                    <h4>No Announcements Posted</h4>
+                    <p>There are no announcements to display. Use the form above to create one.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="editAnnouncementModal" tabindex="-1" aria-labelledby="editAnnouncementModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editAnnouncementModalLabel">Edit Announcement</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="editAnnouncementForm" method="POST" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="edit-title" class="form-label">Announcement Title</label>
+                            <input type="text" class="form-control" id="edit-title" name="title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-content" class="form-label">Announcement Content</label>
+                            <textarea class="form-control" id="edit-content" name="content" rows="4"
+                                required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-file_upload" class="form-label">Currently Attached Files</label>
+                            <div id="current-attached-files" class="mb-2"></div>
+                            <label for="edit-file_upload" class="form-label">Replace or Add New Files (Optional)</label>
+                            <input type="file" class="form-control" id="edit-file_upload" name="files[]" multiple
+                                accept=".pdf, .doc, .docx, .ppt, .pptx, .xlsx, .xls, .png, .jpg, .jpeg, .gif">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel"><i
+                            class="fas fa-triangle-exclamation text-danger me-2"></i>Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to permanently delete this announcement?</p>
+                    <p class="text-danger mb-0">This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Vision<span class="ed">ED</span></a>
+            <ul class="nav justify-content-center my-4">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_admin') }}">Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('registered_users') }}">Registered Users</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('material_uploader') }}">Materials
+                        Uploader</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('query_solver') }}">Query Solver</a></li>
+                <li class="nav-item"><a class="nav-link active"
+                        href="{{ url_for('admin_announcements') }}">Announcements</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+            <div class="mb-4">
+                <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="social-icon" title="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+            <p class="copyright">&copy; 2025 VisionED - Admin Portal. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+            // Edit Modal logic
+            const editAnnouncementModal = document.getElementById('editAnnouncementModal');
+            if (editAnnouncementModal) {
+                editAnnouncementModal.addEventListener('show.bs.modal', event => {
+                    const button = event.relatedTarget;
+                    const announcementId = button.getAttribute('data-announcement-id');
+                    const announcementTitle = button.getAttribute('data-announcement-title');
+                    const announcementContent = button.getAttribute('data-announcement-content');
+                    const attachedFilesString = button.getAttribute('data-attached-files');
+
+                    const modalTitle = editAnnouncementModal.querySelector('.modal-title');
+                    const form = document.getElementById('editAnnouncementForm');
+                    const titleInput = document.getElementById('edit-title');
+                    const contentInput = document.getElementById('edit-content');
+                    const currentFilesDiv = document.getElementById('current-attached-files');
+
+                    modalTitle.textContent = `Edit Announcement - ${announcementTitle}`; // Corrected title
+                    form.action = `/admin/announcements/edit/${announcementId}`;
+                    titleInput.value = announcementTitle;
+                    contentInput.value = announcementContent;
+
+                    // Display currently attached files
+                    currentFilesDiv.innerHTML = '';
+                    if (attachedFilesString) {
+                        const files = attachedFilesString.split(',');
+                        files.forEach(file => {
+                            if (file) {
+                                const fileLink = document.createElement('a');
+                                fileLink.href = "{{ url_for('download_announcement_file', filename='') }}" + file;
+                                fileLink.target = "_blank";
+                                fileLink.classList.add('badge', 'bg-secondary', 'me-2');
+                                fileLink.textContent = file;
+                                currentFilesDiv.appendChild(fileLink);
+                            }
+                        });
+                    } else {
+                        currentFilesDiv.innerHTML = '<span class="text-muted">No files currently attached.</span>';
+                    }
+                });
+            }
+
+            // Delete Modal logic
+            const confirmDeleteModal = document.getElementById('confirmDeleteModal');
+            if (confirmDeleteModal) {
+                let deleteActionUrl = '';
+                const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+                confirmDeleteModal.addEventListener('show.bs.modal', event => {
+                    const button = event.relatedTarget;
+                    deleteActionUrl = button.dataset.action;
+                });
+                confirmDeleteBtn.addEventListener('click', () => {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = deleteActionUrl;
+                    document.body.appendChild(form);
+                    form.submit();
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

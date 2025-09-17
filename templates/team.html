@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisionED - Our Team</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #17a2b8;
+            /* A modern teal */
+            --secondary-color: #2c3e50;
+            /* A deep, professional blue-gray */
+            --background-color: #f8f9fa;
+            --text-color: #343a40;
+            --light-text-color: #6c757d;
+            --white-color: #ffffff;
+            --border-radius: 12px;
+            --border-color: #e9ecef;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Navbar (Consistent with other pages) --- */
+        .navbar {
+            background-color: var(--white-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--secondary-color) !important;
+        }
+
+        .navbar-brand .ed {
+            color: var(--primary-color);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            transform: translateY(-2px);
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 80px 0;
+        }
+
+        /* --- Section Title --- */
+        .section-title h1, .section-title h2 {
+            font-weight: 700;
+        }
+        .section-title p {
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* --- Team Section (REDESIGNED) --- */
+        .team-card {
+            background: var(--white-color);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            text-align: center;
+            padding: 30px;
+            transition: all 0.4s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border-top: 4px solid transparent;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(44, 62, 80, 0.15);
+            border-top-color: var(--primary-color);
+        }
+
+        .team-card .profile-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .team-card img {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--background-color);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+        }
+        
+        .team-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .team-card .role {
+            color: var(--primary-color);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .team-card .card-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .team-card .card-content p {
+            flex-grow: 1;
+        }
+
+        .team-card .social-links a {
+            color: var(--light-text-color);
+            margin: 0 5px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f0f2f5;
+        }
+
+        .team-card .social-links a:hover {
+            color: var(--white-color);
+            background-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        /* --- Footer --- */
+        .footer {
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+            padding: 40px 0 20px 0;
+            flex-shrink: 0;
+        }
+
+        .footer .navbar-brand {
+            color: var(--white-color) !important;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .footer h5 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .footer .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer .footer-link:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+
+        .footer .social-icon {
+            color: rgba(255, 255, 255, 0.7);
+            margin-right: 15px;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .footer .social-icon:hover {
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .footer .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">Vision<span class="ed">ED</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/team">Our Team</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Title -->
+            <div class="text-center mb-5 section-title">
+                <h1>Meet Our Team</h1>
+                <p class="lead text-muted">The passionate minds behind VisionED, dedicated to revolutionizing education.</p>
+            </div>
+            
+            <!-- Core Team -->
+            <div class="row g-4 justify-content-center">
+                <!-- Team Member 1: Ashish Jha -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="team-card">
+                        <div class="profile-wrapper">
+                           <img src="{{ url_for('static', filename='uploads/images/mypic.jpg') }}" alt="Profile picture of Ashish Jha">
+                        </div>
+                        <div class="card-content">
+                            <h5 class="fw-bold">Ashish Jha</h5>
+                            <span class="role">Team Leader | Backend & ML Lead</span>
+                            <p class="text-muted small">Manages backend logic, trains our predictive models, and contributes to frontend development.</p>
+                            <div class="social-links mt-3">
+                                <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Member 2: Sagar Raj -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="team-card">
+                         <div class="profile-wrapper">
+                            <img src="{{ url_for('static', filename='uploads/images/sagar.jpg') }}" alt="Profile picture of Sagar Raj">
+                         </div>
+                        <div class="card-content">
+                            <h5 class="fw-bold">Sagar Raj</h5>
+                            <span class="role">Backend & Frontend Developer</span>
+                            <p class="text-muted small">Works on the Python backend, assists in model training, and specializes in frontend UI/UX design.</p>
+                            <div class="social-links mt-3">
+                                <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Member 3: Jyesh Kumar Bharat -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="team-card">
+                         <div class="profile-wrapper">
+                           <img src="{{ url_for('static', filename='uploads/images/jyesh.jpg') }}" alt="Profile picture of Jyesh Kumar Bharat">
+                         </div>
+                        <div class="card-content">
+                            <h5 class="fw-bold">Jyesh Kumar Bharat</h5>
+                            <span class="role">Frontend & Data Specialist</span>
+                            <p class="text-muted small">Focuses on frontend implementation, data collection, and managing the data upload process.</p>
+                            <div class="social-links mt-3">
+                                <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Member 4: Ritika Kumari -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="team-card">
+                        <div class="profile-wrapper">
+                            <img src="{{ url_for('static', filename='uploads/images/ritika.jpg') }}" alt="Profile picture of Ritika kumari">
+                        </div>
+                        <div class="card-content">
+                            <h5 class="fw-bold">Ritika Kumari</h5>
+                            <span class="role">Frontend & Research Lead</span>
+                            <p class="text-muted small">Contributes to frontend development and leads the collection of research materials for the website.</p>
+                            <div class="social-links mt-3">
+                                <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row gy-4 text-center text-md-start">
+                <!-- Column 1: Brand & About -->
+                <div class="col-lg-4 col-md-12 mb-3 mb-lg-0">
+                    <a class="navbar-brand" href="/">Vision<span class="ed">ED</span></a>
+                    <p class="mt-2" style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+                        Empowering education with AI insights.
+                    </p>
+                </div>
+
+                <!-- Column 2: Quick Links -->
+                <div class="col-lg-2 col-md-4 col-6">
+                    <h5 class="mb-3">Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="/" class="footer-link">Home</a></li>
+                        <li class="mb-2"><a href="/contact" class="footer-link">Contact</a></li>
+                        <li class="mb-2"><a href="/team" class="footer-link">Our Team</a></li>
+                        <li class="mb-2"><a href="/login" class="footer-link">Login</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Resources -->
+                <div class="col-lg-3 col-md-4 col-6">
+                    <h5 class="mb-3">Resources</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="/blog" class="footer-link">Blog</a></li>
+                        <li class="mb-2"><a href="/privacy" class="footer-link">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="/terms" class="footer-link">Terms of Service</a></li>
+                        <li class="mb-2"><a href="/faq" class="footer-link">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Follow Us -->
+                <div class="col-lg-3 col-md-4">
+                    <h5 class="mb-3">Follow Us</h5>
+                    <div class="d-flex justify-content-center justify-content-md-start">
+                        <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="copyright text-center">
+                        &copy; 2025 VisionED - Student Performance Prediction. All rights reserved.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+

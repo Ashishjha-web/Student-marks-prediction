@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisionED - Announcements</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #17a2b8;
+            --secondary-color: #2c3e50;
+            --background-color: #f4f7f6;
+            --text-color: #333;
+            --light-text-color: #777;
+            --white-color: #ffffff;
+            --border-radius: 12px;
+            --border-color: #ddd;
+            --header-gradient: linear-gradient(135deg, #17a2b8 0%, #4a919e 50%, #2c3e50 100%);
+            --announcement-card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --announcement-card-hover-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .navbar {
+            background-color: var(--white-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--secondary-color) !important;
+        }
+
+        .navbar-brand .ed {
+            color: var(--primary-color);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-logout {
+            background-color: #dc3545;
+            color: var(--white-color);
+            font-weight: 500;
+            padding: 0.5rem 1.2rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background-color: #c82333;
+            color: var(--white-color);
+            transform: translateY(-2px);
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 40px 20px;
+        }
+
+        .header-section {
+            background-image: var(--header-gradient);
+            background-size: cover;
+            background-position: center;
+            color: var(--white-color);
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 2rem;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-section h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-section p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content-card {
+            background: var(--white-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+        }
+
+        .announcement-card {
+            background-color: var(--white-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--announcement-card-shadow);
+            margin-bottom: 20px;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            padding: 20px;
+            border-left: 5px solid transparent;
+        }
+
+        .announcement-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--announcement-card-hover-shadow);
+            border-left-color: var(--primary-color);
+        }
+
+        .announcement-card .card-header {
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .announcement-card .card-header h5 {
+            margin: 0;
+            font-size: 1.3rem;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .announcement-card .card-header small {
+            color: var(--light-text-color);
+            font-size: 0.9rem;
+        }
+
+        .announcement-card .card-body p {
+            line-height: 1.6;
+            color: var(--text-color);
+            margin-bottom: 0;
+        }
+
+        .no-announcements-message {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: #f9f9f9;
+            border-radius: var(--border-radius);
+            border: 1px dashed var(--primary-color);
+        }
+
+        .no-announcements-message i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .no-announcements-message h4 {
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .no-announcements-message p {
+            color: var(--light-text-color);
+        }
+
+        .footer {
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+            padding: 60px 0 20px 0;
+            flex-shrink: 0;
+        }
+
+        .footer .navbar-brand {
+            color: var(--white-color) !important;
+        }
+
+        .footer .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            padding: 0.5rem 1rem;
+        }
+
+        .footer .nav-link:hover {
+            color: var(--white-color);
+        }
+
+        .footer .social-icon {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0 12px;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer .social-icon:hover {
+            color: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        .footer .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Styles for attached files section */
+        .attached-files {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .file-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 12px;
+            background-color: #f1f3f5;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            text-decoration: none;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: background-color 0.2s;
+        }
+
+        .file-link:hover {
+            background-color: #e2e6ea;
+            color: var(--primary-color);
+        }
+
+        .file-link i {
+            margin-right: 8px;
+        }
+
+        .file-link:hover i {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('student_dashboard') }}">Vision<span class="ed">ED</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_student') }}">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('my_courses') }}">My Courses</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('subject_entry') }}">Performance
+                            Analytics</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('ask_query') }}">Ask Query</a></li>
+                    <li class="nav-item"><a class="nav-link active"
+                            href="{{ url_for('student_announcements') }}">Announcements</a></li>
+                    <li class="nav-item"><a class="btn btn-logout" href="{{ url_for('logout') }}">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="header-section">
+                <div class="header-content">
+                    <h1><i class="fas fa-bullhorn me-2"></i> Announcements</h1>
+                    <p>Stay informed with the latest updates and news.</p>
+                </div>
+            </div>
+
+            <div class="content-card">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                {% if announcements %}
+                {% for announcement in announcements %}
+                <div class="announcement-card">
+                    <div class="card-header">
+                        <h5 class="card-title">{{ announcement.title }}</h5>
+                        <small>
+                            Posted by {{ announcement.user.fullname }}
+                            {% if announcement.user.role == 'administrator' %}
+                            {% if announcement.user.admin_info and announcement.user.admin_info.department ==
+                            'ALL_BRANCHES' %}
+                            (Super Admin)
+                            {% else %}
+                            (Admin)
+                            {% endif %}
+                            {% endif %}
+                            <span class="ms-1">{{ time_ago(announcement.timestamp) }}</span>
+                            {% if announcement.edited %}<span class="fst-italic ms-1">(edited)</span>{% endif %}
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{{ announcement.content }}</p>
+                        {% if announcement.attached_files %}
+                        <div class="attached-files">
+                            {% for file in announcement.attached_files.split(',') %}
+                            {% set file_extension = file.split('.')[-1] %}
+                            {% if file_extension == 'pdf' %}
+                            <a href="{{ url_for('download_announcement_file', filename=file) }}" class="file-link"
+                                target="_blank">
+                                <i class="fas fa-file-pdf"></i>
+                                <span>{{ file }}</span>
+                            </a>
+                            {% elif file_extension == 'doc' or file_extension == 'docx' %}
+                            <a href="{{ url_for('download_announcement_file', filename=file) }}" class="file-link"
+                                target="_blank">
+                                <i class="fas fa-file-word"></i>
+                                <span>{{ file }}</span>
+                            </a>
+                            {% elif file_extension == 'ppt' or file_extension == 'pptx' %}
+                            <a href="{{ url_for('download_announcement_file', filename=file) }}" class="file-link"
+                                target="_blank">
+                                <i class="fas fa-file-powerpoint"></i>
+                                <span>{{ file }}</span>
+                            </a>
+                            {% elif file_extension == 'xls' or file_extension == 'xlsx' %}
+                            <a href="{{ url_for('download_announcement_file', filename=file) }}" class="file-link"
+                                target="_blank">
+                                <i class="fas fa-file-excel"></i>
+                                <span>{{ file }}</span>
+                            </a>
+                            {% elif file_extension in ['png', 'jpg', 'jpeg', 'gif'] %}
+                            <a href="{{ url_for('download_announcement_file', filename=file) }}" class="file-link"
+                                target="_blank">
+                                <i class="fas fa-image"></i>
+                                <span>{{ file }}</span>
+                            </a>
+                            {% else %}
+                            <a href="{{ url_for('download_announcement_file', filename=file) }}" class="file-link"
+                                target="_blank">
+                                <i class="fas fa-file"></i>
+                                <span>{{ file }}</span>
+                            </a>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="no-announcements-message">
+                    <i class="fas fa-rss"></i>
+                    <h4>No Announcements Yet</h4>
+                    <p>Check back soon for the latest news and updates!</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <a class="navbar-brand" href="{{ url_for('student_dashboard') }}">Vision<span class="ed">ED</span></a>
+            <ul class="nav justify-content-center my-4">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_student') }}">Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('my_courses') }}">My Courses</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('subject_entry') }}">Performance
+                        Analytics</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('ask_query') }}">Ask Query</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('student_announcements') }}">Announcements</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+            <div class="mb-4">
+                <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="social-icon" title="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+            <p class="copyright">&copy; 2025 VisionED - Student Performance Prediction. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

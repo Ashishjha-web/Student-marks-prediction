@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VisionED - Query Solver</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #17a2b8;
+            --secondary-color: #2c3e50;
+            --danger-color: #dc3545;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --admin-highlight-bg: #e8f7f9;
+            --pinned-highlight-bg: #fff8e1;
+            --background-color: #f8f9fa;
+            --text-color: #343a40;
+            --light-text-color: #6c757d;
+            --white-color: #ffffff;
+            --border-radius: 12px;
+            --border-color: #e9ecef;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: var(--white-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--secondary-color) !important;
+        }
+
+        .navbar-brand .ed {
+            color: var(--primary-color);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-logout {
+            background-color: #dc3545;
+            color: var(--white-color);
+            font-weight: 500;
+            padding: 0.5rem 1.2rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background-color: #c82333;
+            color: var(--white-color);
+            transform: translateY(-2px);
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 60px 0;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .card {
+            background: var(--white-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, .07);
+            border: none;
+            padding: 30px;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(23, 162, 184, .2);
+        }
+
+        .btn-submit {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            border: none;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all .3s;
+        }
+
+        .query-card {
+            padding: 25px;
+        }
+
+        .query-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .query-header img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            font-weight: 600;
+        }
+
+        .timestamp {
+            font-size: .85rem;
+            color: var(--light-text-color);
+        }
+
+        .query-body {
+            line-height: 1.7;
+            word-wrap: break-word;
+        }
+
+        .edit-form-container {
+            display: none;
+            margin-top: 15px;
+        }
+
+        .query-footer {
+            margin-top: 20px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--light-text-color);
+            cursor: pointer;
+            font-size: .9rem;
+            transition: all .2s;
+            padding: 6px 10px;
+            border-radius: 6px;
+        }
+
+        .action-btn:hover {
+            background-color: #f1f3f5;
+            color: var(--primary-color);
+        }
+
+        .action-btn.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .action-btn.dislike.active {
+            color: var(--danger-color);
+        }
+
+        .action-btn.btn-heart.active {
+            color: var(--danger-color) !important;
+        }
+
+        .btn-delete:hover {
+            color: var(--white-color);
+            background-color: var(--danger-color);
+        }
+
+        .btn-toggle-replies {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .replies-section {
+            margin-top: 20px;
+            padding-left: 25px;
+            border-left: 3px solid var(--border-color);
+        }
+
+        .reply-card {
+            background-color: #fdfdff;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .nested-replies {
+            margin-top: 15px;
+            padding-left: 15px;
+            border-left: 2px solid #ced4da;
+        }
+
+        .admin-post {
+            background-color: var(--admin-highlight-bg);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .pinned-post {
+            background-color: var(--pinned-highlight-bg);
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .admin-badge {
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+        }
+
+        .status-icons {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.1rem;
+            display: flex;
+            gap: 10px;
+            color: var(--light-text-color);
+        }
+
+        .status-icons .fa-thumbtack {
+            color: var(--warning-color);
+        }
+
+        .status-icons .fa-lock {
+            color: var(--danger-color);
+        }
+
+        /* --- Footer --- */
+        .footer {
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+            padding: 60px 0 20px 0;
+            flex-shrink: 0;
+        }
+
+        .footer .navbar-brand {
+            color: var(--white-color) !important;
+        }
+
+        .footer .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            padding: 0.5rem 1rem;
+        }
+
+        .footer .nav-link:hover {
+            color: var(--white-color);
+        }
+
+        .footer .social-icon {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0 12px;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer .social-icon:hover {
+            color: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        .footer .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Vision<span class="ed">ED</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_admin') }}">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('registered_users') }}">Registered
+                            Users</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('material_uploader') }}">Material
+                            Uploader</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('query_solver') }}">Query
+                            Solver</a></li>
+                    <li class="nav-item"><a class="nav-link"
+                            href="{{ url_for('admin_announcements') }}">Announcements</a>
+                    </li>
+                    <li class="nav-item"><a class="btn btn-logout" href="{{ url_for('logout') }}">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container" id="main-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}{% for category, message in messages %}
+            {% if category != 'blocked' %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }} <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endif %}
+            {% endfor %}{% endif %}
+            {% endwith %}
+
+            <div class="page-header">
+                <h1>Community Q&A Solver</h1>
+                <p class="lead text-muted">Moderate discussions and manage the community forum.</p>
+            </div>
+
+            {% if current_user.is_forum_blocked %}
+            <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+                <i class="fas fa-ban fa-2x me-3"></i>
+                <div>
+                    <h4 class="alert-heading">Your Forum Access is Restricted</h4>
+                    <p>
+                        You have been blocked from posting, replying, and editing by a super admin
+                        {% if current_user.blocker %}
+                        (<b>{{ current_user.blocker.fullname }}</b>).
+                        {% else %}
+                        .
+                        {% endif %}
+                    </p>
+                    <hr>
+                    <p class="mb-0">
+                        Please contact them for further information. You can still view the forum content.
+                    </p>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if not current_user.is_forum_blocked %}
+            <div class="card mb-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="mb-0">Forum Controls</h4>
+                    <button type="button"
+                        class="btn btn-sm {% if is_chat_locked %}btn-success{% else %}btn-danger{% endif %}"
+                        data-bs-toggle="modal" data-bs-target="#confirmLockForumModal"
+                        data-action="{{ url_for('admin_toggle_global_lock') }}"
+                        data-is-locked="{{ is_chat_locked|tojson }}">
+                        <i class="fas {% if is_chat_locked %}fa-unlock{% else %}fa-lock{% endif %} me-2"></i>
+                        {% if is_chat_locked %}Unlock Forum{% else %}Lock Forum{% endif %}
+                    </button>
+                </div>
+                <form action="{{ url_for('query_solver') }}" method="POST">
+                    <textarea class="form-control mb-3" name="query_text"
+                        placeholder="Post a new query or announcement..." required></textarea>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-submit px-4 py-2">Post Query</button>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+
+            <h3 class="mb-4">Recent Queries</h3>
+
+            {% macro render_reply_tree(replies, query_id, is_locked, is_super_admin, current_user) %}
+            {% for reply in replies %}
+            <div class="reply-card {% if reply.author.role == 'administrator' %}admin-post{% endif %} {% if reply.is_pinned %}pinned-post{% endif %}"
+                id="reply-{{ reply.id }}">
+                <div class="query-header position-relative">
+                    {% set photo_path = (reply.author.admin_info.profile_photo if reply.author.role == 'administrator'
+                    and reply.author.admin_info else reply.author.student_info.profile_photo if
+                    reply.author.student_info else ('images/admin_default.png' if reply.author.role == 'administrator'
+                    else 'images/student_default.png')) or ('images/admin_default.png' if reply.author.role ==
+                    'administrator' else 'images/student_default.png') %}
+                    {% if not photo_path.startswith('images/') %}
+                    {% set photo_path = 'images/' + photo_path %}
+                    {% endif %}
+                    <img src="{{ url_for('static', filename='uploads/' + photo_path) }}" alt="Profile picture">
+                    <div>
+                        <div class="user-name">
+                            {{ reply.author.fullname }}
+                            {% if reply.author.role == 'administrator' %}
+                            {% if reply.author.admin_info and reply.author.admin_info.department == 'ALL_BRANCHES' %}
+                            <span class="admin-badge">Super Admin</span>
+                            {% else %}
+                            <span class="admin-badge">Admin</span>
+                            {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="timestamp">{{ time_ago(reply.timestamp) }} {% if reply.edited %}<span
+                                class="fst-italic">(edited)</span>{% endif %}</div>
+                    </div>
+                    <div class="status-icons">{% if reply.is_pinned %}<i class="fas fa-thumbtack" title="Pinned"></i>{%
+                        endif %}</div>
+                </div>
+                <div class="query-body py-2">
+                    <p>{{ reply.text | safe }}</p>
+                </div>
+                <div class="edit-form-container">
+                    <form action="{{ url_for('admin_edit_reply', reply_id=reply.id) }}" method="POST">
+                        <textarea class="form-control mb-2" name="edit_text" rows="3"
+                            required>{{ reply.text }}</textarea>
+                        <div class="text-end"><button type="button"
+                                class="btn btn-sm btn-secondary btn-cancel-edit">Cancel</button> <button type="submit"
+                                class="btn btn-sm btn-success">Save</button></div>
+                    </form>
+                </div>
+                <div class="query-footer d-flex flex-wrap justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-2 mb-2 mb-md-0">
+                        <button
+                            class="action-btn btn-vote like {% if reply.user_vote and reply.user_vote.vote_type == 'like' %}active{% endif %}"
+                            data-entity-type="reply" data-entity-id="{{ reply.id }}" data-vote-type="like"><i
+                                class="fas fa-thumbs-up"></i> <span class="count">{{
+                                reply.votes|selectattr('vote_type','equalto','like')|list|length }}</span></button>
+                        <button
+                            class="action-btn btn-vote dislike {% if reply.user_vote and reply.user_vote.vote_type == 'dislike' %}active{% endif %}"
+                            data-entity-type="reply" data-entity-id="{{ reply.id }}" data-vote-type="dislike"><i
+                                class="fas fa-thumbs-down"></i> <span class="count">{{
+                                reply.votes|selectattr('vote_type','equalto','dislike')|list|length }}</span></button>
+                        {% set heart_givers = reply.hearts | map(attribute='author') | selectattr('role', 'equalto',
+                        'administrator') | map(attribute='fullname') | list %}
+                        {% set heart_givers_string = heart_givers | join(', ') %}
+                        <button type="button" class="action-btn btn-heart {% if reply.user_heart %}active{% endif %}"
+                            data-entity-type="reply" data-entity-id="{{ reply.id }}" data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            title="{{ heart_givers_string if heart_givers else 'Give a heart' }}">
+                            <i class="fas fa-heart"></i> <span class="count">{{ reply.hearts|length }}</span>
+                        </button>
+                        {% if not is_locked and not current_user.is_forum_blocked %}<button class="action-btn btn-reply"
+                            data-query-id="{{ query_id }}" data-parent-id="{{ reply.id }}"><i class="fas fa-reply"></i>
+                            Reply</button>{% endif %}
+                    </div>
+
+                    <div class="d-flex align-items-center gap-1">
+                        {% if not current_user.is_forum_blocked %}
+                        <form class="d-inline" method="POST"
+                            action="{{ url_for('admin_toggle_pin', entity_type='reply', entity_id=reply.id) }}"><button
+                                type="submit" class="action-btn"
+                                title="{{ 'Unpin reply' if reply.is_pinned else 'Pin reply' }}"><i
+                                    class="fas fa-thumbtack me-1"></i>{{ 'Unpin' if reply.is_pinned else 'Pin'
+                                }}</button></form>
+                        {% endif %}
+
+                        {% set reply_author = reply.author %}
+                        {% set author_is_regular_admin = reply_author.role == 'administrator' and
+                        reply_author.admin_info and reply_author.admin_info.department != 'ALL_BRANCHES' %}
+                        {% if (reply_author.role == 'student' or (is_super_admin and author_is_regular_admin)) and not
+                        current_user.is_forum_blocked %}
+                        <button type="button" class="action-btn" data-bs-toggle="modal"
+                            data-bs-target="#confirmBlockModal"
+                            data-action="{{ url_for('toggle_forum_block', user_id=reply_author.id) }}"
+                            data-username="{{ reply_author.fullname }}"
+                            data-is-blocked="{{ reply_author.is_forum_blocked|tojson }}"
+                            data-target-role="{{ reply_author.role }}">
+                            {% set target_role_text = 'Admin' if reply_author.role == 'administrator' else 'User' %}
+                            {% if reply_author.is_forum_blocked %}
+                            <i class="fas fa-user-check me-1"></i> Unblock {{ target_role_text }}
+                            {% else %}
+                            <i class="fas fa-user-slash me-1"></i> Block {{ target_role_text }}
+                            {% endif %}
+                        </button>
+                        {% endif %}
+
+                        {% if session['user_id'] == reply.user_id and not current_user.is_forum_blocked %}<button
+                            type="button" class="action-btn btn-edit" title="Edit"><i
+                                class="fas fa-edit me-1"></i>Edit</button>{% endif %}
+
+                        {% set author_is_super_admin = reply.author.role == 'administrator' and reply.author.admin_info
+                        and reply.author.admin_info.department == 'ALL_BRANCHES' %}
+                        {% if not current_user.is_forum_blocked and (session['user_id'] == reply.user_id or
+                        reply.author.role == 'student' or (is_super_admin and not author_is_super_admin)) %}
+                        <button type="button" class="action-btn btn-delete" title="Delete" data-bs-toggle="modal"
+                            data-bs-target="#confirmDeleteModal"
+                            data-action="{{ url_for('admin_delete_reply', reply_id=reply.id) }}">
+                            <i class="fas fa-trash me-1"></i>Delete
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="replies-section-container">
+                    <div id="reply-form-container-reply-{{ reply.id }}"></div>
+                    {% if reply.children %}
+                    <button class="action-btn btn-toggle-replies mt-2" data-reply-count="{{ reply.children|length }}"><i
+                            class="fas fa-caret-down"></i> View {{
+                        reply.children|length }} {% if reply.children|length == 1 %}reply{% else %}replies{% endif
+                        %}</button>
+                    <div class="nested-replies" style="display: none;">{{ render_reply_tree(reply.children, query_id,
+                        is_locked, is_super_admin, current_user) }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            {% endmacro %}
+
+            {% set is_super_admin = current_admin_info and current_admin_info.department == 'ALL_BRANCHES' %}
+
+            {% for query in queries %}
+            <div class="card query-card mb-4 {% if query.author.role == 'administrator' %}admin-post{% endif %} {% if query.is_pinned %}pinned-post{% endif %}"
+                id="query-{{ query.id }}">
+                <div class="query-header position-relative">
+                    {% set photo_path = (query.author.admin_info.profile_photo if query.author.role == 'administrator'
+                    and query.author.admin_info else query.author.student_info.profile_photo if
+                    query.author.student_info else ('images/admin_default.png' if query.author.role == 'administrator'
+                    else 'images/student_default.png')) or ('images/admin_default.png' if query.author.role ==
+                    'administrator' else 'images/student_default.png') %}
+                    {% if not photo_path.startswith('images/') %}
+                    {% set photo_path = 'images/' + photo_path %}
+                    {% endif %}
+                    <img src="{{ url_for('static', filename='uploads/' + photo_path) }}" alt="Profile picture">
+                    <div>
+                        <div class="user-name">
+                            {{ query.author.fullname }}
+                            {% if query.author.role == 'administrator' %}
+                            {% if query.author.admin_info and query.author.admin_info.department == 'ALL_BRANCHES' %}
+                            <span class="admin-badge">Super Admin</span>
+                            {% else %}
+                            <span class="admin-badge">Admin</span>
+                            {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="timestamp">Posted {{ time_ago(query.timestamp) }} {% if query.edited %}<span
+                                class="fst-italic">(edited)</span>{% endif %}</div>
+                    </div>
+                    <div class="status-icons">
+                        {% if query.is_pinned %}<i class="fas fa-thumbtack" title="Pinned"></i>{% endif %}
+                        {% if query.is_locked %}<i class="fas fa-lock" title="Locked"></i>{% endif %}
+                    </div>
+                </div>
+                <div class="query-body py-2">
+                    <p>{{ query.text | safe }}</p>
+                </div>
+                <div class="edit-form-container">
+                    <form action="{{ url_for('admin_edit_query', query_id=query.id) }}" method="POST">
+                        <textarea class="form-control mb-2" name="edit_text" rows="4"
+                            required>{{ query.text }}</textarea>
+                        <div class="text-end"><button type="button"
+                                class="btn btn-sm btn-secondary btn-cancel-edit">Cancel</button> <button type="submit"
+                                class="btn btn-sm btn-success">Save</button></div>
+                    </form>
+                </div>
+                <div class="query-footer d-flex flex-wrap justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-2 mb-2 mb-md-0">
+                        <button
+                            class="action-btn btn-vote like {% if query.user_vote and query.user_vote.vote_type == 'like' %}active{% endif %}"
+                            data-entity-type="query" data-entity-id="{{ query.id }}" data-vote-type="like"><i
+                                class="fas fa-thumbs-up"></i> <span class="count">{{
+                                query.votes|selectattr('vote_type','equalto','like')|list|length }}</span></button>
+                        <button
+                            class="action-btn btn-vote dislike {% if query.user_vote and query.user_vote.vote_type == 'dislike' %}active{% endif %}"
+                            data-entity-type="query" data-entity-id="{{ query.id }}" data-vote-type="dislike"><i
+                                class="fas fa-thumbs-down"></i> <span class="count">{{
+                                query.votes|selectattr('vote_type','equalto','dislike')|list|length }}</span></button>
+                        {% set heart_givers = query.hearts | map(attribute='author') | selectattr('role', 'equalto',
+                        'administrator') | map(attribute='fullname') | list %}
+                        {% set heart_givers_string = heart_givers | join(', ') %}
+                        <button type="button" class="action-btn btn-heart {% if query.user_heart %}active{% endif %}"
+                            data-entity-type="query" data-entity-id="{{ query.id }}" data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            title="{{ heart_givers_string if heart_givers else 'Give a heart' }}">
+                            <i class="fas fa-heart"></i> <span class="count">{{ query.hearts|length }}</span>
+                        </button>
+                        {% if not query.is_locked and not current_user.is_forum_blocked %}<button
+                            class="action-btn btn-reply" data-query-id="{{ query.id }}"><i
+                                class="fas fa-comment-dots"></i> Reply</button>{% endif %}
+                    </div>
+                    <div class="d-flex align-items-center gap-1">
+                        {% if not current_user.is_forum_blocked %}
+                        <form class="d-inline" method="POST"
+                            action="{{ url_for('admin_toggle_pin', entity_type='query', entity_id=query.id) }}"><button
+                                type="submit" class="action-btn"><i class="fas fa-thumbtack me-1"></i>{{ 'Unpin' if
+                                query.is_pinned else 'Pin' }}</button></form>
+                        {% endif %}
+
+                        {% set author = query.author %}
+                        {% set author_is_regular_admin = author.role == 'administrator' and author.admin_info and
+                        author.admin_info.department != 'ALL_BRANCHES' %}
+                        {% if (author.role == 'student' or (is_super_admin and author_is_regular_admin)) and not
+                        current_user.is_forum_blocked %}
+                        <button type="button" class="action-btn" data-bs-toggle="modal"
+                            data-bs-target="#confirmBlockModal"
+                            data-action="{{ url_for('toggle_forum_block', user_id=author.id) }}"
+                            data-username="{{ author.fullname }}" data-is-blocked="{{ author.is_forum_blocked|tojson }}"
+                            data-target-role="{{ author.role }}">
+                            {% set target_role_text = 'Admin' if author.role == 'administrator' else 'User' %}
+                            {% if author.is_forum_blocked %}<i class="fas fa-user-check me-1"></i> Unblock {{
+                            target_role_text }}{% else %}<i class="fas fa-user-slash me-1"></i> Block {{
+                            target_role_text }}{% endif %}
+                        </button>
+                        {% endif %}
+
+                        {% if session['user_id'] == query.user_id and not current_user.is_forum_blocked %}<button
+                            type="button" class="action-btn btn-edit" title="Edit"><i
+                                class="fas fa-edit me-1"></i>Edit</button>{% endif %}
+
+                        {% set author_is_super_admin = query.author.role == 'administrator' and query.author.admin_info
+                        and query.author.admin_info.department == 'ALL_BRANCHES' %}
+                        {% if not current_user.is_forum_blocked and (session['user_id'] == query.user_id or
+                        query.author.role == 'student' or (is_super_admin and not author_is_super_admin)) %}
+                        <button type="button" class="action-btn btn-delete" title="Delete" data-bs-toggle="modal"
+                            data-bs-target="#confirmDeleteModal"
+                            data-action="{{ url_for('admin_delete_query', query_id=query.id) }}">
+                            <i class="fas fa-trash me-1"></i>Delete
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="replies-section-container">
+                    <div id="reply-form-container-{{ query.id }}"></div>
+                    {% if query.replies %}
+                    {% set top_level_replies = query.replies | selectattr('parent_id', 'equalto', none) %}
+                    {% if top_level_replies %}
+                    <button class="action-btn btn-toggle-replies mt-2" data-reply-count="{{ query.replies|length }}"><i
+                            class="fas fa-caret-down"></i> View {{
+                        query.replies|length }} {% if query.replies|length == 1 %}reply{% else %}replies{% endif
+                        %}</button>
+                    <div class="replies-section" style="display: none;">{{ render_reply_tree(top_level_replies,
+                        query.id, query.is_locked, is_super_admin, current_user) }}</div>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            {% else %}
+            <p class="text-center text-muted mt-5">No queries have been posted yet.</p>
+            {% endfor %}
+
+            <div id="master-reply-form" class="mt-3 p-3 bg-light rounded" style="display: none;">
+                <form method="POST"><input type="hidden" name="parent_id" value=""><textarea class="form-control mb-2"
+                        name="reply_text" placeholder="Write your reply..." rows="3" required></textarea>
+                    <div class="text-end"><button type="button" class="btn btn-sm btn-secondary"
+                            id="cancel-master-reply">Cancel</button><button type="submit"
+                            class="btn btn-sm btn-primary">Post Reply</button></div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel"><i
+                            class="fas fa-triangle-exclamation text-danger me-2"></i>Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to permanently delete this item?</p>
+                    <p class="text-danger mb-0">This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="blockedInfoModal" tabindex="-1" aria-labelledby="blockedInfoModalLabel"
+        aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center p-4">
+                    <i class="fas fa-user-lock fa-4x text-danger mb-3"></i>
+                    <h3 class="modal-title mb-2" id="blockedInfoModalLabel">Forum Access Restricted</h3>
+                    <p class="text-muted">Your ability to post, reply, and edit on the forum has been suspended by a
+                        super admin.</p>
+                    <div class="bg-light p-3 rounded mt-3">
+                        <p class="mb-1"><strong>Blocked By:</strong> {% if current_user and current_user.blocker
+                            %}{{ current_user.blocker.fullname }}{% else %}A Super Admin{% endif %}</p>
+                        <p class="mb-0">Please contact the administrator for further assistance.</p>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center border-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">I Understand</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="confirmBlockModal" tabindex="-1" aria-labelledby="confirmBlockModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmBlockModalLabel">Confirm Action</h5><button type="button"
+                        class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer"><button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Cancel</button><button type="button" class="btn"
+                        id="confirmBlockBtn">Confirm</button></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="confirmLockForumModal" tabindex="-1" aria-labelledby="confirmLockForumModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmLockForumModalLabel">Confirm Forum Action</h5><button
+                        type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer"><button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Cancel</button><button type="button" class="btn"
+                        id="confirmLockForumBtn">Confirm</button></div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Vision<span class="ed">ED</span></a>
+            <ul class="nav justify-content-center my-4">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_admin') }}">Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('registered_users') }}">Registered
+                        Users</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('material_uploader') }}">Materials
+                        Uploader</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('query_solver') }}">Query Solver</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_announcements') }}">Announcements</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+            <div class="mb-4">
+                <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="social-icon" title="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+            <p class="copyright">&copy; 2025 VisionED - Admin Portal. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(
+                tooltipTriggerEl));
+
+            async function apiRequest(url, method = 'POST', body = {}) {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify(body)
+                });
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({
+                        message: 'An unknown error occurred'
+                    }));
+                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            }
+
+            async function handleVoteClick(button) {
+                const {
+                    entityType,
+                    entityId,
+                    voteType
+                } = button.dataset;
+                const footer = button.closest('.query-footer');
+                if (!entityType || !entityId || !voteType || !footer) return;
+                try {
+                    const data = await apiRequest(`/admin/vote/${entityType}/${entityId}`, 'POST', {
+                        vote_type: voteType
+                    });
+                    const likeBtn = footer.querySelector('.btn-vote.like');
+                    const dislikeBtn = footer.querySelector('.btn-vote.dislike');
+                    likeBtn.querySelector('.count').textContent = data.likes;
+                    dislikeBtn.querySelector('.count').textContent = data.dislikes;
+                    likeBtn.classList.toggle('active', data.user_vote === 'like');
+                    dislikeBtn.classList.toggle('active', data.user_vote === 'dislike');
+                } catch (error) {
+                    console.error("Vote failed:", error);
+                }
+            }
+            async function handleHeartClick(button) {
+                const {
+                    entityType,
+                    entityId
+                } = button.dataset;
+                if (!entityType || !entityId) return;
+                try {
+                    const data = await apiRequest(`/admin/toggle_heart/${entityType}/${entityId}`);
+                    button.classList.toggle('active', data.is_hearted);
+                    const countSpan = button.querySelector('.count');
+                    if (countSpan) {
+                        countSpan.textContent = data.heart_count;
+                    }
+                } catch (error) {
+                    console.error("Heart toggle failed:", error);
+                }
+            }
+
+            function handleEditClick(button) {
+                const container = button.closest('.query-card, .reply-card');
+                if (!container) return;
+                container.querySelector('.query-body').style.display = 'none';
+                const editForm = container.querySelector('.edit-form-container');
+                editForm.style.display = 'block';
+                editForm.querySelector('textarea').focus();
+            }
+
+            function cancelEdit(button) {
+                const container = button.closest('.query-card, .reply-card');
+                if (!container) return;
+                container.querySelector('.edit-form-container').style.display = 'none';
+                container.querySelector('.query-body').style.display = 'block';
+            }
+
+            function handleReplyClick(button) {
+                const {
+                    queryId,
+                    parentId = ''
+                } = button.dataset;
+                const masterReplyForm = document.getElementById('master-reply-form');
+                const form = masterReplyForm.querySelector('form');
+                let targetContainer = parentId ?
+                    document.querySelector(`#reply-${parentId} .replies-section-container`) :
+                    document.getElementById(`reply-form-container-${queryId}`);
+                if (!targetContainer) return;
+                targetContainer.appendChild(masterReplyForm);
+                form.action = `/admin/post_reply/${queryId}`;
+                form.querySelector('input[name="parent_id"]').value = parentId;
+                masterReplyForm.style.display = 'block';
+                const textarea = masterReplyForm.querySelector('textarea');
+                textarea.value = '';
+                textarea.focus();
+            }
+
+            function cancelMasterReply() {
+                const masterReplyForm = document.getElementById('master-reply-form');
+                masterReplyForm.style.display = 'none';
+                document.body.appendChild(masterReplyForm);
+            }
+
+            function handleToggleReplies(button) {
+                const targetDiv = button.nextElementSibling;
+                if (!targetDiv || (!targetDiv.classList.contains('nested-replies') && !targetDiv.classList.contains(
+                    'replies-section'))) {
+                    console.error("Could not find the correct replies div to toggle.");
+                    return;
+                }
+                const isHidden = targetDiv.style.display === 'none';
+                targetDiv.style.display = isHidden ? 'block' : 'none';
+                const icon = button.querySelector('i');
+                if (isHidden) {
+                    icon.classList.replace('fa-caret-down', 'fa-caret-up');
+                    button.innerHTML = `<i class="fas fa-caret-up"></i> Hide replies`;
+                } else {
+                    icon.classList.replace('fa-caret-up', 'fa-caret-down');
+                    const replyCount = button.dataset.replyCount || 0;
+                    const replyText = parseInt(replyCount) === 1 ? 'reply' : 'replies';
+                    button.innerHTML = `<i class="fas fa-caret-down"></i> View ${replyCount} ${replyText}`;
+                }
+            }
+
+            document.getElementById('main-container').addEventListener('click', (event) => {
+                const button = event.target.closest('button');
+                if (!button) return;
+                if (button.classList.contains('btn-vote')) {
+                    handleVoteClick(button);
+                } else if (button.classList.contains('btn-heart')) {
+                    handleHeartClick(button);
+                } else if (button.classList.contains('btn-edit')) {
+                    handleEditClick(button);
+                } else if (button.classList.contains('btn-cancel-edit')) {
+                    cancelEdit(button);
+                } else if (button.classList.contains('btn-reply')) {
+                    handleReplyClick(button);
+                } else if (button.classList.contains('btn-toggle-replies')) {
+                    handleToggleReplies(button);
+                }
+            });
+
+            document.getElementById('cancel-master-reply').addEventListener('click', cancelMasterReply);
+
+            const confirmDeleteModal = document.getElementById('confirmDeleteModal');
+            if (confirmDeleteModal) {
+                let deleteActionUrl = '';
+                const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+                confirmDeleteModal.addEventListener('show.bs.modal', event => {
+                    const button = event.relatedTarget;
+                    deleteActionUrl = button.dataset.action;
+                });
+                confirmDeleteBtn.addEventListener('click', () => {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = deleteActionUrl;
+                    document.body.appendChild(form);
+                    form.submit();
+                });
+            }
+
+            const confirmBlockModal = document.getElementById('confirmBlockModal');
+            if (confirmBlockModal) {
+                let actionUrl = '';
+                const confirmBtn = document.getElementById('confirmBlockBtn');
+                confirmBlockModal.addEventListener('show.bs.modal', event => {
+                    const button = event.relatedTarget;
+                    actionUrl = button.dataset.action;
+                    const username = button.dataset.username;
+                    const isBlocked = JSON.parse(button.dataset.isBlocked);
+                    const targetRole = button.dataset.targetRole === 'administrator' ? 'admin' : 'user';
+                    const modalBody = confirmBlockModal.querySelector('.modal-body');
+                    if (isBlocked) {
+                        modalBody.innerHTML =
+                            `Are you sure you want to <strong>unblock ${username}</strong> (${targetRole})?`;
+                        confirmBtn.textContent = 'Yes, Unblock';
+                        confirmBtn.className = 'btn btn-success';
+                    } else {
+                        modalBody.innerHTML =
+                            `Are you sure you want to <strong>block ${username}</strong> (${targetRole})? This will prevent them from posting.`;
+                        confirmBtn.textContent = 'Yes, Block';
+                        confirmBtn.className = 'btn btn-danger';
+                    }
+                });
+                confirmBtn.addEventListener('click', () => {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = actionUrl;
+                    document.body.appendChild(form);
+                    form.submit();
+                });
+            }
+
+            const confirmLockForumModal = document.getElementById('confirmLockForumModal');
+            if (confirmLockForumModal) {
+                let lockActionUrl = '';
+                const confirmLockForumBtn = document.getElementById('confirmLockForumBtn');
+                confirmLockForumModal.addEventListener('show.bs.modal', event => {
+                    const button = event.relatedTarget;
+                    lockActionUrl = button.dataset.action;
+                    const isLocked = JSON.parse(button.dataset.isLocked);
+                    const modalBody = confirmLockForumModal.querySelector('.modal-body');
+                    if (isLocked) {
+                        modalBody.innerHTML =
+                            `Are you sure you want to <strong>globally unlock</strong> the forum? Students will be able to post again.`;
+                        confirmLockForumBtn.textContent = 'Yes, Unlock';
+                        confirmLockForumBtn.className = 'btn btn-success';
+                    } else {
+                        modalBody.innerHTML =
+                            `Are you sure you want to <strong>globally lock</strong> the forum? This will prevent all students and admins from posting.`;
+                        confirmLockForumBtn.textContent = 'Yes, Lock';
+                        confirmLockForumBtn.className = 'btn btn-danger';
+                    }
+                });
+                confirmLockForumBtn.addEventListener('click', () => {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = lockActionUrl;
+                    document.body.appendChild(form);
+                    form.submit();
+                });
+            }
+
+            {% if current_user and current_user.is_forum_blocked %}
+            const blockedModal = new bootstrap.Modal(document.getElementById('blockedInfoModal'));
+            blockedModal.show();
+            {% endif %}
+        });
+    </script>
+</body>
+
+</html>

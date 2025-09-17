@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisionED - My Courses</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #17a2b8;
+            --secondary-color: #2c3e50;
+            --background-color: #f0f2f5;
+            --text-color: #343a40;
+            --light-text-color: #6c757d;
+            --white-color: #ffffff;
+            --border-radius: 12px;
+            --border-color: #e9ecef;
+            --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --gradient-color: radial-gradient(circle at top left, #17a2b8 0%, #2c3e50 100%);
+            --course-card-hover-bg: #e0f2f5;
+            --course-card-hover-text: #117a8b;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: var(--white-color);
+            box-shadow: var(--card-shadow);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--secondary-color) !important;
+        }
+
+        .navbar-brand .ed {
+            color: var(--primary-color);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-logout {
+            background-color: #dc3545;
+            color: var(--white-color);
+            font-weight: 500;
+            padding: 0.5rem 1.2rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background-color: #c82333;
+            color: var(--white-color);
+            transform: translateY(-2px);
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 60px 0;
+        }
+
+        /* New Header Design */
+        .header-section {
+            background-image: var(--gradient-color);
+            background-size: cover;
+            background-position: center;
+            color: var(--white-color);
+            padding: 80px 20px;
+            text-align: center;
+            border-radius: var(--border-radius);
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-section h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-section p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            color: rgba(255, 255, 255, 0.9);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-section .btn {
+            background-color: var(--white-color);
+            color: var(--secondary-color);
+            border-color: var(--white-color);
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-section .btn:hover {
+            background-color: var(--course-card-hover-bg);
+            border-color: var(--course-card-hover-bg);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .content-card {
+            background: var(--white-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
+            padding: 40px;
+        }
+
+        .course-card {
+            background: #fdfdfd;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e0e0e0;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            height: 100%;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .course-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15), 0 0 20px var(--primary-color);
+        }
+
+        .course-card .card-icon {
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            transition: color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 1;
+            position: relative;
+        }
+
+        .course-card:hover .card-icon {
+            color: var(--secondary-color);
+        }
+
+        .course-card-content {
+            flex-grow: 1;
+            z-index: 1;
+            position: relative;
+        }
+
+        .course-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            transition: color 0.4s;
+        }
+
+        .course-card:hover .course-title {
+            color: var(--course-card-hover-text);
+        }
+
+        .course-id {
+            font-size: 1rem;
+            color: var(--primary-color);
+            font-weight: 500;
+            text-transform: uppercase;
+            display: block;
+            transition: color 0.4s;
+        }
+
+        .course-card:hover .course-id {
+            color: var(--secondary-color);
+        }
+
+        .no-courses-message {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: #e9f5f7;
+            border-radius: var(--border-radius);
+            border: 1px dashed var(--primary-color);
+        }
+
+        .no-courses-message i {
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .no-courses-message h4 {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .no-courses-message p {
+            color: var(--text-color);
+        }
+
+        .no-courses-message .btn-outline-primary {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 500;
+            border-radius: 50px;
+            padding: 10px 25px;
+            transition: all 0.3s ease;
+        }
+
+        .no-courses-message .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+            padding: 60px 0 20px 0;
+            flex-shrink: 0;
+        }
+
+        .footer .navbar-brand {
+            color: var(--white-color) !important;
+        }
+
+        .footer .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            padding: 0.5rem 1rem;
+        }
+
+        .footer .nav-link:hover {
+            color: var(--white-color);
+        }
+
+        .footer .social-icon {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0 12px;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer .social-icon:hover {
+            color: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        .footer .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('student_dashboard') }}">Vision<span class="ed">ED</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_student') }}">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('my_courses') }}">My Courses</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('subject_entry') }}">Performance
+                            Analytics</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('ask_query') }}">Ask Query</a></li>
+                    <li class="nav-item"><a class="nav-link"
+                            href="{{ url_for('student_announcements') }}">Announcements</a></li>
+                    <li class="nav-item"><a class="btn btn-logout" href="{{ url_for('logout') }}">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="header-section">
+                {% if student_info %}
+                <h1>My Courses</h1>
+                <p>A list of all your subjects for the <strong>{{ student_info.sem | string }}</strong> semester in
+                    <strong>{{ student_info.branch }}</strong> branch.
+                </p>
+                {% else %}
+                <h1>Courses</h1>
+                <p>Please complete your profile to view your personalized course list.</p>
+                <a href="{{ url_for('profile_student') }}" class="btn btn-primary mt-3">Complete Profile</a>
+                {% endif %}
+            </div>
+
+            <div class="content-card">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                {% if courses %}
+                <div class="row g-4 justify-content-center">
+                    {% for course in courses %}
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <a href="{{ url_for('view_notes', subject_id=course.id) }}" class="course-card">
+                            <div class="card-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="course-card-content">
+                                <h5 class="course-title">{{ course.name }}</h5>
+                                <span class="course-id">{{ course.id }}</span>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="no-courses-message">
+                    <i class="fas fa-search-minus"></i>
+                    <h4>No Courses Found</h4>
+                    <p>It looks like there are no subjects listed for your current branch and semester. Please check
+                        your profile details or contact an administrator for assistance.</p>
+                    <a href="{{ url_for('profile_student') }}" class="btn btn-outline-primary mt-3">Update Profile</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <a class="navbar-brand" href="{{ url_for('student_dashboard') }}">Vision<span class="ed">ED</span></a>
+            <ul class="nav justify-content-center my-4">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_student') }}">Profile</a></li>
+                <li class="nav-item"><a class="nav-link active" href="{{ url_for('my_courses') }}">My Courses</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('subject_entry') }}">Performance Analytics</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('ask_query') }}">Ask Query</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('student_announcements') }}">Announcements</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+            <div class="mb-4">
+                <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="social-icon" title="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+            <p class="copyright">&copy; 2025 VisionED - Student Performance Prediction. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Analytics - {{ student_info.name }}</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #17a2b8;
+            --secondary-color: #2c3e50;
+            --background-color: #f8f9fa;
+            --text-color: #343a40;
+            --light-text-color: #6c757d;
+            --white-color: #ffffff;
+            --border-radius: 12px;
+            --border-color: #e9ecef;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: var(--white-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--secondary-color) !important;
+        }
+
+        .navbar-brand .ed {
+            color: var(--primary-color);
+        }
+
+        .btn-back {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            font-weight: 500;
+            padding: 0.5rem 1.2rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #138496;
+            color: var(--white-color);
+            transform: translateY(-2px);
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 60px 0;
+        }
+
+        .results-container {
+            background: var(--white-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
+            padding: 40px;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .results-header h1 {
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .charts-container-grid,
+        .attendance-charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .attendance-charts-grid {
+             grid-template-columns: 1fr 1fr;
+             margin-top: 30px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background-color: #f8f9fa;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 25px;
+        }
+
+        .card h2 {
+            font-size: 1.25em;
+            font-weight: 600;
+            color: var(--secondary-color);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            padding: 12px 5px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            color: var(--light-text-color);
+            font-weight: 500;
+        }
+
+        td b {
+            color: var(--text-color);
+            font-size: 1.1em;
+        }
+
+        .analysis-card h3 {
+            font-size: 1.5em;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+        }
+
+        .level-Top { color: var(--primary-color); }
+        .level-Good { color: #28a745; }
+        .level-Average { color: #ffc107; }
+        .level-Below { color: #dc3545; }
+
+        .analysis-card p {
+            font-size: 1em;
+            line-height: 1.6;
+            color: var(--light-text-color);
+        }
+
+        @media (max-width: 992px) {
+            .results-grid,
+            .charts-container-grid,
+            .attendance-charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .modal-body h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(23, 162, 184, 0.3);
+        }
+
+        .action-btn {
+            cursor: pointer;
+            background-color: #e9ecef;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .action-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .remove-btn.is-hidden {
+            visibility: hidden;
+            cursor: default;
+        }
+
+        .dynamic-entry {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            gap: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Vision<span class="ed">ED</span></a>
+            <div class="ms-auto">
+                <a class="btn btn-back" href="{{ url_for('registered_users') }}">
+                    <i class="fas fa-arrow-left"></i> Back to Users
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div id="predictionResults" class="results-container" {% if not predictions %}style="display:none;" {% endif %}>
+                <div class="results-header">
+                    <h1>Performance Analysis for {{ student_info.name }} 📈</h1>
+                    <p class="text-muted">Reg. No: {{ student_info.reg_no }} | Branch: {{ student_info.branch }} | Sem: {{ student_info.sem }}</p>
+                </div>
+
+                <div class="charts-container-grid">
+                    <div class="card">
+                        <h2>Predicted Marks Overview</h2>
+                        <div class="chart-container">
+                            <canvas id="marksChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h2>Subject Contribution (%)</h2>
+                        <div class="chart-container">
+                            <canvas id="contributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="attendance-charts-grid">
+                    <div class="card">
+                        <h2>Previous Semester Attendance (%)</h2>
+                        <div class="chart-container">
+                            <canvas id="prevAttendanceChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h2>Predicted Attendance Trend (%)</h2>
+                        <div class="chart-container">
+                            <canvas id="predictedAttendanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results-grid">
+                    <div class="card analysis-card">
+                        <h2>Overall Analysis</h2>
+                        <h3 class="level-{{ level.split(' ')[0] if level else '' }}">{{ level }}</h3>
+                        <p>The student's predicted average score is <b>{{ avg_score }} out of 70</b>.</p>
+                    </div>
+                    <div class="card analysis-card">
+                        <h2>💡 Personalized Tips</h2>
+                        <p>{{ tips }}</p>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 30px;">
+                    <h2>Detailed Subject Breakdown</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Expected Marks (out of 70)</th>
+                                <th>Performance Level</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if predictions %}
+                            {% for subject, data in predictions.items() %}
+                            <tr>
+                                <td>{{ subject }}</td>
+                                <td><b>{{ data.mark }}</b></td>
+                                <td><span class="level-{{ data.level.split(' ')[0] }}">{{ data.level }}</span></td>
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#marksModal">
+                        <i class="fas fa-edit me-2"></i> Edit Student's Marks
+                    </button>
+                </div>
+            </div>
+
+            <div id="noDataMessage" class="results-container mt-4 text-center" {% if predictions %}style="display:none;"{% endif %}>
+                <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                <h2 class="text-muted">No Prediction Available</h2>
+                <p class="lead text-muted">Enter the student's marks for the first time to generate a performance prediction.</p>
+                <button class="btn btn-primary btn-lg mt-3" data-bs-toggle="modal" data-bs-target="#marksModal">
+                    <i class="fas fa-plus-circle me-2"></i> Add Marks to Predict
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="marksModal" tabindex="-1" aria-labelledby="marksModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="marksModalLabel">Edit Marks for {{ student_info.name }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url_for('admin_predict', user_id=student_info.user_id) }}" method="post">
+                        
+                        {% if student_info.sem > 1 %}
+                        <h2>Semester {{ student_info.sem - 1 }}<sup>{{ get_ordinal_suffix(student_info.sem - 1) }}</sup> Marks (out of 70)</h2>
+                        <fieldset>
+                            {% for subject in prev_subjects %}
+                            <div class="mb-3">
+                                <label for="modal-{{ subject.id }}">{{ subject.name }}</label>
+                                <input type="number" class="form-control" name="{{ subject.id }}"
+                                    id="modal-{{ subject.id }}" min="0" max="70"
+                                    value="{{ prev_sem_marks.get(subject.id, '') }}">
+                            </div>
+                            {% endfor %}
+                        </fieldset>
+                        {% endif %}
+
+                        <h2>Semester {{ student_info.sem }}<sup>{{ get_ordinal_suffix(student_info.sem) }}</sup> Class Tests (out of 20)</h2>
+                        {% for subject in current_subjects %}
+                        <fieldset>
+                            <legend>{{ subject.name }}<button type="button" class="action-btn add-btn"
+                                    onclick="addEntry('modal-{{ subject.id }}_tests', '{{ subject.id }}_ct', 20, 'Class Test Score')">+</button>
+                            </legend>
+                            <div id="modal-{{ subject.id }}_tests">
+                                {# JavaScript will populate this section #}
+                            </div>
+                        </fieldset>
+                        {% endfor %}
+
+                        <h2>Past Attendance Records (%)</h2>
+                        <fieldset>
+                            <legend>Semester Attendance<button type="button" class="action-btn add-btn"
+                                    onclick="addEntry('modal-attendance_entries', 'prev_attendance', 100, 'Semester Attendance %')">+</button>
+                            </legend>
+                            <div id="modal-attendance_entries">
+                                {# JavaScript will populate this section #}
+                            </div>
+                        </fieldset>
+
+                        <button type="submit" class="btn btn-submit">Save Changes & Predict</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const saved_marks = {
+            ...{{ prev_sem_marks|tojson|safe }},
+            ...{{ current_ct_marks|tojson|safe }},
+            ...{{ attendance_marks|tojson|safe }}
+        };
+
+        let predictionChart = null;
+        let contributionChart = null;
+        let prevAttendanceChart = null;
+        let predictedAttendanceChart = null;
+
+
+        function renderPredictionChart() {
+            const predictionsData = {{ predictions|tojson|safe }};
+            if (!predictionsData) return;
+            const ctx = document.getElementById('marksChart').getContext('2d');
+            const labels = Object.keys(predictionsData);
+            const marks = labels.map(label => predictionsData[label].mark);
+
+            const colors = ['rgba(23, 162, 184, 0.6)', 'rgba(44, 62, 80, 0.6)', 'rgba(243, 156, 18, 0.6)', 'rgba(46, 204, 113, 0.6)', 'rgba(155, 89, 182, 0.6)'];
+
+            if (predictionChart) predictionChart.destroy();
+            predictionChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Predicted Marks (out of 70)',
+                        data: marks,
+                        backgroundColor: colors,
+                        borderColor: colors.map(c => c.replace('0.6', '1')),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { x: { beginAtZero: true, max: 70 } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+        
+        function renderContributionChart() {
+            const predictionsData = {{ predictions | tojson | safe}};
+            if (!predictionsData) return;
+
+            const ctx = document.getElementById('contributionChart').getContext('2d');
+            const labels = Object.keys(predictionsData);
+            const marks = labels.map(label => predictionsData[label].mark);
+            
+            if (contributionChart) contributionChart.destroy();
+
+            contributionChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Contribution %',
+                        data: marks,
+                        backgroundColor: [
+                            'rgba(23, 162, 184, 0.7)', 'rgba(44, 62, 80, 0.7)',
+                            'rgba(243, 156, 18, 0.7)', 'rgba(46, 204, 113, 0.7)',
+                            'rgba(155, 89, 182, 0.7)', 'rgba(231, 76, 60, 0.7)'
+                        ],
+                        borderColor: [
+                           '#17a2b8', '#2c3e50', '#f39c12', '#2ecc71', '#9b59b6', '#e74c3c'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.label || '';
+                                    if (label) { label += ': '; }
+                                    const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                    const value = context.parsed;
+                                    const percentage = total > 0 ? (value / total * 100).toFixed(2) : 0;
+                                    return `${label}${percentage}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function renderPrevAttendanceChart() {
+            const prevAttendanceData = {{ attendance_marks | tojson | safe }};
+            const sortedKeys = Object.keys(prevAttendanceData).map(k => parseInt(k.split('_').pop())).sort((a,b) => a-b);
+
+            if(sortedKeys.length === 0) return;
+            
+            const labels = sortedKeys.map(key => `Semester ${key}`);
+            const data = sortedKeys.map(key => prevAttendanceData[`prev_attendance_${key}`]);
+            
+            const ctx = document.getElementById('prevAttendanceChart').getContext('2d');
+
+            if (prevAttendanceChart) prevAttendanceChart.destroy();
+
+            const gradient = ctx.createLinearGradient(0, 0, 0, 350);
+            gradient.addColorStop(0, 'rgba(44, 62, 80, 0.5)');
+            gradient.addColorStop(1, 'rgba(44, 62, 80, 0)');
+
+            prevAttendanceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Attendance %',
+                        data: data,
+                        borderColor: 'rgba(44, 62, 80, 1)',
+                        backgroundColor: gradient,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: 'rgba(44, 62, 80, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverRadius: 7,
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(44, 62, 80, 1)',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, max: 100 } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+        
+        function renderPredictedAttendanceChart() {
+            const attendanceValues = Object.values({{ attendance_marks | tojson | safe }}).map(v => parseInt(v));
+
+            if(attendanceValues.length === 0) return;
+
+            const lastAttendance = attendanceValues[attendanceValues.length - 1];
+            const avgAttendance = attendanceValues.reduce((a, b) => a + b, 0) / attendanceValues.length;
+            const isUpwardTrend = avgAttendance >= lastAttendance;
+
+            const ctx = document.getElementById('predictedAttendanceChart').getContext('2d');
+
+            if (predictedAttendanceChart) predictedAttendanceChart.destroy();
+
+            const gradient = ctx.createLinearGradient(0, 0, 0, 350);
+             if (isUpwardTrend) {
+                gradient.addColorStop(0, 'rgba(46, 204, 113, 0.6)');
+                gradient.addColorStop(1, 'rgba(46, 204, 113, 0)');
+            } else {
+                gradient.addColorStop(0, 'rgba(231, 76, 60, 0.6)');
+                gradient.addColorStop(1, 'rgba(231, 76, 60, 0)');
+            }
+            const borderColor = isUpwardTrend ? 'rgba(46, 204, 113, 1)' : 'rgba(231, 76, 60, 1)';
+
+
+            predictedAttendanceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [`Semester ${attendanceValues.length}`, `Predicted Sem ${attendanceValues.length + 1}`],
+                    datasets: [{
+                        label: 'Attendance %',
+                        data: [lastAttendance, avgAttendance],
+                        borderColor: borderColor,
+                        backgroundColor: gradient,
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 3,
+                        borderDash: [5, 5],
+                        pointBackgroundColor: borderColor,
+                        pointBorderColor: '#fff',
+                        pointRadius: 5,
+                        pointHoverRadius: 8,
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: borderColor,
+                        pointHoverBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { 
+                        y: { 
+                            beginAtZero: true, 
+                            max: 100,
+                            ticks: {
+                                callback: function(value) { return value + '%'; }
+                            }
+                        } 
+                    },
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            padding: 10,
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 12 },
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) { label += ': '; }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y.toFixed(2) + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function () {
+            const hasPredictions = {{ (predictions and predictions|length > 0)|tojson }};
+
+            if (hasPredictions) {
+                renderPredictionChart();
+                renderContributionChart();
+                renderPrevAttendanceChart();
+                renderPredictedAttendanceChart();
+            }
+            
+            const marksModal = document.getElementById('marksModal');
+            marksModal.addEventListener('show.bs.modal', event => {
+                populateDynamicFields('{{ current_subjects|map(attribute="id")|join(",") }}', 'ct', '_tests', 'Class Test Score', 20);
+                populateDynamicFields('prev_attendance', 'att', '_entries', 'Semester Attendance %', 100);
+            });
+        });
+        
+        function createEntry(container, name, value, maxVal, placeholder) {
+            const entryDiv = document.createElement('div');
+            entryDiv.className = 'dynamic-entry';
+            entryDiv.innerHTML = `
+                <div class="flex-grow-1">
+                    <input type="number" name="${name}" min="0" max="${maxVal}" value="${value}" class="form-control" placeholder="${placeholder}">
+                </div>
+                <button type="button" class="action-btn remove-btn" onclick="removeEntry(this)">&minus;</button>
+            `;
+            container.appendChild(entryDiv);
+        }
+
+        function populateDynamicFields(subjectIds, type, containerSuffix, placeholderText, maxVal) {
+            const prefixes = type === 'ct' ? subjectIds.split(',') : [subjectIds];
+
+            prefixes.forEach(prefix => {
+                const containerId = (type === 'ct') ? `modal-${prefix}${containerSuffix}` : `modal-attendance${containerSuffix}`;
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                
+                container.innerHTML = ''; 
+                const namePrefix = (type === 'ct') ? `${prefix}_ct` : 'prev_attendance';
+                const markKeys = Object.keys(saved_marks).filter(key => key.startsWith(namePrefix));
+                
+                let maxIndex = 0;
+                markKeys.forEach(key => {
+                    const num = parseInt(key.split('_').pop(), 10) || 0;
+                    if (num > maxIndex) maxIndex = num;
+                });
+
+                const loopLimit = Math.max(1, maxIndex);
+                for (let i = 1; i <= loopLimit; i++) {
+                    const currentKey = `${namePrefix}_${i}`;
+                    const value = saved_marks[currentKey] || '';
+                    createEntry(container, currentKey, value, maxVal, `${placeholderText} ${i}`);
+                }
+                updateEntriesUI(containerId);
+            });
+        }
+
+        function addEntry(containerId, namePrefix, maxVal, placeholderText) {
+            const container = document.getElementById(containerId);
+            const newIndex = container.children.length + 1;
+            createEntry(container, `${namePrefix}_${newIndex}`, '', maxVal, `${placeholderText} ${newIndex}`);
+            updateEntriesUI(containerId);
+        }
+
+        function removeEntry(button) {
+            const entryDiv = button.closest('.dynamic-entry');
+            const container = entryDiv.parentElement;
+            entryDiv.remove();
+            updateEntriesUI(container.id);
+        }
+        
+        function updateEntriesUI(containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            const entries = container.getElementsByClassName('dynamic-entry');
+            const namePrefix = containerId.includes('attendance') ? 'prev_attendance' : containerId.replace('modal-', '').replace('_tests', '_ct');
+            const placeholderText = containerId.includes('attendance') ? 'Semester Attendance %' : 'Class Test Score';
+
+            for (let i = 0; i < entries.length; i++) {
+                const input = entries[i].querySelector('input[type="number"]');
+                const removeBtn = entries[i].querySelector('.remove-btn');
+                const newIndex = i + 1;
+                if (input) {
+                    input.name = `${namePrefix}_${newIndex}`;
+                    input.placeholder = `${placeholderText} ${newIndex}`;
+                }
+                if (removeBtn) {
+                    removeBtn.classList.toggle('is-hidden', entries.length <= 1);
+                }
+            }
+        }
+    </script>
+    </body>
+</html>
+

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisionED - AI-Powered Student Insights</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #17a2b8;
+            /* A modern teal */
+            --secondary-color: #2c3e50;
+            /* A deep, professional blue-gray */
+            --background-color: #f8f9fa;
+            --text-color: #343a40;
+            --light-text-color: #6c757d;
+            --white-color: #ffffff;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            background-color: var(--white-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 1rem 0;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--secondary-color) !important;
+        }
+
+        .navbar-brand .ed {
+            color: var(--primary-color);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            transform: translateY(-2px);
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            background: linear-gradient(45deg, rgba(23, 162, 184, 0.9), rgba(44, 62, 80, 0.9)),
+                url('https://source.unsplash.com/1600x900/?technology,education') no-repeat center center/cover;
+            color: var(--white-color);
+            text-align: center;
+            padding: 140px 20px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-top: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.9;
+        }
+
+        .hero .btn-primary {
+            background-image: linear-gradient(to right, #17a2b8, #148a9c);
+            color: var(--white-color);
+            border: none;
+            padding: 14px 32px;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(23, 162, 184, 0.3);
+        }
+
+        .hero .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(23, 162, 184, 0.4);
+        }
+
+        /* --- Section Styling --- */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: var(--secondary-color);
+        }
+
+        /* --- Features Section --- */
+        .feature-card {
+            background: var(--white-color);
+            border: 1px solid #e9ecef;
+            border-radius: var(--border-radius);
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            height: 100%;
+            cursor: pointer; /* ADDED: Indicate clickable */
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        /* --- How It Works Section --- */
+        .step-card {
+            background: var(--white-color);
+            border-radius: var(--border-radius);
+            padding: 40px 30px;
+            height: 100%;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-icon {
+            position: relative;
+            display: inline-block;
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -10px;
+            right: -20px;
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 700;
+            border: 3px solid var(--white-color);
+        }
+
+        .step-arrow {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            opacity: 0.6;
+        }
+
+        /* --- Reviews Section --- */
+        .reviews {
+            background-color: #eef7f8;
+        }
+
+        .review-card {
+            background: var(--white-color);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: all 0.3s ease; /* ADDED */
+        }
+
+        .review-card:hover { /* ADDED */
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .review-card p {
+            font-style: italic;
+            color: var(--light-text-color);
+        }
+
+        .review-card h6 {
+            font-weight: 600;
+            margin-top: 15px;
+            color: var(--secondary-color);
+        }
+
+        /* --- Footer (REVERTED & HEIGHT ADJUSTED) --- */
+        .footer {
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+            padding: 40px 0 20px 0; /* MODIFIED: Reduced height */
+        }
+
+        .footer .navbar-brand {
+            color: var(--white-color) !important;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .footer h5 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .footer .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer .footer-link:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+
+        .footer .social-icon {
+            color: rgba(255, 255, 255, 0.7);
+            margin-right: 15px; /* MODIFIED: Spacing */
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .footer .social-icon:hover {
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .footer .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 30px; /* MODIFIED: Reduced height */
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* --- Modal Styling (NEW & MODIFIED) --- */
+        .modal-content {
+            border-radius: var(--border-radius);
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            border-bottom: none;
+            padding: 1.5rem 2rem;
+        }
+
+        .modal-header .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
+
+        .modal-title {
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+
+        .modal-body {
+            padding: 2rem;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+        
+        .accuracy-display {
+            background-color: #eef7f8;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .accuracy-display .percent {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            line-height: 1;
+        }
+        
+        .accuracy-display .label {
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+
+        .feature-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .feature-list li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 1rem;
+        }
+
+        .feature-list li::before {
+            content: '\f00c'; /* Font Awesome check icon */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+            top: 4px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">Vision<span class="ed">ED</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/team">Our Team</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <h1 class="display-4">Empowering Education with AI Insights</h1>
+            <p class="lead">VisionED predicts student performance to help educators and students achieve better outcomes
+                through smart, timely interventions.</p>
+            <a href="/signup" class="btn btn-primary btn-lg mt-4">Let's Predict Your Future</a>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="section features">
+        <div class="container text-center">
+            <h2 class="section-title">Why Choose VisionED?</h2>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <!-- MODIFIED: Added modal trigger -->
+                    <div class="feature-card" data-bs-toggle="modal" data-bs-target="#predictionModal">
+                        <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                        <h5 class="fw-bold mb-3">Accurate Predictions</h5>
+                        <p class="text-muted">Our advanced AI models analyze past performance to predict future outcomes
+                            with high accuracy, enabling early action.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <!-- MODIFIED: Added modal trigger -->
+                    <div class="feature-card" data-bs-toggle="modal" data-bs-target="#dashboardModal">
+                        <div class="feature-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        <h5 class="fw-bold mb-3">Insightful Dashboards</h5>
+                        <p class="text-muted">Intuitive dashboards for both students and administrators to visualize
+                            progress and identify areas for improvement.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <!-- MODIFIED: Added modal trigger -->
+                    <div class="feature-card" data-bs-toggle="modal" data-bs-target="#securityModal">
+                        <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h5 class="fw-bold mb-3">Secure & Private</h5>
+                        <p class="text-muted">We prioritize your data privacy with industry-standard encryption and
+                            robust security layers to keep information safe.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="section how-it-works">
+        <div class="container text-center">
+            <h2 class="section-title">A Simple Process</h2>
+            <div class="row g-4 justify-content-center align-items-center">
+                <!-- Step 1 -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="step-card">
+                        <div class="step-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span class="step-number">1</span>
+                        </div>
+                        <h5 class="fw-bold mb-2">Upload Data</h5>
+                        <p class="text-muted mb-0">Securely upload historical student data through our encrypted portal.</p>
+                    </div>
+                </div>
+                <!-- Arrow Separator -->
+                <div class="col-auto align-self-center d-none d-lg-block">
+                    <i class="fas fa-arrow-right step-arrow"></i>
+                </div>
+                <!-- Step 2 -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="step-card">
+                        <div class="step-icon">
+                            <i class="fas fa-brain"></i>
+                            <span class="step-number">2</span>
+                        </div>
+                        <h5 class="fw-bold mb-2">AI Analysis</h5>
+                        <p class="text-muted mb-0">Our algorithms analyze the data to identify key predictors of success.</p>
+                    </div>
+                </div>
+                <!-- Arrow Separator -->
+                <div class="col-auto align-self-center d-none d-lg-block">
+                    <i class="fas fa-arrow-right step-arrow"></i>
+                </div>
+                <!-- Step 3 -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="step-card">
+                        <div class="step-icon">
+                            <i class="fas fa-chart-pie"></i>
+                            <span class="step-number">3</span>
+                        </div>
+                        <h5 class="fw-bold mb-2">Receive Insights</h5>
+                        <p class="text-muted mb-0">Access clear, actionable insights on an intuitive dashboard.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Reviews Section (MODIFIED) -->
+    <section class="section reviews">
+        <div class="container text-center">
+            <h2 class="section-title">What Our Users Say</h2>
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="review-card">
+                        <p>"VisionED provides an unprecedented level of insight. The ability to proactively identify struggling students has allowed us to improve our support systems and has significantly boosted our overall academic outcomes."</p>
+                        <h6 class="mt-auto">- Dr. Shakti Nath Singh, Faculty of NGP Patna-13</h6>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="review-card">
+                        <p>"As a faculty member, this platform is a game-changer. It helps me tailor my teaching approach to individual student needs and focus my energy on those who require the most attention. It's an invaluable tool."</p>
+                        <h6 class="mt-auto">- Mrs. Ayesha Alam, Faculty of NGP Patna-13</h6>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="review-card">
+                        <p>"The predictive insights gave me a clear roadmap for my studies. I knew exactly which topics to focus on, which boosted my confidence and dramatically improved my final grades. I feel more in control of my learning."</p>
+                        <h6 class="mt-auto">- Sagar Raj, Student of NGP Patna-13</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (REVERTED & HEIGHT ADJUSTED) -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row gy-4 text-center text-md-start">
+                <!-- Column 1: Brand & About -->
+                <div class="col-lg-4 col-md-12 mb-3 mb-lg-0">
+                    <a class="navbar-brand" href="/">Vision<span class="ed">ED</span></a>
+                    <p class="mt-2" style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+                        Empowering education with AI insights.
+                    </p>
+                </div>
+
+                <!-- Column 2: Quick Links -->
+                <div class="col-lg-2 col-md-4 col-6">
+                    <h5 class="mb-3">Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="/" class="footer-link">Home</a></li>
+                        <li class="mb-2"><a href="/contact" class="footer-link">Contact</a></li>
+                        <li class="mb-2"><a href="/team" class="footer-link">Our Team</a></li>
+                        <li class="mb-2"><a href="/login" class="footer-link">Login</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Resources -->
+                <div class="col-lg-3 col-md-4 col-6">
+                    <h5 class="mb-3">Resources</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="/blog" class="footer-link">Blog</a></li>
+                        <li class="mb-2"><a href="/privacy" class="footer-link">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="/terms" class="footer-link">Terms of Service</a></li>
+                        <li class="mb-2"><a href="/faq" class="footer-link">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Follow Us -->
+                <div class="col-lg-3 col-md-4">
+                    <h5 class="mb-3">Follow Us</h5>
+                    <div class="d-flex justify-content-center justify-content-md-start">
+                        <!-- MODIFIED: Reordered Icons -->
+                        <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="copyright text-center">
+                        &copy; 2025 VisionED - Student Performance Prediction. All rights reserved.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Modals (MODIFIED CONTENT) -->
+    <!-- Prediction Modal -->
+    <div class="modal fade" id="predictionModal" tabindex="-1" aria-labelledby="predictionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="predictionModalLabel">Unparalleled Predictive Accuracy</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="accuracy-display">
+                        <div class="percent">95%</div>
+                        <div class="label">Average Model Accuracy</div>
+                    </div>
+                    <p>Our AI model doesn't just see data; it understands it. After rigorous training and validation, our models predict student performance with an <strong>average accuracy exceeding 95%</strong>. This means:</p>
+                    <ul class="feature-list">
+                        <li><strong>Early Identification:</strong> Pinpoint at-risk students weeks in advance, allowing for timely and effective support before they fall behind.</li>
+                        <li><strong>Data-Backed Foresight:</strong> Move from guesswork to informed decisions. Individual predictions for each student consistently surpass 90% accuracy.</li>
+                        <li><strong>Resource Optimization:</strong> Focus your intervention efforts where they're needed most, maximizing impact and improving student success rates.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dashboard Modal -->
+    <div class="modal fade" id="dashboardModal" tabindex="-1" aria-labelledby="dashboardModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dashboardModalLabel">More Than a Dashboard, It's Your Command Center</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                   <p>VisionED's dashboard is more than just charts; it's an interactive command center designed to empower action. Here’s what sets it apart:</p>
+                   <ul class="feature-list">
+                       <li><strong>Performance Analytics:</strong> Get deep, AI-powered predictions and analysis of exam performance for every student, identifying trends and patterns.</li>
+                       <li><strong>Personalized Student Profiles:</strong> A 360-degree view of each student, combining academic information, attendance, and engagement metrics in one place.</li>
+                       <li><strong>Centralized Course Hub:</strong> Access all enrolled subjects, learning materials, and semester syllabi, streamlining academic management.</li>
+                       <li><strong>Integrated Announcements:</strong> Keep everyone informed with the latest notices and important news pushed directly to their dashboard.</li>
+                       <li><strong>Proactive Support Center:</strong> Allow students to "Ask for Help" directly, connecting them with mentors or administrators for timely support.</li>
+                   </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Security Modal -->
+    <div class="modal fade" id="securityModal" tabindex="-1" aria-labelledby="securityModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="securityModalLabel">Your Trust, Secured by Design</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                   <p>We consider your data's security to be paramount. Our security isn't an afterthought; it's built into our core architecture. Here's how we protect your trust:</p>
+                   <ul class="feature-list">
+                       <li><strong>End-to-End Encryption:</strong> Your data is protected with <strong>AES-256 encryption</strong> both in transit and at rest—the same standard used by banks and governments.</li>
+                       <li><strong>Advanced Password Hashing:</strong> We never store plaintext passwords. All credentials are secured using the industry-standard <strong>bcrypt hashing algorithm</strong>.</li>
+                       <li><strong>Role-Based Access Control (RBAC):</strong> Our granular permission system ensures users can only access the data relevant to their role, guaranteeing student privacy.</li>
+                       <li><strong>Continuous Threat Monitoring:</strong> Our infrastructure is monitored 24/7 for vulnerabilities and suspicious activity, keeping us a step ahead of potential threats.</li>
+                   </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Navbar Scroll Effect Script -->
+    <script>
+        const nav = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+
+</html>
+

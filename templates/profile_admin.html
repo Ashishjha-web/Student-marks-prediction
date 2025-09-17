@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisionED - Admin Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #17a2b8;
+            --secondary-color: #2c3e50;
+            --background-color: #f8f9fa;
+            --text-color: #343a40;
+            --light-text-color: #6c757d;
+            --white-color: #ffffff;
+            --border-radius: 12px;
+            --border-color: #e9ecef;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            background-color: var(--white-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--secondary-color) !important;
+        }
+
+        .navbar-brand .ed {
+            color: var(--primary-color);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-logout {
+            background-color: #dc3545;
+            color: var(--white-color);
+            font-weight: 500;
+            padding: 0.5rem 1.2rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background-color: #c82333;
+            color: var(--white-color);
+            transform: translateY(-2px);
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 60px 0;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-header h1 {
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .card {
+            background: var(--white-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
+        }
+
+        .profile-card {
+            padding: 40px;
+        }
+
+        .profile-picture-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-picture-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin-bottom: 15px;
+        }
+
+        .profile-picture {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--border-color);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-btn-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        .btn-upload {
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            background-color: var(--white-color);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-upload:hover {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+        }
+
+        .upload-btn-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-helper-text {
+            font-size: 0.85rem;
+            color: var(--light-text-color);
+            margin-top: 10px;
+        }
+
+        .form-control,
+        .form-select {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.2);
+        }
+
+        .form-control[readonly] {
+            background-color: #e9ecef;
+        }
+
+        .btn-submit {
+            background: var(--primary-color);
+            color: var(--white-color);
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(23, 162, 184, 0.3);
+        }
+
+        .btn-submit:disabled {
+            background-color: #a0a0a0;
+            cursor: not-allowed;
+        }
+
+        /* --- Custom Modal --- */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1050;
+        }
+
+        .modal-content-custom {
+            background: var(--white-color);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* --- Footer --- */
+        .footer {
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+            padding: 60px 0 20px 0;
+            flex-shrink: 0;
+        }
+
+        .footer .navbar-brand {
+            color: var(--white-color) !important;
+        }
+
+        .footer .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            padding: 0.5rem 1rem;
+        }
+
+        .footer .nav-link:hover {
+            color: var(--white-color);
+        }
+
+        .footer .social-icon {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0 12px;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer .social-icon:hover {
+            color: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        .footer .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Vision<span class="ed">ED</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('profile_admin') }}">Profile</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('registered_users') }}">Registered
+                            Users</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('material_uploader') }}">Materials
+                            Uploader</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('query_solver') }}">Query Solver</a></li>
+                    <li class="nav-item"><a class="nav-link"
+                            href="{{ url_for('admin_announcements') }}">Announcements</a></li>
+                    <li class="nav-item"><a class="btn btn-logout" href="{{ url_for('logout') }}">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card profile-card">
+                        <div class="page-header">
+                            <h1>Manage Your Profile</h1>
+                            <p class="text-muted">Keep your information up-to-date to get the best experience.</p>
+                        </div>
+
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                        {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show mb-4" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+
+                        <form id="adminProfileForm" action="{{ url_for('profile_admin') }}" method="POST"
+                            enctype="multipart/form-data" onsubmit="return validateForm()">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="profile-picture-section">
+                                        <div class="profile-picture-container">
+                                            {% set photo_path = admin_info.profile_photo or 'images/admin_default.png'
+                                            %}
+                                            {% if not photo_path.startswith('images/') %}
+                                            {% set photo_path = 'images/' + photo_path %}
+                                            {% endif %}
+                                            <img src="{{ url_for('static', filename='uploads/' + photo_path) }}"
+                                                alt="Profile Picture" class="profile-picture" id="profile-pic-preview">
+                                        </div>
+                                        <div class="upload-btn-wrapper">
+                                            <button class="btn-upload" type="button">Change Photo</button>
+                                            <input type="file" name="profile_photo" id="profile-photo-input"
+                                                accept="image/*">
+                                        </div>
+                                        <p class="upload-helper-text">Allowed formats: JPG, PNG, GIF</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <h5 class="mb-4">Personal Information</h5>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="name" class="form-label">Full Name</label>
+                                            <input type="text" class="form-control" id="name" name="name"
+                                                value="{{ admin_info.name if admin_info else session.user_name }}"
+                                                required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="email" class="form-label">Email Address</label>
+                                            <input type="email" class="form-control" id="email" name="email"
+                                                value="{{ user_email if user_email else '' }}" readonly>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="phone" class="form-label">Phone No.</label>
+                                            <input type="tel" class="form-control" id="phone" name="phone"
+                                                value="{{ admin_info.phone if admin_info else '' }}"
+                                                placeholder="e.g., 9876543210">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="department" class="form-label">Department</label>
+                                            <select class="form-select" id="department" name="department" required>
+                                                <option value="" disabled {% if not admin_info or not
+                                                    admin_info.department %}selected{% endif %}>Select Department
+                                                </option>
+                                                <option value="CSE" {% if admin_info and admin_info.department=='CSE'
+                                                    %}selected{% endif %}>CSE</option>
+                                                <option value="EE" {% if admin_info and admin_info.department=='EE'
+                                                    %}selected{% endif %}>EE</option>
+                                                <option value="CE" {% if admin_info and admin_info.department=='CE'
+                                                    %}selected{% endif %}>CE</option>
+                                                <option value="EL" {% if admin_info and admin_info.department=='EL'
+                                                    %}selected{% endif %}>EL</option>
+                                                <option value="ME" {% if admin_info and admin_info.department=='ME'
+                                                    %}selected{% endif %}>ME</option>
+                                                <option value="AE" {% if admin_info and admin_info.department=='AE'
+                                                    %}selected{% endif %}>AE</option>
+                                                <option value="ALL_BRANCHES" {% if admin_info and
+                                                    admin_info.department=='ALL_BRANCHES' %}selected{% endif %}>ALL
+                                                    BRANCHES</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <h5 class="mb-4">Change Password</h5>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="current_password" class="form-label">Current Password</label>
+                                    <input type="password" class="form-control" id="current_password"
+                                        name="current_password">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="new_password" class="form-label">New Password</label>
+                                    <input type="password" class="form-control" id="new_password" name="new_password">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="confirm_password" class="form-label">Confirm New Password</label>
+                                    <input type="password" class="form-control" id="confirm_password"
+                                        name="confirm_password">
+                                </div>
+                            </div>
+
+                            <div id="changeAdminCodeSection" style="display: none;">
+                                <hr class="my-4">
+                                <h5 class="mb-4">Change Admin Code</h5>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="current_admin_code" class="form-label">Current Admin Code</label>
+                                        <input type="password" class="form-control" id="current_admin_code"
+                                            name="current_admin_code">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="admin_code" class="form-label">New Admin Signup Code</label>
+                                        <input type="password" class="form-control" id="admin_code" name="admin_code">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="confirm_admin_code" class="form-label">Confirm New Admin
+                                            Code</label>
+                                        <input type="password" class="form-control" id="confirm_admin_code"
+                                            name="confirm_admin_code">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <button type="submit" id="updateProfileBtn" class="btn btn-submit">Update
+                                    Profile</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="superAdminModal" class="modal-backdrop">
+        <div class="modal-content-custom">
+            <h5 class="mb-3">Super Admin Verification</h5>
+            <p class="text-muted mb-3">Please enter the super-admin code to manage all branches.</p>
+            <div class="mb-3"> <input type="password" id="superAdminCode" class="form-control"
+                    placeholder="Super Admin Code">
+                <div id="modal-error" class="text-danger small mt-1 d-none">Incorrect code. Please try again.</div>
+            </div>
+            <div class="d-flex justify-content-end"> <button type="button" class="btn btn-secondary me-2"
+                    onclick="closeSuperAdminModal()">Cancel</button> <button type="button" class="btn btn-primary"
+                    onclick="verifySuperAdminCode()">Verify</button> </div>
+        </div>
+    </div>
+    <div id="customAlertModal" class="modal-backdrop">
+        <div class="modal-content-custom text-center">
+            <p id="customAlertMessage" class="mb-3"></p><button type="button" class="btn btn-primary"
+                onclick="closeCustomAlert()">OK</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Vision<span class="ed">ED</span></a>
+            <ul class="nav justify-content-center my-4">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_admin') }}">Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('registered_users') }}">Registered Users</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('material_uploader') }}">Materials
+                        Uploader</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('query_solver') }}">Query Solver</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_announcements') }}">Announcements</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+            <div class="mb-4">
+                <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="social-icon" title="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+            <p class="copyright">&copy; 2025 VisionED - Admin Portal. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Global variables
+        const superAdminModal = document.getElementById('superAdminModal');
+        const superAdminCodeInput = document.getElementById('superAdminCode');
+        const modalError = document.getElementById('modal-error');
+        const changeAdminCodeSection = document.getElementById('changeAdminCodeSection');
+        const departmentSelect = document.getElementById('department');
+        const updateProfileBtn = document.getElementById('updateProfileBtn');
+        let isSuperAdminVerified = false;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const profilePhotoInput = document.getElementById('profile-photo-input');
+            const profilePicPreview = document.getElementById('profile-pic-preview');
+
+            profilePhotoInput.addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        profilePicPreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            if (departmentSelect.value === 'ALL_BRANCHES') {
+                isSuperAdminVerified = true;
+                changeAdminCodeSection.style.display = 'block';
+            }
+
+            let previousDepartment = departmentSelect.value;
+            departmentSelect.addEventListener('focus', function () {
+                previousDepartment = this.value;
+            });
+
+            departmentSelect.addEventListener('change', function () {
+                if (this.value === 'ALL_BRANCHES' && !isSuperAdminVerified) {
+                    superAdminModal.style.display = 'flex';
+                    updateProfileBtn.disabled = true;
+                    this.value = previousDepartment;
+                } else {
+                    updateProfileBtn.disabled = false;
+                }
+            });
+        });
+
+        function closeSuperAdminModal() {
+            superAdminModal.style.display = 'none';
+            updateProfileBtn.disabled = false;
+            modalError.classList.add('d-none');
+        }
+
+        function verifySuperAdminCode() {
+            const SUPER_ADMIN_CODE = "{{ super_admin_code }}";
+            if (superAdminCodeInput.value === SUPER_ADMIN_CODE) {
+                isSuperAdminVerified = true;
+                superAdminModal.style.display = 'none';
+                updateProfileBtn.disabled = false;
+                changeAdminCodeSection.style.display = 'block';
+                departmentSelect.value = 'ALL_BRANCHES';
+                modalError.classList.add('d-none');
+            } else {
+                modalError.classList.remove('d-none');
+            }
+        }
+
+        function validateForm() {
+            const phoneInput = document.getElementById('phone').value;
+            const currentPassword = document.getElementById('current_password').value;
+            const newPassword = document.getElementById('new_password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+
+            const currentAdminCode = document.getElementById('current_admin_code').value;
+            const adminCode = document.getElementById('admin_code').value;
+            const confirmAdminCode = document.getElementById('confirm_admin_code').value;
+
+            if (phoneInput) {
+                const phoneRegex = /^(?:\+91)?[789]\d{9}$/;
+                if (!phoneRegex.test(phoneInput)) {
+                    showCustomAlert('Please enter a valid 10-digit Indian phone number.');
+                    return false;
+                }
+            }
+
+            if (newPassword || confirmPassword || currentPassword) {
+                if (!currentPassword) {
+                    showCustomAlert('Please enter your current password to set a new one.');
+                    return false;
+                }
+                if (newPassword !== confirmPassword) {
+                    showCustomAlert('New passwords do not match.');
+                    return false;
+                }
+                if (newPassword.length < 6) {
+                    showCustomAlert('New password must be at least 6 characters long.');
+                    return false;
+                }
+            }
+
+            if (adminCode || confirmAdminCode || currentAdminCode) {
+                if (!currentAdminCode) {
+                    showCustomAlert('Please enter the current admin code to set a new one.');
+                    return false;
+                }
+                if (adminCode !== confirmAdminCode) {
+                    showCustomAlert('New admin codes do not match.');
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        function showCustomAlert(message) {
+            document.getElementById('customAlertMessage').textContent = message;
+            document.getElementById('customAlertModal').style.display = 'flex';
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('customAlertModal').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>

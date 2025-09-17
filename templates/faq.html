@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisionED - Frequently Asked Questions</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #17a2b8;
+            --secondary-color: #2c3e50;
+            --background-color: #f8f9fa;
+            --text-color: #343a40;
+            --light-text-color: #6c757d;
+            --white-color: #ffffff;
+            --border-radius: 12px;
+            --border-color: #e9ecef;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            background-color: var(--white-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--secondary-color) !important;
+        }
+
+        .navbar-brand .ed {
+            color: var(--primary-color);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 80px 0;
+        }
+        
+        /* --- FAQ Accordion Styling --- */
+        .accordion-item {
+            background-color: var(--white-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius) !important;
+            margin-bottom: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .accordion-button {
+            font-weight: 600;
+            color: var(--secondary-color);
+            background-color: var(--white-color);
+            border-radius: var(--border-radius) !important;
+        }
+        
+        .accordion-button:not(.collapsed) {
+            color: var(--primary-color);
+            background-color: #f0fbfc;
+            box-shadow: inset 0 -1px 0 var(--border-color);
+        }
+
+        .accordion-button:focus {
+            box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.2);
+            border-color: var(--primary-color);
+        }
+        
+        .accordion-body {
+            color: var(--light-text-color);
+            line-height: 1.8;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+            padding: 40px 0 20px 0;
+            flex-shrink: 0;
+        }
+
+        .footer .navbar-brand {
+            color: var(--white-color) !important;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .footer h5 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .footer .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer .footer-link:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+
+        .footer .social-icon {
+            color: rgba(255, 255, 255, 0.7);
+            margin-right: 15px;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .footer .social-icon:hover {
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .footer .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">Vision<span class="ed">ED</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/team">Our Team</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h1 class="fw-bold">Frequently Asked Questions</h1>
+                <p class="lead text-muted">Have a question? We're here to help.</p>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-9">
+                    <div class="accordion" id="faqAccordion">
+                        
+                        <!-- FAQ Item 1 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    What is VisionED?
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    VisionED is an AI-powered educational platform designed to predict student performance. By analyzing academic data, it provides valuable insights to students and educators, helping them identify areas for improvement and enabling timely interventions to boost academic success.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 2 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    How accurate is the performance prediction?
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Our predictive models are built using advanced machine learning algorithms that are continuously refined. We are proud to report an average accuracy rate of approximately 95% in forecasting student outcomes. While no prediction is 100% guaranteed, this high level of accuracy provides a very reliable tool for both students and educators.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 3 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    Is my data secure and private?
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Absolutely. We prioritize data security and privacy above all else. We use end-to-end encryption, role-based access controls, and other industry-standard security measures to ensure your information is always protected. For more details, please review our <a href="/privacy">Privacy Policy</a>.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ Item 4 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingFour">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                    Who can see my performance data?
+                                </button>
+                            </h2>
+                            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                   As a student, you have full access to your own data and predictions. Authorized educators and administrators within your institution can also view this information to provide you with the necessary support and guidance. Your data is never shared with third parties without your consent.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 5 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingFive">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                    How do I get started with VisionED?
+                                </button>
+                            </h2>
+                            <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                   Getting started is easy! Simply navigate to the <a href="/login">Login</a> page and create an account using your institutional email address. Once registered, you can log in to access your personalized dashboard and start exploring your academic insights.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 6 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingSix">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                    What kind of data does VisionED analyze?
+                                </button>
+                            </h2>
+                            <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                   VisionED analyzes historical and current academic data, such as grades, exam scores, assignment submissions, and attendance records. All data is handled with the strictest confidentiality and is used solely for the purpose of generating performance insights and improving the educational experience.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 7 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingSeven">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                                    How can educators benefit from VisionED?
+                                </button>
+                            </h2>
+                            <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                   Educators can use our insightful dashboards to identify students who may be at risk of falling behind, understand class-wide performance trends, and tailor their teaching strategies to address specific learning gaps. It empowers them to make data-driven decisions and provide proactive, targeted support to their students.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row gy-4 text-center text-md-start">
+                <!-- Column 1: Brand & About -->
+                <div class="col-lg-4 col-md-12 mb-3 mb-lg-0">
+                    <a class="navbar-brand" href="/">Vision<span class="ed">ED</span></a>
+                    <p class="mt-2" style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+                        Empowering education with AI insights.
+                    </p>
+                </div>
+
+                <!-- Column 2: Quick Links -->
+                <div class="col-lg-2 col-md-4 col-6">
+                    <h5 class="mb-3">Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="/" class="footer-link">Home</a></li>
+                        <li class="mb-2"><a href="/contact" class="footer-link">Contact</a></li>
+                        <li class="mb-2"><a href="/team" class="footer-link">Our Team</a></li>
+                        <li class="mb-2"><a href="/login" class="footer-link">Login</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Resources -->
+                <div class="col-lg-3 col-md-4 col-6">
+                    <h5 class="mb-3">Resources</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="/blog" class="footer-link">Blog</a></li>
+                        <li class="mb-2"><a href="/privacy" class="footer-link">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="/terms" class="footer-link">Terms of Service</a></li>
+                        <li class="mb-2"><a href="/faq" class="footer-link">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Follow Us -->
+                <div class="col-lg-3 col-md-4">
+                    <h5 class="mb-3">Follow Us</h5>
+                    <div class="d-flex justify-content-center justify-content-md-start">
+                        <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="copyright text-center">
+                        &copy; 2025 VisionED - Student Performance Prediction. All rights reserved.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+
