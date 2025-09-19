@@ -117,55 +117,27 @@
             object-fit: cover;
             border: 1px solid #dee2e6;
         }
-
-        .action-btn {
-            background: none;
-            border: none;
-            color: var(--light-text-color);
-            cursor: pointer;
-            font-size: .9rem;
-            transition: all .2s;
-            padding: 6px 10px;
-            border-radius: 6px;
-        }
-
-        .action-btn:hover {
-            background-color: #f1f3f5;
-            color: var(--primary-color);
-        }
-
+        
         .btn-icon-text {
             display: inline-flex;
             align-items: center;
             gap: 5px;
         }
 
-        /* --- New styles for improved layout --- */
+        /* --- Controls for search and filter --- */
         .controls-container {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
         }
 
-        @media (min-width: 768px) {
-            .controls-container {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .controls-group {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            }
+        .controls-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
         }
-
-        .search-input {
-            width: 100%;
-        }
-
+        
         .search-container {
             position: relative;
             width: 100%;
@@ -173,7 +145,6 @@
 
         .search-container .form-control {
             padding-right: 2.5rem;
-            /* Space for the icon */
         }
 
         .search-container .search-icon {
@@ -183,10 +154,8 @@
             transform: translateY(-50%);
             color: var(--light-text-color);
             pointer-events: none;
-            /* Make the icon non-clickable */
         }
-
-
+        
         /* --- Footer --- */
         .footer {
             background-color: var(--secondary-color);
@@ -207,10 +176,17 @@
         .footer .nav-link:hover {
             color: var(--white-color);
         }
+        
+        .social-icons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
 
         .footer .social-icon {
             color: rgba(255, 255, 255, 0.7);
-            margin: 0 12px;
+            margin: 0;
             font-size: 1.5rem;
             transition: all 0.3s ease;
         }
@@ -227,6 +203,60 @@
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.5);
         }
+
+        /* --- Responsive Styles --- */
+        @media (min-width: 768px) {
+            .controls-container {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .controls-group {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 40px 0;
+            }
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+            /* --- ⭐ CORRECTED: Responsive Footer Styles --- */
+            .footer .container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+            }
+            .footer .my-4,
+            .footer .mb-4 {
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
+            }
+            .footer .nav {
+                flex-direction: column !important;
+                width: 100%;
+                gap: 0.5rem;
+            }
+            .footer .nav-item {
+                margin-bottom: 0.5rem;
+            }
+            .footer .copyright {
+                margin-top: 1.5rem;
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 576px) {
+             .page-header h1 {
+                font-size: 1.6rem;
+            }
+        }
+
     </style>
 </head>
 
@@ -281,12 +311,12 @@
 
             {# --- Student Table --- #}
             <div id="student-table-container" class="card p-4 {% if view_as == 'admins' %}d-none{% endif %}">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3">
-                    <h5 class="mb-2 mb-md-0">Students ({{ students|length }})</h5>
+                <div class="controls-container">
+                    <h5 class="mb-0">Students ({{ students|length }})</h5>
                     <div class="controls-group">
                         <div class="search-container">
                             <input type="text" id="student-search-input"
-                                class="form-control form-control-sm search-input"
+                                class="form-control form-control-sm"
                                 placeholder="Search by name or reg no." value="{{ search_query }}">
                             <i class="fas fa-search search-icon"></i>
                         </div>
@@ -372,11 +402,11 @@
             {# --- Admin Table (only for Super Admins) --- #}
             {% if is_super_admin %}
             <div id="admin-table-container" class="card p-4 {% if view_as == 'students' %}d-none{% endif %}">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3">
-                    <h5 class="mb-2 mb-md-0">Administrators ({{ admin_users|length }})</h5>
+                <div class="controls-container">
+                    <h5 class="mb-0">Administrators ({{ admin_users|length }})</h5>
                     <div class="controls-group">
                         <div class="search-container">
-                            <input type="text" id="admin-search-input" class="form-control form-control-sm search-input"
+                            <input type="text" id="admin-search-input" class="form-control form-control-sm"
                                 placeholder="Search by name or department" value="{{ search_query }}">
                             <i class="fas fa-search search-icon"></i>
                         </div>
@@ -486,7 +516,7 @@
                 </li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
-            <div class="mb-4">
+            <div class="mb-4 social-icons-container">
                 <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
                 <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
                 <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
@@ -516,7 +546,6 @@
             let currentView = "{{ view_as }}";
             let debounceTimer;
 
-            // Function to perform dynamic search and update the table
             const fetchAndRenderTable = async (viewAs, searchQuery, sortBy, branch) => {
                 clearTimeout(debounceTimer);
                 debounceTimer = setTimeout(async () => {
@@ -527,12 +556,13 @@
                     if (branch) {
                         url.searchParams.append('branch', branch);
                     }
-                    // Update browser URL for bookmarking/sharing
                     const newUrl = new URL(window.location);
                     newUrl.searchParams.set('view_as', viewAs);
                     newUrl.searchParams.set('search', searchQuery);
                     newUrl.searchParams.set('sort_by', sortBy);
                     if (branch) newUrl.searchParams.set('branch', branch);
+                    else newUrl.searchParams.delete('branch');
+                    
                     window.history.pushState({}, '', newUrl);
 
 
@@ -541,7 +571,7 @@
 
                     const tableBodyId = viewAs === 'students' ? 'student-table-body' : 'admin-table-body';
                     const tableBody = document.getElementById(tableBodyId);
-                    tableBody.innerHTML = ''; // Clear existing rows
+                    tableBody.innerHTML = '';
 
                     if (data.results.length === 0) {
                         const colspan = viewAs === 'students' ? 8 : 7;
@@ -551,8 +581,7 @@
 
                     data.results.forEach((item, index) => {
                         const row = document.createElement('tr');
-
-                        // Handle photo path for backward compatibility
+                        
                         let photoPath = item.profile_photo;
                         if (photoPath && !photoPath.startsWith('images/')) {
                             photoPath = 'images/' + photoPath;
@@ -609,10 +638,9 @@
                         }
                         tableBody.appendChild(row);
                     });
-                }, 300); // 300ms debounce
+                }, 300);
             };
 
-            // Event listeners for dynamic controls
             const addEventListeners = () => {
                 if (studentSearchInput) {
                     studentSearchInput.addEventListener('input', () => {
@@ -650,7 +678,6 @@
             };
             addEventListeners();
 
-            // Toggle button logic
             if (toggleButton) {
                 toggleButton.addEventListener('click', function () {
                     const newView = currentView === 'students' ? 'admins' : 'students';
@@ -679,3 +706,4 @@
 </body>
 
 </html>
+

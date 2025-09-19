@@ -8,8 +8,6 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
@@ -22,6 +20,7 @@
             --white-color: #ffffff;
             --border-radius: 12px;
             --border-color: #e9ecef;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         }
 
         body {
@@ -33,9 +32,10 @@
             min-height: 100vh;
         }
 
+        /* Navbar */
         .navbar {
             background-color: var(--white-color);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--shadow);
             padding: 1rem 0;
         }
 
@@ -76,7 +76,6 @@
 
         .btn-logout:hover {
             background-color: #c82333;
-            color: var(--white-color);
             transform: translateY(-2px);
         }
 
@@ -88,6 +87,7 @@
             box-shadow: none;
         }
 
+        /* Main Content */
         .main-content {
             flex-grow: 1;
             padding: 60px 0;
@@ -111,11 +111,11 @@
             color: var(--secondary-color);
         }
 
+        /* Profile Picture */
         .profile-picture-section {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             margin-bottom: 30px;
         }
 
@@ -135,19 +135,6 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .profile-placeholder {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background-color: #e9ecef;
-            border: 5px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            color: var(--light-text-color);
-        }
-
         .upload-btn-wrapper {
             position: relative;
             overflow: hidden;
@@ -161,7 +148,6 @@
             background-color: var(--white-color);
             padding: 8px 20px;
             border-radius: 50px;
-            font-size: 0.9rem;
             font-weight: 600;
             transition: all 0.3s ease;
         }
@@ -173,7 +159,6 @@
         }
 
         .upload-btn-wrapper input[type=file] {
-            font-size: 100px;
             position: absolute;
             left: 0;
             top: 0;
@@ -181,12 +166,7 @@
             cursor: pointer;
         }
 
-        .upload-helper-text {
-            font-size: 0.85rem;
-            color: var(--light-text-color);
-            margin-top: 10px;
-        }
-
+        /* Forms */
         .form-control,
         .form-select {
             padding: 12px;
@@ -197,7 +177,6 @@
 
         .form-control:focus,
         .form-select:focus {
-            outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(23, 162, 184, .2);
         }
@@ -222,6 +201,7 @@
             box-shadow: 0 8px 20px rgba(23, 162, 184, 0.3);
         }
 
+        /* Custom Alert */
         .modal-backdrop {
             position: fixed;
             top: 0;
@@ -241,9 +221,10 @@
             border-radius: var(--border-radius);
             width: 90%;
             max-width: 400px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow);
         }
 
+        /* --- Footer (Updated Styling) --- */
         .footer {
             background-color: var(--secondary-color);
             color: var(--white-color);
@@ -263,10 +244,19 @@
         .footer .nav-link:hover {
             color: var(--white-color);
         }
+        
+        /* ⭐ ADDED: Container for social icons */
+        .social-icons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px; /* Modern spacing */
+        }
 
+        /* ⭐ UPDATED: social icon margin is now handled by container gap */
         .footer .social-icon {
             color: rgba(255, 255, 255, 0.7);
-            margin: 0 12px;
+            margin: 0; /* Set margin to 0 */
             font-size: 1.5rem;
             transition: all 0.3s ease;
         }
@@ -283,6 +273,26 @@
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.5);
         }
+        
+        /* Responsive */
+        @media (max-width: 767.98px) {
+            .main-content {
+                padding: 30px 15px;
+            }
+
+            .profile-card {
+                padding: 25px;
+            }
+
+            .profile-header h1 {
+                font-size: 1.6rem;
+            }
+
+            .profile-picture-container {
+                width: 120px;
+                height: 120px;
+            }
+        }
     </style>
 </head>
 
@@ -290,20 +300,16 @@
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
             <a class="navbar-brand" href="{{ url_for('student_dashboard') }}">Vision<span class="ed">ED</span></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('profile_student') }}">Profile</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('profile_student') }}">Profile</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('my_courses') }}">My Courses</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('subject_entry') }}">Performance
-                            Analytics</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('subject_entry') }}">Performance Analytics</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('ask_query') }}">Ask Query</a></li>
-                    <li class="nav-item"><a class="nav-link"
-                            href="{{ url_for('student_announcements') }}">Announcements</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('student_announcements') }}">Announcements</a></li>
                     <li class="nav-item"><a class="btn btn-logout" href="{{ url_for('logout') }}">Logout</a></li>
                 </ul>
             </div>
@@ -315,15 +321,15 @@
             <div class="profile-card">
                 <div class="profile-header">
                     <h1>Manage Your Profile</h1>
-                    <p class="text-muted">Keep your information up-to-date to get the best experience.</p>
+                    <p class="text-muted">Keep your information up-to-date.</p>
                 </div>
 
                 {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                 {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible fade show mb-4" role="alert">
+                <div class="alert alert-{{ category }} alert-dismissible fade show mb-4">
                     {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
                 {% endfor %}
                 {% endif %}
@@ -335,14 +341,10 @@
                         <div class="col-md-4">
                             <div class="profile-picture-section">
                                 <div class="profile-picture-container">
-                                    {% set photo_path = student_info.profile_photo or 'images/student_default.png' %}
-                                    {% if not photo_path.startswith('images/') %}
-                                    {% set photo_path = 'images/' + photo_path %}
-                                    {% endif %}
-                                    <img src="{{ url_for('static', filename='uploads/' + photo_path) }}"
-                                        alt="Profile Picture" class="profile-picture" id="profile-pic-preview">
+                                    {% set photo_path = student_info.profile_photo or 'student_default.png' %}
+                                    <img src="{{ url_for('static', filename='uploads/' + photo_path) }}" alt="Profile Picture"
+                                        class="profile-picture" id="profile-pic-preview">
                                 </div>
-
                                 <div class="upload-btn-wrapper">
                                     <button class="btn-upload" type="button">Change Photo</button>
                                     <input type="file" name="profile_photo" id="profile-photo-input" accept="image/*">
@@ -350,6 +352,7 @@
                                 <p class="upload-helper-text">Allowed formats: JPG, PNG, GIF</p>
                             </div>
                         </div>
+
                         <div class="col-md-8">
                             <h5 class="mb-4">Academic & Personal Details</h5>
                             <div class="row">
@@ -365,8 +368,8 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="email" class="form-label">Email ID</label>
-                                    <input type="email" class="form-control" id="email" name="email"
-                                        value="{{ user_email or '' }}" readonly>
+                                    <input type="email" class="form-control" id="email" name="email" value="{{ user_email or '' }}"
+                                        readonly>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="phone" class="form-label">Phone No.</label>
@@ -376,39 +379,33 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="branch" class="form-label">Branch</label>
                                     <select class="form-select" id="branch" name="branch" required>
-                                        <option value="" disabled {% if not student_info or not student_info.branch
-                                            %}selected{% endif %}>Select Branch</option>
-                                        <option value="CSE" {% if student_info and student_info.branch=='CSE'
-                                            %}selected{% endif %}>CSE</option>
-                                        <option value="EE" {% if student_info and student_info.branch=='EE' %}selected{%
-                                            endif %}>EE</option>
-                                        <option value="CE" {% if student_info and student_info.branch=='CE' %}selected{%
-                                            endif %}>CE</option>
-                                        <option value="EL" {% if student_info and student_info.branch=='EL' %}selected{%
-                                            endif %}>EL</option>
-                                        <option value="ME" {% if student_info and student_info.branch=='ME' %}selected{%
-                                            endif %}>ME</option>
-                                        <option value="AE" {% if student_info and student_info.branch=='AE' %}selected{%
-                                            endif %}>AE</option>
+                                        <option value="" disabled {% if not student_info or not student_info.branch %}selected{% endif %}>
+                                            Select Branch</option>
+                                        <option value="CSE" {% if student_info and student_info.branch=='CSE' %}selected{% endif %}>CSE
+                                        </option>
+                                        <option value="EE" {% if student_info and student_info.branch=='EE' %}selected{% endif %}>EE
+                                        </option>
+                                        <option value="CE" {% if student_info and student_info.branch=='CE' %}selected{% endif %}>CE
+                                        </option>
+                                        <option value="EL" {% if student_info and student_info.branch=='EL' %}selected{% endif %}>EL
+                                        </option>
+                                        <option value="ME" {% if student_info and student_info.branch=='ME' %}selected{% endif %}>ME
+                                        </option>
+                                        <option value="AE" {% if student_info and student_info.branch=='AE' %}selected{% endif %}>AE
+                                        </option>
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="sem" class="form-label">Semester</label>
                                     <select class="form-select" id="sem" name="sem" required>
-                                        <option value="" disabled {% if not student_info or not student_info.sem
-                                            %}selected{% endif %}>Select Semester</option>
-                                        <option value="1" {% if student_info and student_info.sem==1 %}selected{% endif
-                                            %}>1st</option>
-                                        <option value="2" {% if student_info and student_info.sem==2 %}selected{% endif
-                                            %}>2nd</option>
-                                        <option value="3" {% if student_info and student_info.sem==3 %}selected{% endif
-                                            %}>3rd</option>
-                                        <option value="4" {% if student_info and student_info.sem==4 %}selected{% endif
-                                            %}>4th</option>
-                                        <option value="5" {% if student_info and student_info.sem==5 %}selected{% endif
-                                            %}>5th</option>
-                                        <option value="6" {% if student_info and student_info.sem==6 %}selected{% endif
-                                            %}>6th</option>
+                                        <option value="" disabled {% if not student_info or not student_info.sem %}selected{% endif %}>
+                                            Select Semester</option>
+                                        <option value="1" {% if student_info and student_info.sem==1 %}selected{% endif %}>1st</option>
+                                        <option value="2" {% if student_info and student_info.sem==2 %}selected{% endif %}>2nd</option>
+                                        <option value="3" {% if student_info and student_info.sem==3 %}selected{% endif %}>3rd</option>
+                                        <option value="4" {% if student_info and student_info.sem==4 %}selected{% endif %}>4th</option>
+                                        <option value="5" {% if student_info and student_info.sem==5 %}selected{% endif %}>5th</option>
+                                        <option value="6" {% if student_info and student_info.sem==6 %}selected{% endif %}>6th</option>
                                     </select>
                                 </div>
                             </div>
@@ -451,17 +448,15 @@
     <footer class="footer">
         <div class="container text-center">
             <a class="navbar-brand" href="{{ url_for('student_dashboard') }}">Vision<span class="ed">ED</span></a>
-            <ul class="nav justify-content-center my-4">
+            <ul class="nav flex-column flex-md-row justify-content-md-center my-4">
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_student') }}">Profile</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('my_courses') }}">My Courses</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('subject_entry') }}">Performance Analytics</a>
-                </li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('subject_entry') }}">Performance Analytics</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('ask_query') }}">Ask Query</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('student_announcements') }}">Announcements</a>
-                </li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('student_announcements') }}">Announcements</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
-            <div class="mb-4">
+            <div class="mb-4 social-icons-container">
                 <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
                 <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
                 <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
@@ -474,7 +469,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const profilePhotoInput = document.getElementById('profile-photo-input');
@@ -520,7 +514,6 @@
                     return false;
                 }
             }
-
             return true;
         }
 
@@ -536,3 +529,4 @@
 </body>
 
 </html>
+

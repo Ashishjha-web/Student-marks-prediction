@@ -181,12 +181,6 @@
             color: var(--danger-color);
         }
 
-        .edit-delete-group {
-            margin-left: auto;
-            display: flex;
-            gap: 5px;
-        }
-
         .btn-delete {
             color: var(--danger-color);
         }
@@ -258,6 +252,7 @@
             color: var(--danger-color);
         }
 
+        /* --- Footer (Updated Styling) --- */
         .footer {
             background-color: var(--secondary-color);
             color: var(--white-color);
@@ -278,9 +273,20 @@
             color: var(--white-color);
         }
 
+        /* ⭐ ADDED: Container for social icons */
+        .social-icons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            /* Modern spacing */
+        }
+
+        /* ⭐ UPDATED: social icon margin is now handled by container gap */
         .footer .social-icon {
             color: rgba(255, 255, 255, 0.7);
-            margin: 0 12px;
+            margin: 0;
+            /* Set margin to 0 */
             font-size: 1.5rem;
             transition: all 0.3s ease;
         }
@@ -296,6 +302,91 @@
             margin-top: 40px;
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* --- Responsive Styles --- */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 40px 0;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .page-header {
+                margin-bottom: 30px;
+            }
+
+            .replies-section {
+                padding-left: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .main-content {
+                padding: 30px 0;
+            }
+
+            .card {
+                padding: 15px;
+            }
+            
+            .query-card {
+                padding: 15px;
+            }
+
+            .query-header img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .query-header {
+                gap: 10px;
+            }
+
+            .query-footer {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            
+            .query-footer .d-flex {
+                justify-content: space-between;
+            }
+            
+            .query-footer .mb-2 {
+                margin-bottom: 0 !important;
+            }
+
+            .action-btn {
+                font-size: 0.85rem;
+                padding: 5px 8px;
+            }
+            
+            .replies-section {
+                padding-left: 15px;
+                border-left-width: 2px;
+            }
+            
+            .nested-replies {
+                padding-left: 10px;
+            }
+            
+            .status-icons {
+                top: 10px;
+                right: 10px;
+            }
+
+            .admin-badge {
+                display: inline-block;
+                margin-left: 0;
+                margin-top: 4px;
+            }
         }
     </style>
 </head>
@@ -369,7 +460,7 @@
                             required></textarea>
                     </div>
                     <div class="text-end">
-                        <button type="submit" class="btn btn-submit">Post Query</button>
+                        <button type="submit" class="btn btn-submit px-4">Post Query</button>
                     </div>
                 </form>
                 {% endif %}
@@ -395,18 +486,18 @@
                         <div class="user-name">
                             {{ reply.author.fullname }}
                             {% if reply.author.role == 'administrator' %}
-                            {% if reply.author.admin_info and reply.author.admin_info.department == 'ALL_BRANCHES' %}
-                            <span class="admin-badge">Super Admin</span>
-                            {% else %}
-                            <span class="admin-badge">Admin</span>
-                            {% endif %}
+                                {% if reply.author.admin_info and reply.author.admin_info.department == 'ALL_BRANCHES' %}
+                                <span class="admin-badge">Super Admin</span>
+                                {% else %}
+                                <span class="admin-badge">Admin</span>
+                                {% endif %}
                             {% endif %}
                         </div>
                         <div class="timestamp">{{ time_ago(reply.timestamp) }} {% if reply.edited %}<span
                                 class="fst-italic">(edited)</span>{% endif %}</div>
                     </div>
                     <div class="status-icons">{% if reply.is_pinned %}<i class="fas fa-thumbtack" title="Pinned"></i>{%
-                        endif %}</div>
+                            endif %}</div>
                 </div>
 
                 <div class="query-body py-2">
@@ -480,7 +571,7 @@
             {% endmacro %}
 
             {% for query in queries %}
-            <div class="card query-card {% if query.author.role == 'administrator' %}admin-post{% endif %} {% if query.is_pinned %}pinned-post{% endif %}"
+            <div class="card query-card mb-4 {% if query.author.role == 'administrator' %}admin-post{% endif %} {% if query.is_pinned %}pinned-post{% endif %}"
                 id="query-{{ query.id }}">
                 <div class="query-header position-relative">
                     {% set photo_path = (query.author.admin_info.profile_photo if query.author.role == 'administrator'
@@ -496,11 +587,11 @@
                         <div class="user-name">
                             {{ query.author.fullname }}
                             {% if query.author.role == 'administrator' %}
-                            {% if query.author.admin_info and query.author.admin_info.department == 'ALL_BRANCHES' %}
-                            <span class="admin-badge">Super Admin</span>
-                            {% else %}
-                            <span class="admin-badge">Admin</span>
-                            {% endif %}
+                                {% if query.author.admin_info and query.author.admin_info.department == 'ALL_BRANCHES' %}
+                                <span class="admin-badge">Super Admin</span>
+                                {% else %}
+                                <span class="admin-badge">Admin</span>
+                                {% endif %}
                             {% endif %}
                         </div>
                         <div class="timestamp">Posted {{ time_ago(query.timestamp) }} {% if query.edited %}<span
@@ -599,8 +690,7 @@
         </div>
     </main>
 
-    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -645,7 +735,7 @@
     <footer class="footer">
         <div class="container text-center">
             <a class="navbar-brand" href="{{ url_for('student_dashboard') }}">Vision<span class="ed">ED</span></a>
-            <ul class="nav justify-content-center my-4">
+            <ul class="nav flex-column flex-md-row justify-content-md-center my-4">
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_student') }}">Profile</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('my_courses') }}">My Courses</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('subject_entry') }}">Performance
@@ -655,7 +745,7 @@
                 </li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
-            <div class="mb-4">
+            <div class="mb-4 social-icons-container">
                 <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
                 <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
                 <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
@@ -674,178 +764,177 @@
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 
-            const isUserBlocked = {{ is_user_blocked | tojson
-        }};
-        const blockedModal = new bootstrap.Modal(document.getElementById('blockedModal'));
+            const isUserBlocked = {{ is_user_blocked | tojson}};
+            const blockedModal = new bootstrap.Modal(document.getElementById('blockedModal'));
 
-        async function apiRequest(url, method = 'POST', body = {}) {
-            const response = await fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                body: JSON.stringify(body)
-            });
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({
-                    message: 'An unknown error occurred'
-                }));
-                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        }
-
-        async function handleVoteClick(button) {
-            const {
-                entityType,
-                entityId,
-                voteType
-            } = button.dataset;
-            const footer = button.closest('.query-footer');
-            if (!entityType || !entityId || !voteType || !footer) return;
-            try {
-                const data = await apiRequest(`/student/vote/${entityType}/${entityId}`, 'POST', {
-                    vote_type: voteType
+            async function apiRequest(url, method = 'POST', body = {}) {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify(body)
                 });
-                const likeBtn = footer.querySelector('.btn-vote.like');
-                const dislikeBtn = footer.querySelector('.btn-vote.dislike');
-                likeBtn.querySelector('.count').textContent = data.likes;
-                dislikeBtn.querySelector('.count').textContent = data.dislikes;
-                likeBtn.classList.toggle('active', data.user_vote === 'like');
-                dislikeBtn.classList.toggle('active', data.user_vote === 'dislike');
-            } catch (error) {
-                console.error("Vote failed:", error);
-                alert('Could not cast vote. Please try again.');
-            }
-        }
-
-        function handleEditClick(button) {
-            if (isUserBlocked) {
-                blockedModal.show();
-                return;
-            }
-            const container = button.closest('.query-card, .reply-card');
-            if (!container) return;
-            container.querySelector('.query-body').style.display = 'none';
-            const editForm = container.querySelector('.edit-form-container');
-            editForm.style.display = 'block';
-            editForm.querySelector('textarea').focus();
-        }
-
-        function cancelEdit(button) {
-            const container = button.closest('.query-card, .reply-card');
-            if (!container) return;
-            container.querySelector('.edit-form-container').style.display = 'none';
-            container.querySelector('.query-body').style.display = 'block';
-        }
-
-        function handleReplyClick(button) {
-            if (isUserBlocked) {
-                blockedModal.show();
-                return;
-            }
-            const {
-                queryId,
-                parentId = ''
-            } = button.dataset;
-            const masterReplyForm = document.getElementById('master-reply-form');
-            const form = masterReplyForm.querySelector('form');
-            let targetContainer = parentId ?
-                document.querySelector(`#reply-${parentId} .replies-section-container`) :
-                document.getElementById(`reply-form-container-${queryId}`);
-            if (!targetContainer) return;
-            targetContainer.appendChild(masterReplyForm);
-            form.action = `/student/post_reply/${queryId}`;
-            form.querySelector('input[name="parent_id"]').value = parentId;
-            masterReplyForm.style.display = 'block';
-            const textarea = masterReplyForm.querySelector('textarea');
-            textarea.value = '';
-            textarea.focus();
-        }
-
-        function cancelMasterReply() {
-            const masterReplyForm = document.getElementById('master-reply-form');
-            masterReplyForm.style.display = 'none';
-            document.body.appendChild(masterReplyForm);
-        }
-
-        function handleToggleReplies(button) {
-            const targetDiv = button.nextElementSibling;
-            if (!targetDiv || (!targetDiv.classList.contains('nested-replies') && !targetDiv.classList.contains(
-                'replies-section'))) {
-                return;
-            }
-            const isHidden = targetDiv.style.display === 'none';
-            targetDiv.style.display = isHidden ? 'block' : 'none';
-            const icon = button.querySelector('i');
-
-            if (isHidden) {
-                icon.classList.replace('fa-caret-down', 'fa-caret-up');
-                button.innerHTML = `<i class="fas fa-caret-up"></i> Hide replies`;
-            } else {
-                icon.classList.replace('fa-caret-up', 'fa-caret-down');
-                const replyCount = button.dataset.replyCount || 0;
-                const replyText = parseInt(replyCount) === 1 ? 'reply' : 'replies';
-                button.innerHTML = `<i class="fas fa-caret-down"></i> View ${replyCount} ${replyText}`;
-            }
-        }
-
-        document.getElementById('main-container').addEventListener('click', (event) => {
-            const button = event.target.closest('button');
-            if (!button) return;
-
-            if (isUserBlocked && (button.classList.contains('btn-edit') || button.classList.contains(
-                'btn-reply') || (button.type === 'submit' && button.closest('form')))) {
-                event.preventDefault();
-                blockedModal.show();
-                return;
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({
+                        message: 'An unknown error occurred'
+                    }));
+                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+                }
+                return response.json();
             }
 
-            if (button.classList.contains('btn-vote')) {
-                handleVoteClick(button);
-            } else if (button.classList.contains('btn-edit')) {
-                handleEditClick(button);
-            } else if (button.classList.contains('btn-cancel-edit')) {
-                cancelEdit(button);
-            } else if (button.classList.contains('btn-reply')) {
-                handleReplyClick(button);
-            } else if (button.classList.contains('btn-toggle-replies')) {
-                handleToggleReplies(button);
+            async function handleVoteClick(button) {
+                const {
+                    entityType,
+                    entityId,
+                    voteType
+                } = button.dataset;
+                const footer = button.closest('.query-footer');
+                if (!entityType || !entityId || !voteType || !footer) return;
+                try {
+                    const data = await apiRequest(`/student/vote/${entityType}/${entityId}`, 'POST', {
+                        vote_type: voteType
+                    });
+                    const likeBtn = footer.querySelector('.btn-vote.like');
+                    const dislikeBtn = footer.querySelector('.btn-vote.dislike');
+                    likeBtn.querySelector('.count').textContent = data.likes;
+                    dislikeBtn.querySelector('.count').textContent = data.dislikes;
+                    likeBtn.classList.toggle('active', data.user_vote === 'like');
+                    dislikeBtn.classList.toggle('active', data.user_vote === 'dislike');
+                } catch (error) {
+                    console.error("Vote failed:", error);
+                    alert('Could not cast vote. Please try again.');
+                }
             }
-        });
 
-        const postQueryForm = document.getElementById('post-query-form');
-        if (postQueryForm) {
-            postQueryForm.addEventListener('submit', function (event) {
+            function handleEditClick(button) {
                 if (isUserBlocked) {
+                    blockedModal.show();
+                    return;
+                }
+                const container = button.closest('.query-card, .reply-card');
+                if (!container) return;
+                container.querySelector('.query-body').style.display = 'none';
+                const editForm = container.querySelector('.edit-form-container');
+                editForm.style.display = 'block';
+                editForm.querySelector('textarea').focus();
+            }
+
+            function cancelEdit(button) {
+                const container = button.closest('.query-card, .reply-card');
+                if (!container) return;
+                container.querySelector('.edit-form-container').style.display = 'none';
+                container.querySelector('.query-body').style.display = 'block';
+            }
+
+            function handleReplyClick(button) {
+                if (isUserBlocked) {
+                    blockedModal.show();
+                    return;
+                }
+                const {
+                    queryId,
+                    parentId = ''
+                } = button.dataset;
+                const masterReplyForm = document.getElementById('master-reply-form');
+                const form = masterReplyForm.querySelector('form');
+                let targetContainer = parentId ?
+                    document.querySelector(`#reply-${parentId} .replies-section-container`) :
+                    document.getElementById(`reply-form-container-${queryId}`);
+                if (!targetContainer) return;
+                targetContainer.appendChild(masterReplyForm);
+                form.action = `/student/post_reply/${queryId}`;
+                form.querySelector('input[name="parent_id"]').value = parentId;
+                masterReplyForm.style.display = 'block';
+                const textarea = masterReplyForm.querySelector('textarea');
+                textarea.value = '';
+                textarea.focus();
+            }
+
+            function cancelMasterReply() {
+                const masterReplyForm = document.getElementById('master-reply-form');
+                masterReplyForm.style.display = 'none';
+                document.body.appendChild(masterReplyForm);
+            }
+
+            function handleToggleReplies(button) {
+                const targetDiv = button.nextElementSibling;
+                if (!targetDiv || (!targetDiv.classList.contains('nested-replies') && !targetDiv.classList.contains(
+                        'replies-section'))) {
+                    return;
+                }
+                const isHidden = targetDiv.style.display === 'none';
+                targetDiv.style.display = isHidden ? 'block' : 'none';
+                const icon = button.querySelector('i');
+
+                if (isHidden) {
+                    icon.classList.replace('fa-caret-down', 'fa-caret-up');
+                    button.innerHTML = `<i class="fas fa-caret-up"></i> Hide replies`;
+                } else {
+                    icon.classList.replace('fa-caret-up', 'fa-caret-down');
+                    const replyCount = button.dataset.replyCount || 0;
+                    const replyText = parseInt(replyCount) === 1 ? 'reply' : 'replies';
+                    button.innerHTML = `<i class="fas fa-caret-down"></i> View ${replyCount} ${replyText}`;
+                }
+            }
+
+            document.getElementById('main-container').addEventListener('click', (event) => {
+                const button = event.target.closest('button');
+                if (!button) return;
+
+                if (isUserBlocked && (button.classList.contains('btn-edit') || button.classList.contains(
+                        'btn-reply') || (button.type === 'submit' && button.closest('form')))) {
                     event.preventDefault();
                     blockedModal.show();
+                    return;
+                }
+
+                if (button.classList.contains('btn-vote')) {
+                    handleVoteClick(button);
+                } else if (button.classList.contains('btn-edit')) {
+                    handleEditClick(button);
+                } else if (button.classList.contains('btn-cancel-edit')) {
+                    cancelEdit(button);
+                } else if (button.classList.contains('btn-reply')) {
+                    handleReplyClick(button);
+                } else if (button.classList.contains('btn-toggle-replies')) {
+                    handleToggleReplies(button);
                 }
             });
-        }
 
-        document.getElementById('cancel-master-reply').addEventListener('click', cancelMasterReply);
+            const postQueryForm = document.getElementById('post-query-form');
+            if (postQueryForm) {
+                postQueryForm.addEventListener('submit', function (event) {
+                    if (isUserBlocked) {
+                        event.preventDefault();
+                        blockedModal.show();
+                    }
+                });
+            }
 
-        // New Modal logic for Delete Confirmation
-        const confirmDeleteModal = document.getElementById('confirmDeleteModal');
-        if (confirmDeleteModal) {
-            let deleteActionUrl = '';
-            const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-            confirmDeleteModal.addEventListener('show.bs.modal', event => {
-                const button = event.relatedTarget;
-                deleteActionUrl = button.dataset.action;
-            });
-            confirmDeleteBtn.addEventListener('click', () => {
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = deleteActionUrl;
-                document.body.appendChild(form);
-                form.submit();
-            });
-        }
+            document.getElementById('cancel-master-reply').addEventListener('click', cancelMasterReply);
+            
+            const confirmDeleteModal = document.getElementById('confirmDeleteModal');
+            if (confirmDeleteModal) {
+                let deleteActionUrl = '';
+                const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+                confirmDeleteModal.addEventListener('show.bs.modal', event => {
+                    const button = event.relatedTarget;
+                    deleteActionUrl = button.dataset.action;
+                });
+                confirmDeleteBtn.addEventListener('click', () => {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = deleteActionUrl;
+                    document.body.appendChild(form);
+                    form.submit();
+                });
+            }
         });
     </script>
 </body>
 
 </html>
+

@@ -96,8 +96,8 @@
         }
 
         .attendance-charts-grid {
-             grid-template-columns: 1fr 1fr;
-             margin-top: 30px;
+            grid-template-columns: 1fr 1fr;
+            margin-top: 30px;
         }
 
         .results-grid {
@@ -136,9 +136,10 @@
 
         th,
         td {
-            padding: 12px 5px;
+            padding: 12px 15px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
         }
 
         th {
@@ -168,14 +169,6 @@
             color: var(--light-text-color);
         }
 
-        @media (max-width: 992px) {
-            .results-grid,
-            .charts-container-grid,
-            .attendance-charts-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
         .modal-body h2 {
             font-size: 1.5rem;
             font-weight: 600;
@@ -184,6 +177,22 @@
             margin-bottom: 1.5rem;
             padding-bottom: 0.5rem;
             border-bottom: 2px solid var(--border-color);
+        }
+        
+        .modal-body fieldset {
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .modal-body legend {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
         .btn-submit {
@@ -237,6 +246,170 @@
             margin-bottom: 12px;
             gap: 10px;
         }
+        
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .custom-modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1060;
+        }
+
+        .custom-modal-content {
+            background: var(--white-color);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeInScale 0.3s ease-out;
+        }
+
+        .custom-modal-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .custom-modal-title {
+            font-weight: 600;
+            font-size: 1.25rem;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .custom-modal-message {
+            color: var(--light-text-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        /* --- Footer (Updated Styling) --- */
+        .footer {
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+            padding: 60px 0 20px 0;
+            flex-shrink: 0;
+        }
+
+        .footer .navbar-brand {
+            color: var(--white-color) !important;
+        }
+
+        .footer .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            padding: 0.5rem 1rem;
+        }
+
+        .footer .nav-link:hover {
+            color: var(--white-color);
+        }
+
+        /* ⭐ ADDED: Container for social icons */
+        .social-icons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px; /* Modern spacing */
+        }
+
+        /* ⭐ UPDATED: social icon margin is now handled by container gap */
+        .footer .social-icon {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0; /* Set margin to 0 */
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer .social-icon:hover {
+            color: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        .footer .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* --- Responsive Styles --- */
+        @media (max-width: 992px) {
+            .results-grid,
+            .charts-container-grid,
+            .attendance-charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 40px 0;
+            }
+            .results-container {
+                padding: 25px;
+            }
+            .results-header h1 {
+                font-size: 1.8rem;
+            }
+            .chart-container {
+                height: 300px;
+            }
+            .chart-wrapper {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .chart-wrapper .chart-container {
+                min-width: 500px;
+            }
+            .modal-body h2 {
+                font-size: 1.3rem;
+                margin-top: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+            .main-content {
+                padding: 20px 0;
+            }
+            .results-container {
+                padding: 15px;
+            }
+            .card {
+                padding: 15px;
+            }
+            .results-header h1 {
+                font-size: 1.5rem;
+                margin-bottom: 25px;
+            }
+            .analysis-card h3 {
+                font-size: 1.3em;
+            }
+            .chart-container {
+                height: 280px;
+            }
+            th,
+            td {
+                padding: 10px 8px;
+                font-size: 0.9rem;
+            }
+            .footer {
+                padding: 40px 0 20px;
+            }
+        }
     </style>
 </head>
 
@@ -254,42 +427,62 @@
 
     <main class="main-content">
         <div class="container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }} alert-dismissible fade show mb-4" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
             <div id="predictionResults" class="results-container" {% if not predictions %}style="display:none;" {% endif %}>
                 <div class="results-header">
                     <h1>Performance Analysis for {{ student_info.name }} 📈</h1>
-                    <p class="text-muted">Reg. No: {{ student_info.reg_no }} | Branch: {{ student_info.branch }} | Sem: {{ student_info.sem }}</p>
+                    <p class="text-muted">Reg. No: {{ student_info.reg_no }} | Branch: {{ student_info.branch }} | Sem:
+                        {{ student_info.sem }}</p>
                 </div>
 
                 <div class="charts-container-grid">
                     <div class="card">
                         <h2>Predicted Marks Overview</h2>
-                        <div class="chart-container">
-                            <canvas id="marksChart"></canvas>
+                        <div class="chart-wrapper">
+                            <div class="chart-container">
+                                <canvas id="marksChart"></canvas>
+                            </div>
                         </div>
                     </div>
                     <div class="card">
                         <h2>Subject Contribution (%)</h2>
-                        <div class="chart-container">
-                            <canvas id="contributionChart"></canvas>
+                        <div class="chart-wrapper">
+                            <div class="chart-container">
+                                <canvas id="contributionChart"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
 
+                {% if projected_attendance and projected_attendance|length > 0 %}
                 <div class="attendance-charts-grid">
                     <div class="card">
                         <h2>Previous Semester Attendance (%)</h2>
-                        <div class="chart-container">
-                            <canvas id="prevAttendanceChart"></canvas>
+                        <div class="chart-wrapper">
+                            <div class="chart-container">
+                                <canvas id="prevAttendanceChart"></canvas>
+                            </div>
                         </div>
                     </div>
                     <div class="card">
                         <h2>Predicted Attendance Trend (%)</h2>
-                        <div class="chart-container">
-                            <canvas id="predictedAttendanceChart"></canvas>
+                        <div class="chart-wrapper">
+                            <div class="chart-container">
+                                <canvas id="predictedAttendanceChart"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
-
+                {% endif %}
                 <div class="results-grid">
                     <div class="card analysis-card">
                         <h2>Overall Analysis</h2>
@@ -304,26 +497,28 @@
 
                 <div class="card" style="margin-top: 30px;">
                     <h2>Detailed Subject Breakdown</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Subject</th>
-                                <th>Expected Marks (out of 70)</th>
-                                <th>Performance Level</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if predictions %}
-                            {% for subject, data in predictions.items() %}
-                            <tr>
-                                <td>{{ subject }}</td>
-                                <td><b>{{ data.mark }}</b></td>
-                                <td><span class="level-{{ data.level.split(' ')[0] }}">{{ data.level }}</span></td>
-                            </tr>
-                            {% endfor %}
-                            {% endif %}
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Expected Marks (out of 70)</th>
+                                    <th>Performance Level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if predictions %}
+                                {% for subject, data in predictions.items() %}
+                                <tr>
+                                    <td>{{ subject }}</td>
+                                    <td><b>{{ data.mark }}</b></td>
+                                    <td><span class="level-{{ data.level.split(' ')[0] }}">{{ data.level }}</span></td>
+                                </tr>
+                                {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div class="text-center mt-4">
@@ -333,10 +528,12 @@
                 </div>
             </div>
 
-            <div id="noDataMessage" class="results-container mt-4 text-center" {% if predictions %}style="display:none;"{% endif %}>
+            <div id="noDataMessage" class="results-container mt-4 text-center" {% if predictions %}style="display:none;"
+                {% endif %}>
                 <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
                 <h2 class="text-muted">No Prediction Available</h2>
-                <p class="lead text-muted">Enter the student's marks for the first time to generate a performance prediction.</p>
+                <p class="lead text-muted">Enter the student's marks for the first time to generate a performance
+                    prediction.</p>
                 <button class="btn btn-primary btn-lg mt-3" data-bs-toggle="modal" data-bs-target="#marksModal">
                     <i class="fas fa-plus-circle me-2"></i> Add Marks to Predict
                 </button>
@@ -353,7 +550,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="{{ url_for('admin_predict', user_id=student_info.user_id) }}" method="post">
-                        
+
                         {% if student_info.sem > 1 %}
                         <h2>Semester {{ student_info.sem - 1 }}<sup>{{ get_ordinal_suffix(student_info.sem - 1) }}</sup> Marks (out of 70)</h2>
                         <fieldset>
@@ -362,13 +559,14 @@
                                 <label for="modal-{{ subject.id }}">{{ subject.name }}</label>
                                 <input type="number" class="form-control" name="{{ subject.id }}"
                                     id="modal-{{ subject.id }}" min="0" max="70"
-                                    value="{{ prev_sem_marks.get(subject.id, '') }}">
+                                    value="{{ prev_sem_marks.get(subject.id, '') }}" required>
                             </div>
                             {% endfor %}
                         </fieldset>
                         {% endif %}
 
-                        <h2>Semester {{ student_info.sem }}<sup>{{ get_ordinal_suffix(student_info.sem) }}</sup> Class Tests (out of 20)</h2>
+                        <h2>Semester {{ student_info.sem }}<sup>{{ get_ordinal_suffix(student_info.sem) }}</sup>
+                            Class Tests (out of 20)</h2>
                         {% for subject in current_subjects %}
                         <fieldset>
                             <legend>{{ subject.name }}<button type="button" class="action-btn add-btn"
@@ -397,13 +595,48 @@
         </div>
     </div>
     
+    <div id="customAlertModal" class="custom-modal-backdrop">
+        <div class="custom-modal-content">
+            <h3 class="custom-modal-icon"><i class="fas fa-exclamation-circle text-warning"></i></h3>
+            <h5 class="custom-modal-title">Limit Reached</h5>
+            <p id="customAlertMessage" class="custom-modal-message"></p>
+            <button type="button" class="btn btn-primary" onclick="closeCustomAlert()">OK</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Vision<span class="ed">ED</span></a>
+
+            <ul class="nav flex-column flex-md-row justify-content-md-center my-4">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('registered_users') }}">Registered Users</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('material_uploader') }}">Materials Uploader</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('query_solver') }}">Query Solver</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_announcements') }}">Announcements</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+
+            <div class="mb-4 social-icons-container">
+                <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="social-icon" title="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+            <p class="copyright">&copy; 2025 VisionED - Admin Portal. All rights reserved.</p>
+        </div>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
+        // Your existing JavaScript code...
         const saved_marks = {
-            ...{{ prev_sem_marks|tojson|safe }},
-            ...{{ current_ct_marks|tojson|safe }},
-            ...{{ attendance_marks|tojson|safe }}
+            ...{{ prev_sem_marks| tojson | safe }},
+            ...{{ current_ct_marks| tojson | safe }},
+            ...{{ attendance_marks| tojson | safe }}
         };
 
         let predictionChart = null;
@@ -411,9 +644,8 @@
         let prevAttendanceChart = null;
         let predictedAttendanceChart = null;
 
-
         function renderPredictionChart() {
-            const predictionsData = {{ predictions|tojson|safe }};
+            const predictionsData = {{ predictions | tojson | safe }};
             if (!predictionsData) return;
             const ctx = document.getElementById('marksChart').getContext('2d');
             const labels = Object.keys(predictionsData);
@@ -438,20 +670,29 @@
                     indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: { x: { beginAtZero: true, max: 70 } },
-                    plugins: { legend: { display: false } }
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 70
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
                 }
             });
         }
-        
+
         function renderContributionChart() {
-            const predictionsData = {{ predictions | tojson | safe}};
+            const predictionsData = {{ predictions | tojson | safe }};
             if (!predictionsData) return;
 
             const ctx = document.getElementById('contributionChart').getContext('2d');
             const labels = Object.keys(predictionsData);
             const marks = labels.map(label => predictionsData[label].mark);
-            
+
             if (contributionChart) contributionChart.destroy();
 
             contributionChart = new Chart(ctx, {
@@ -467,7 +708,7 @@
                             'rgba(155, 89, 182, 0.7)', 'rgba(231, 76, 60, 0.7)'
                         ],
                         borderColor: [
-                           '#17a2b8', '#2c3e50', '#f39c12', '#2ecc71', '#9b59b6', '#e74c3c'
+                            '#17a2b8', '#2c3e50', '#f39c12', '#2ecc71', '#9b59b6', '#e74c3c'
                         ],
                         borderWidth: 1
                     }]
@@ -476,12 +717,16 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'top' },
+                        legend: {
+                            position: 'top'
+                        },
                         tooltip: {
                             callbacks: {
                                 label: function (context) {
                                     let label = context.label || '';
-                                    if (label) { label += ': '; }
+                                    if (label) {
+                                        label += ': ';
+                                    }
                                     const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
                                     const value = context.parsed;
                                     const percentage = total > 0 ? (value / total * 100).toFixed(2) : 0;
@@ -493,16 +738,16 @@
                 }
             });
         }
-        
+
         function renderPrevAttendanceChart() {
             const prevAttendanceData = {{ attendance_marks | tojson | safe }};
-            const sortedKeys = Object.keys(prevAttendanceData).map(k => parseInt(k.split('_').pop())).sort((a,b) => a-b);
+            const sortedKeys = Object.keys(prevAttendanceData).map(k => parseInt(k.split('_').pop())).sort((a, b) => a - b);
 
-            if(sortedKeys.length === 0) return;
-            
+            if (sortedKeys.length === 0) return;
+
             const labels = sortedKeys.map(key => `Semester ${key}`);
             const data = sortedKeys.map(key => prevAttendanceData[`prev_attendance_${key}`]);
-            
+
             const ctx = document.getElementById('prevAttendanceChart').getContext('2d');
 
             if (prevAttendanceChart) prevAttendanceChart.destroy();
@@ -532,27 +777,42 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: { y: { beginAtZero: true, max: 100 } },
-                    plugins: { legend: { display: false } }
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
                 }
             });
         }
         
         function renderPredictedAttendanceChart() {
-            const attendanceValues = Object.values({{ attendance_marks | tojson | safe }}).map(v => parseInt(v));
+            const attendanceData = {{ attendance_marks | tojson | safe }};
+            const sortedKeys = Object.keys(attendanceData).map(k => parseInt(k.split('_').pop())).sort((a, b) => a - b);
 
-            if(attendanceValues.length === 0) return;
+            if (sortedKeys.length === 0) return;
 
-            const lastAttendance = attendanceValues[attendanceValues.length - 1];
-            const avgAttendance = attendanceValues.reduce((a, b) => a + b, 0) / attendanceValues.length;
-            const isUpwardTrend = avgAttendance >= lastAttendance;
+            const lastSemNum = sortedKeys[sortedKeys.length - 1];
+            const lastAttendanceValue = attendanceData[`prev_attendance_${lastSemNum}`];
+            const lastAttendanceLabel = `Semester ${lastSemNum}`;
 
+            const projectedAttendanceData = {{ projected_attendance | tojson | safe }};
+            const projectedLabel = Object.keys(projectedAttendanceData)[0];
+            const projectedValue = projectedAttendanceData[projectedLabel];
+
+            const isUpwardTrend = projectedValue >= lastAttendanceValue;
             const ctx = document.getElementById('predictedAttendanceChart').getContext('2d');
-
+            
             if (predictedAttendanceChart) predictedAttendanceChart.destroy();
 
             const gradient = ctx.createLinearGradient(0, 0, 0, 350);
-             if (isUpwardTrend) {
+            if (isUpwardTrend) {
                 gradient.addColorStop(0, 'rgba(46, 204, 113, 0.6)');
                 gradient.addColorStop(1, 'rgba(46, 204, 113, 0)');
             } else {
@@ -561,14 +821,13 @@
             }
             const borderColor = isUpwardTrend ? 'rgba(46, 204, 113, 1)' : 'rgba(231, 76, 60, 1)';
 
-
             predictedAttendanceChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: [`Semester ${attendanceValues.length}`, `Predicted Sem ${attendanceValues.length + 1}`],
+                    labels: [lastAttendanceLabel, projectedLabel],
                     datasets: [{
                         label: 'Attendance %',
-                        data: [lastAttendance, avgAttendance],
+                        data: [lastAttendanceValue, projectedValue],
                         borderColor: borderColor,
                         backgroundColor: gradient,
                         fill: true,
@@ -587,21 +846,19 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: { 
-                        y: { 
-                            beginAtZero: true, 
+                    scales: {
+                        y: {
+                            beginAtZero: true,
                             max: 100,
                             ticks: {
-                                callback: function(value) { return value + '%'; }
+                                callback: function (value) { return value + '%'; }
                             }
-                        } 
+                        }
                     },
-                    plugins: { 
+                    plugins: {
                         legend: { display: false },
                         tooltip: {
                             padding: 10,
-                            titleFont: { size: 14 },
-                            bodyFont: { size: 12 },
                             callbacks: {
                                 label: function (context) {
                                     let label = context.dataset.label || '';
@@ -619,22 +876,26 @@
         }
         
         document.addEventListener('DOMContentLoaded', function () {
-            const hasPredictions = {{ (predictions and predictions|length > 0)|tojson }};
+            const hasPredictions = {{ (predictions and predictions | length > 0) | tojson }};
+            const hasAttendance = {{ (projected_attendance and projected_attendance|length > 0) | tojson }};
 
             if (hasPredictions) {
                 renderPredictionChart();
                 renderContributionChart();
-                renderPrevAttendanceChart();
-                renderPredictedAttendanceChart();
+                
+                if (hasAttendance) {
+                    renderPrevAttendanceChart();
+                    renderPredictedAttendanceChart();
+                }
             }
-            
+
             const marksModal = document.getElementById('marksModal');
             marksModal.addEventListener('show.bs.modal', event => {
                 populateDynamicFields('{{ current_subjects|map(attribute="id")|join(",") }}', 'ct', '_tests', 'Class Test Score', 20);
                 populateDynamicFields('prev_attendance', 'att', '_entries', 'Semester Attendance %', 100);
             });
         });
-        
+
         function createEntry(container, name, value, maxVal, placeholder) {
             const entryDiv = document.createElement('div');
             entryDiv.className = 'dynamic-entry';
@@ -649,27 +910,27 @@
 
         function populateDynamicFields(subjectIds, type, containerSuffix, placeholderText, maxVal) {
             const prefixes = type === 'ct' ? subjectIds.split(',') : [subjectIds];
-
             prefixes.forEach(prefix => {
                 const containerId = (type === 'ct') ? `modal-${prefix}${containerSuffix}` : `modal-attendance${containerSuffix}`;
                 const container = document.getElementById(containerId);
                 if (!container) return;
                 
-                container.innerHTML = ''; 
+                container.innerHTML = '';
                 const namePrefix = (type === 'ct') ? `${prefix}_ct` : 'prev_attendance';
                 const markKeys = Object.keys(saved_marks).filter(key => key.startsWith(namePrefix));
-                
+
                 let maxIndex = 0;
                 markKeys.forEach(key => {
                     const num = parseInt(key.split('_').pop(), 10) || 0;
                     if (num > maxIndex) maxIndex = num;
                 });
 
-                const loopLimit = Math.max(1, maxIndex);
+                const loopLimit = Math.max(1, markKeys.length > 0 ? maxIndex : 1);
                 for (let i = 1; i <= loopLimit; i++) {
                     const currentKey = `${namePrefix}_${i}`;
                     const value = saved_marks[currentKey] || '';
-                    createEntry(container, currentKey, value, maxVal, `${placeholderText} ${i}`);
+                    const placeholder = placeholderText.includes('Semester') ? `Semester ${i} Attendance %` : `${placeholderText} ${i}`;
+                    createEntry(container, currentKey, value, maxVal, placeholder);
                 }
                 updateEntriesUI(containerId);
             });
@@ -677,39 +938,63 @@
 
         function addEntry(containerId, namePrefix, maxVal, placeholderText) {
             const container = document.getElementById(containerId);
+            const isAttendance = containerId.includes('attendance');
+            const maxAllowed = isAttendance ? ({{ student_info.sem }} - 1) : 5;
+            
+            if (maxAllowed > 0 && container.children.length >= maxAllowed) {
+                showCustomAlert(`You can add a maximum of ${maxAllowed} entries.`);
+                return;
+            }
+
             const newIndex = container.children.length + 1;
-            createEntry(container, `${namePrefix}_${newIndex}`, '', maxVal, `${placeholderText} ${newIndex}`);
+            const placeholder = isAttendance ? `Semester ${newIndex} Attendance %` : `${placeholderText} ${newIndex}`;
+            createEntry(container, `${namePrefix}_${newIndex}`, '', maxVal, placeholder);
             updateEntriesUI(containerId);
         }
 
         function removeEntry(button) {
             const entryDiv = button.closest('.dynamic-entry');
             const container = entryDiv.parentElement;
-            entryDiv.remove();
-            updateEntriesUI(container.id);
+            if (container.children.length > 1) {
+                entryDiv.remove();
+                updateEntriesUI(container.id);
+            }
         }
-        
+
         function updateEntriesUI(containerId) {
             const container = document.getElementById(containerId);
             if (!container) return;
+            
             const entries = container.getElementsByClassName('dynamic-entry');
-            const namePrefix = containerId.includes('attendance') ? 'prev_attendance' : containerId.replace('modal-', '').replace('_tests', '_ct');
-            const placeholderText = containerId.includes('attendance') ? 'Semester Attendance %' : 'Class Test Score';
+            const isAttendance = containerId.includes('attendance');
+            const namePrefix = isAttendance ? 'prev_attendance' : containerId.replace('modal-', '').replace('_tests', '_ct');
+            const placeholderText = isAttendance ? `Semester Attendance %` : 'Class Test Score';
 
             for (let i = 0; i < entries.length; i++) {
                 const input = entries[i].querySelector('input[type="number"]');
                 const removeBtn = entries[i].querySelector('.remove-btn');
                 const newIndex = i + 1;
+                
                 if (input) {
                     input.name = `${namePrefix}_${newIndex}`;
-                    input.placeholder = `${placeholderText} ${newIndex}`;
+                    input.placeholder = isAttendance ? `Semester ${newIndex} Attendance %` : `${placeholderText} ${newIndex}`;
                 }
                 if (removeBtn) {
                     removeBtn.classList.toggle('is-hidden', entries.length <= 1);
                 }
             }
         }
-    </script>
-    </body>
-</html>
 
+        function showCustomAlert(message) {
+            document.getElementById('customAlertMessage').textContent = message;
+            document.getElementById('customAlertModal').style.display = 'flex';
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('customAlertModal').style.display = 'none';
+        }
+
+    </script>
+</body>
+
+</html>

@@ -158,11 +158,25 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .list-group-item h6 {
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+
+        .action-btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            align-items: center;
+            justify-content: flex-end;
         }
 
         .action-btn-group .btn,
         .action-btn-group .d-inline {
-            margin-left: 5px;
+            margin-left: 0;
         }
 
         /* --- Footer --- */
@@ -185,10 +199,18 @@
         .footer .nav-link:hover {
             color: var(--white-color);
         }
+        
+        .social-icons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 2rem;
+        }
 
         .footer .social-icon {
             color: rgba(255, 255, 255, 0.7);
-            margin: 0 12px;
+            margin: 0;
             font-size: 1.5rem;
             transition: all 0.3s ease;
         }
@@ -207,14 +229,31 @@
         }
 
         .guidelines-list {
-            list-style-type: decimal;
-            padding-left: 20px;
+            list-style-type: none;
+            padding-left: 0;
         }
 
         .guidelines-list li {
-            margin-bottom: 10px;
+            margin-bottom: 1.25rem;
+            padding-left: 35px;
+            position: relative;
         }
-
+        .guidelines-list li::before {
+            content: attr(data-step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
         #previewTable {
             width: 100%;
         }
@@ -225,66 +264,14 @@
             border: 1px solid var(--border-color);
         }
 
-        .preview-iframe {
-            width: 100%;
-            height: 75vh;
-            border: none;
-        }
-
-        /* --- Custom Alert Modal --- */
-        @keyframes fadeInScale {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .custom-modal-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: none;
-            /* Hidden by default */
-            justify-content: center;
-            align-items: center;
-            z-index: 1060;
-            /* Higher than Bootstrap's modal z-index (1055) */
-        }
-
-        .custom-modal-content {
-            background: var(--white-color);
-            padding: 30px;
-            border-radius: var(--border-radius);
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            animation: fadeInScale 0.3s ease-out;
-        }
-
-        .custom-modal-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .custom-modal-title {
-            font-weight: 600;
-            font-size: 1.25rem;
-            color: var(--secondary-color);
-            margin-bottom: 0.5rem;
-        }
-
-        .custom-modal-message {
-            color: var(--light-text-color);
-            margin-bottom: 1.5rem;
+        @media (max-width: 767.98px) {
+            .main-content { padding: 40px 0; }
+            .header-section h1 { font-size: 1.8rem; }
+            .content-card .p-4 { padding: 1.5rem !important; }
+            .list-group-item { flex-direction: column; align-items: flex-start; }
+            .list-group-item>div:first-child { margin-bottom: 1rem; width: 100%; }
+            .action-btn-group { width: 100%; }
+            .footer .nav-link { padding-top: .3rem; padding-bottom: .3rem; }
         }
     </style>
 </head>
@@ -324,7 +311,7 @@
                 {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                 {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                <div class="alert alert-{{ category }} alert-dismissible fade show m-4 mb-0" role="alert">
                     {{ message }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
@@ -346,10 +333,12 @@
                         </button>
                     </li>
                 </ul>
+
                 <div class="tab-content p-4" id="uploadTabsContent">
                     <div class="tab-pane fade show active" id="notes-tab-pane" role="tabpanel">
                         <h4 class="mb-4">Upload New Study Material</h4>
-                        <form action="{{ url_for('material_uploader') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ url_for('material_uploader') }}" method="POST"
+                            enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="branchFilter" class="form-label">Branch</label>
@@ -393,8 +382,8 @@
                             <li class="list-group-item">
                                 <div>
                                     <h6><i class="fas fa-file-alt me-2 text-primary"></i>{{ note.file_name }}</h6>
-                                    <p class="text-muted mb-0 small">By: {{ note.uploader_user.fullname }} | Subject: {{
-                                        note.subject_id }} | Uploaded {{ time_ago(note.upload_date) }}</p>
+                                    <p class="text-muted mb-0 small">By: {{ note.uploader_user.fullname }} | Subject:
+                                        {{ note.subject_id }} | Uploaded {{ time_ago(note.upload_date) }}</p>
                                 </div>
                                 <div class="action-btn-group">
                                     <a href="{{ url_for('download_note', filename=note.file_name) }}"
@@ -415,57 +404,79 @@
                             {% endif %}
                         </ul>
                     </div>
+
                     <div class="tab-pane fade" id="analytics-tab-pane" role="tabpanel">
-                        <div id="guidelines-section" class="text-center">
-                            <h4 class="mb-3">Upload Student Analytics Data</h4>
-                            <p class="text-muted">Please read the format requirements carefully before uploading.</p>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#guidelinesModal">
-                                <i class="fas fa-info-circle me-2"></i>Show CSV/Excel Format Guidelines
-                            </button>
+                        <h4 class="mb-4">Student Analytics Uploader</h4>
+                        
+                        <div id="guidelines-prompt">
+                            <div class="card text-center bg-light border-warning p-4">
+                                <div class="card-body">
+                                    <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                                    <h5 class="card-title">Important: Read Before Uploading</h5>
+                                    <p class="card-text">To ensure prediction accuracy, you must use our formatted template. Please read the guidelines to begin.</p>
+                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#guidelinesModal">
+                                        <i class="fas fa-book-reader me-2"></i>Start: Read Upload Guidelines
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
-                        <div id="upload-form-section" style="display:none;">
-                            <h4 class="mb-4">Upload Analytics File</h4>
-                            <form action="{{ url_for('upload_analytics_data') }}" method="POST"
-                                enctype="multipart/form-data">
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="analyticsBranch" class="form-label">Branch</label>
-                                        <select class="form-select" id="analyticsBranch" name="branch" required {% if
-                                            admin_department !='ALL_BRANCHES' %}disabled{% endif %}>
+                        <div id="analytics-uploader-form" style="display: none;">
+                            <div class="alert alert-success d-flex align-items-center" role="alert">
+                                <i class="fas fa-check-circle fa-2x me-3"></i>
+                                <div>
+                                    <strong>Guidelines Acknowledged.</strong> You can now proceed with the upload.
+                                </div>
+                            </div>
+                            <form action="{{ url_for('upload_analytics_data') }}" method="POST" enctype="multipart/form-data" class="mt-4">
+                                <div class="row align-items-end">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="analyticsBranch" class="form-label fw-bold">1. Select Branch</label>
+                                        <select class="form-select" id="analyticsBranch" name="branch" required {% if admin_department != 'ALL_BRANCHES' %}disabled{% endif %}>
                                             {% if admin_department == 'ALL_BRANCHES' %}
-                                            <option value="">Select Branch</option>
+                                            <option value="" selected disabled>-- Select a Branch --</option>
                                             {% for branch in all_subjects_dict.keys() %}
                                             <option value="{{ branch }}">{{ branch }}</option>
                                             {% endfor %}
                                             {% else %}
-                                            <option value="{{ admin_department }}" selected>{{ admin_department }}
-                                            </option>
+                                            <option value="{{ admin_department }}" selected>{{ admin_department }}</option>
                                             {% endif %}
                                         </select>
                                         {% if admin_department != 'ALL_BRANCHES' %}
                                         <input type="hidden" name="branch" value="{{ admin_department }}">
                                         {% endif %}
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="analyticsSem" class="form-label">Semester</label>
+
+                                    <div class="col-md-4 mb-3">
+                                        <label for="analyticsSem" class="form-label fw-bold">2. Select Semester</label>
                                         <select class="form-select" id="analyticsSem" name="sem" required>
-                                            <option value="">Select Semester</option>
-                                            {% for i in range(1, 7) %}
+                                            <option value="" selected disabled>-- Select a Semester --</option>
+                                            {% for i in range(2, 7) %}
                                             <option value="{{i}}">{{i}}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <button type="button" class="btn btn-secondary w-100" id="downloadTemplateBtn" disabled>
+                                            <i class="fas fa-download me-2"></i>Download Template
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="mb-4">
-                                    <label for="csv_file" class="form-label">Upload CSV or Excel File</label>
-                                    <input type="file" class="form-control" id="csv_file" name="file"
-                                        accept=".csv, .xlsx" required>
+
+                                <div class="mb-4 mt-3">
+                                    <label for="csv_file" class="form-label fw-bold">3. Upload Completed File</label>
+                                    <input type="file" class="form-control" id="csv_file" name="file" accept=".csv, .xlsx" required>
                                 </div>
-                                <button type="submit" class="btn btn-submit w-100">Upload Analytics Data</button>
+
+                                <button type="submit" class="btn btn-submit w-100">
+                                    <i class="fas fa-cloud-upload-alt me-2"></i>Upload Analytics Data
+                                </button>
                             </form>
                         </div>
+                        
                         <hr class="my-5">
+
                         <h4 class="mb-4">Uploaded Analytics Files</h4>
                         <ul class="list-group list-group-flush">
                             {% if uploaded_csvs %}
@@ -473,8 +484,8 @@
                             <li class="list-group-item">
                                 <div>
                                     <h6><i class="fas fa-file-csv me-2 text-success"></i>{{ file.file_name }}</h6>
-                                    <p class="text-muted mb-0 small">By: {{ file.uploader_user.fullname }} | Uploaded {{
-                                        time_ago(file.upload_date) }}</p>
+                                    <p class="text-muted mb-0 small">By: {{ file.uploader_user.fullname }} | Uploaded
+                                        {{ time_ago(file.upload_date) }}</p>
                                 </div>
                                 <div class="action-btn-group">
                                     <button class="btn btn-sm btn-outline-secondary preview-csv-btn"
@@ -499,7 +510,7 @@
                             {% endif %}
                         </ul>
                     </div>
-                </div>
+                    </div>
             </div>
         </div>
     </main>
@@ -509,41 +520,38 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="guidelinesModalLabel">CSV/Excel Upload Guidelines</h5>
+                    <h5 class="modal-title" id="guidelinesModalLabel">Analytics Data Upload Guide</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <h5><i class="fas fa-table text-primary me-2"></i>Required Column Structure</h5>
-                    <p>For the analytics model to work correctly, your data file (CSV or Excel) must contain exactly
-                        <strong>16 columns</strong> in the following order:
-                    </p>
-                    <ol class="guidelines-list">
-                        <li><strong>Previous Semester Subject 1 Marks</strong> (External, out of 70)</li>
-                        <li><strong>Previous Semester Subject 2 Marks</strong> (External, out of 70)</li>
-                        <li><strong>Previous Semester Subject 3 Marks</strong> (External, out of 70)</li>
-                        <li><strong>Previous Semester Subject 4 Marks</strong> (External, out of 70)</li>
-                        <li><strong>Previous Semester Subject 5 Marks</strong> (External, out of 70)</li>
-                        <li><strong>Current Semester Subject 1 Class Test Average</strong> (out of 20)</li>
-                        <li><strong>Current Semester Subject 2 Class Test Average</strong> (out of 20)</li>
-                        <li><strong>Current Semester Subject 3 Class Test Average</strong> (out of 20)</li>
-                        <li><strong>Current Semester Subject 4 Class Test Average</strong> (out of 20)</li>
-                        <li><strong>Current Semester Subject 5 Class Test Average</strong> (out of 20)</li>
-                        <li><strong>Previous Semesters' Average Attendance</strong> (in %)</li>
-                        <li><strong>Final Current Semester Subject 1 Marks</strong> (External, out of 70)</li>
-                        <li><strong>Final Current Semester Subject 2 Marks</strong> (External, out of 70)</li>
-                        <li><strong>Final Current Semester Subject 3 Marks</strong> (External, out of 70)</li>
-                        <li><strong>Final Current Semester Subject 4 Marks</strong> (External, out of 70)</li>
-                        <li><strong>Final Current Semester Subject 5 Marks</strong> (External, out of 70)</li>
-                    </ol>
-                    <div class="alert alert-warning mt-4">
-                        <strong>Note:</strong> The system will automatically name the uploaded file based on the Branch
-                        and Semester you select on the upload form. You do not need to name the file yourself.
+                    <h5 class="mb-3"><i class="fas fa-tasks text-primary me-2"></i>Easy 3-Step Process</h5>
+                    <p>To ensure 100% accuracy and avoid errors, please follow these simple steps:</p>
+                    <ul class="guidelines-list">
+                        <li data-step="1">
+                            <strong>Select Branch & Semester:</strong> On the upload form, choose the correct Branch and Semester for the data you wish to upload.
+                        </li>
+                        <li data-step="2">
+                            <strong>Download the Template:</strong> A "Download Template" button will become active. Click it to download a CSV file that is perfectly formatted with the correct subject IDs for your selection.
+                        </li>
+                        <li data-step="3">
+                            <strong>Fill & Upload:</strong> Open the downloaded template, fill in the rows with your student data, save the file, and then upload it using the form.
+                        </li>
+                    </ul>
+                    <div class="alert alert-success mt-4">
+                        <h5 class="alert-heading"><i class="fas fa-check-circle"></i> Why Use the Template?</h5>
+                        The template automatically includes the 16 required columns with the correct internal IDs (e.g., `dbms_ct`, `os_final`). This prevents formatting errors and ensures your data works perfectly with our prediction model.
                     </div>
+                    
+                    <div class="form-check ps-4 mt-4">
+                        <input class="form-check-input" type="checkbox" value="" id="guidelinesCheckbox">
+                        <label class="form-check-label" for="guidelinesCheckbox">
+                            <strong>I have read and understood the data formatting requirements.</strong>
+                        </label>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="proceedToUploadBtn">I Understand, Proceed to
-                        Upload</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="guidelinesUnderstoodBtn" disabled>Acknowledge & Continue</button>
                 </div>
             </div>
         </div>
@@ -587,18 +595,15 @@
     <footer class="footer">
         <div class="container text-center">
             <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Vision<span class="ed">ED</span></a>
-            <ul class="nav justify-content-center my-4">
+            <ul class="nav flex-column flex-md-row justify-content-md-center my-4">
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_admin') }}">Profile</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('registered_users') }}">Registered Users</a>
-                </li>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('material_uploader') }}">Materials
-                        Uploader</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('registered_users') }}">Registered Users</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('material_uploader') }}">Materials Uploader</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('query_solver') }}">Query Solver</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_announcements') }}">Announcements</a>
-                </li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_announcements') }}">Announcements</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
-            <div class="mb-4">
+            <div class="social-icons-container">
                 <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
                 <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
                 <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
@@ -613,125 +618,153 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const subjectsData = {{ all_subjects_dict| tojson | safe
-        }};
-        const branchFilter = document.getElementById('branchFilter');
-        const semesterFilter = document.getElementById('semesterFilter');
-        const subjectSelect = document.getElementById('subject_id');
-        const guidelinesSection = document.getElementById('guidelines-section');
-        const uploadFormSection = document.getElementById('upload-form-section');
-        const proceedToUploadBtn = document.getElementById('proceedToUploadBtn');
-        const guidelinesModal = new bootstrap.Modal(document.getElementById('guidelinesModal'));
-        const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
-        const previewSpinner = document.getElementById('previewSpinner');
-        const previewContent = document.getElementById('preview-content');
-        const adminDepartment = "{{ admin_department }}";
+            // Common variables
+            const subjectsData = {{ all_subjects_dict| tojson | safe }};
+            const adminDepartment = "{{ admin_department }}";
+            const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
+            const previewSpinner = document.getElementById('previewSpinner');
+            const previewContent = document.getElementById('preview-content');
 
-        function updateSemesters() {
-            const selectedBranch = branchFilter.value;
-            semesterFilter.innerHTML = '<option value="">Select Semester</option>';
-            subjectSelect.innerHTML = '<option value="">First, select branch and semester</option>';
-            semesterFilter.disabled = true;
-            subjectSelect.disabled = true;
+            // --- Note Uploader Logic ---
+            const branchFilter = document.getElementById('branchFilter');
+            const semesterFilter = document.getElementById('semesterFilter');
+            const subjectSelect = document.getElementById('subject_id');
 
-            if (selectedBranch && subjectsData[selectedBranch]) {
-                const semesters = Object.keys(subjectsData[selectedBranch]);
-                semesters.forEach(sem => {
-                    const option = document.createElement('option');
-                    option.value = sem;
-                    option.textContent = sem;
-                    semesterFilter.appendChild(option);
-                });
-                semesterFilter.disabled = false;
+            function updateSemesters() {
+                const selectedBranch = branchFilter.value;
+                semesterFilter.innerHTML = '<option value="">Select Semester</option>';
+                subjectSelect.innerHTML = '<option value="">First, select branch and semester</option>';
+                semesterFilter.disabled = true;
+                subjectSelect.disabled = true;
+
+                if (selectedBranch && subjectsData[selectedBranch]) {
+                    const semesters = Object.keys(subjectsData[selectedBranch]);
+                    semesters.forEach(sem => {
+                        const option = document.createElement('option');
+                        option.value = sem;
+                        option.textContent = sem;
+                        semesterFilter.appendChild(option);
+                    });
+                    semesterFilter.disabled = false;
+                }
             }
-        }
 
-        function updateSubjects() {
-            const selectedBranch = branchFilter.value;
-            const selectedSem = semesterFilter.value;
-            subjectSelect.innerHTML = '<option value="">Select Subject</option>';
-            subjectSelect.disabled = true;
+            function updateSubjects() {
+                const selectedBranch = branchFilter.value;
+                const selectedSem = semesterFilter.value;
+                subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+                subjectSelect.disabled = true;
 
-            if (selectedBranch && selectedSem && subjectsData[selectedBranch][selectedSem]) {
-                const subjects = subjectsData[selectedBranch][selectedSem];
-                subjects.forEach(subject => {
-                    const option = document.createElement('option');
-                    option.value = subject.id;
-                    option.textContent = subject.name;
-                    subjectSelect.appendChild(option);
-                });
-                subjectSelect.disabled = false;
+                if (selectedBranch && selectedSem && subjectsData[selectedBranch][selectedSem]) {
+                    const subjects = subjectsData[selectedBranch][selectedSem];
+                    subjects.forEach(subject => {
+                        const option = document.createElement('option');
+                        option.value = subject.id;
+                        option.textContent = subject.name;
+                        subjectSelect.appendChild(option);
+                    });
+                    subjectSelect.disabled = false;
+                }
             }
-        }
+            branchFilter.addEventListener('change', updateSemesters);
+            semesterFilter.addEventListener('change', updateSubjects);
+            if (adminDepartment !== 'ALL_BRANCHES') {
+                updateSemesters();
+            }
 
-        branchFilter.addEventListener('change', updateSemesters);
-        semesterFilter.addEventListener('change', updateSubjects);
+            // --- Analytics Uploader Logic (MODIFIED) ---
+            const guidelinesPrompt = document.getElementById('guidelines-prompt');
+            const uploaderForm = document.getElementById('analytics-uploader-form');
+            const guidelinesModalEl = document.getElementById('guidelinesModal');
+            const guidelinesCheckbox = document.getElementById('guidelinesCheckbox');
+            const guidelinesUnderstoodBtn = document.getElementById('guidelinesUnderstoodBtn');
+            const analyticsBranchSelect = document.getElementById('analyticsBranch');
+            const analyticsSemSelect = document.getElementById('analyticsSem');
+            const downloadTemplateBtn = document.getElementById('downloadTemplateBtn');
+            
+            // Enable the 'Continue' button only when checkbox is checked
+            guidelinesCheckbox.addEventListener('change', function() {
+                guidelinesUnderstoodBtn.disabled = !this.checked;
+            });
 
-        if (adminDepartment !== 'ALL_BRANCHES') {
-            updateSemesters();
-        }
-
-        proceedToUploadBtn.addEventListener('click', function () {
-            guidelinesSection.style.display = 'none';
-            uploadFormSection.style.display = 'block';
-            guidelinesModal.hide();
-        });
-
-        document.querySelectorAll('.preview-csv-btn').forEach(button => {
-            button.addEventListener('click', async function () {
-                const filename = this.dataset.filename;
-                previewModal.show();
-                previewSpinner.style.display = 'block';
-                previewContent.innerHTML = '';
-                document.getElementById('previewModalLabel').textContent = `Preview: ${filename}`;
-
-                try {
-                    const response = await fetch(`/admin/preview_analytics_data/${filename}`);
-                    const data = await response.json();
-
-                    if (data.error) {
-                        previewContent.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
-                    } else {
-                        let tableHTML = '<div class="table-responsive"><table id="previewTable" class="table table-striped table-bordered"><thead><tr>';
-                        data.headers.forEach(header => {
-                            tableHTML += `<th>${header}</th>`;
-                        });
-                        tableHTML += '</tr></thead><tbody>';
-                        data.rows.forEach(row => {
-                            tableHTML += '<tr>';
-                            row.forEach(cell => {
-                                tableHTML += `<td>${cell}</td>`;
-                            });
-                            tableHTML += '</tr>';
-                        });
-                        tableHTML += '</tbody></table></div>';
-                        previewContent.innerHTML = tableHTML;
-                    }
-                } catch (error) {
-                    previewContent.innerHTML = `<div class="alert alert-danger">Failed to load file preview.</div>`;
-                } finally {
-                    previewSpinner.style.display = 'none';
+            // When user acknowledges, hide prompt and show the form
+            guidelinesUnderstoodBtn.addEventListener('click', function() {
+                if (guidelinesCheckbox.checked) {
+                    guidelinesPrompt.style.display = 'none';
+                    uploaderForm.style.display = 'block';
                 }
             });
-        });
 
-        // --- MODIFICATION START: JavaScript for the custom delete modal ---
-        const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
-        const deleteForm = document.getElementById('deleteForm');
-        const confirmDeleteText = document.getElementById('confirmDeleteText');
-
-        document.querySelectorAll('.btn-delete').forEach(button => {
-            button.addEventListener('click', function (event) {
-                event.preventDefault(); // Prevent the form from submitting immediately
-                const action = this.dataset.action;
-                const itemName = this.dataset.itemName;
-
-                confirmDeleteText.textContent = `Are you sure you want to permanently delete the file: ${itemName}?`;
-                deleteForm.action = action;
-                confirmDeleteModal.show();
+            // Reset checkbox if modal is closed without acknowledgment
+            guidelinesModalEl.addEventListener('hidden.bs.modal', function () {
+                guidelinesCheckbox.checked = false;
+                guidelinesUnderstoodBtn.disabled = true;
             });
-        });
-            // --- MODIFICATION END ---
+
+            function checkTemplateButtonState() {
+                downloadTemplateBtn.disabled = !(analyticsBranchSelect.value && analyticsSemSelect.value);
+            }
+
+            analyticsBranchSelect.addEventListener('change', checkTemplateButtonState);
+            analyticsSemSelect.addEventListener('change', checkTemplateButtonState);
+
+            downloadTemplateBtn.addEventListener('click', function() {
+                const branch = analyticsBranchSelect.value;
+                const sem = analyticsSemSelect.value;
+                if (branch && sem) {
+                    const downloadUrl = `/admin/download_analytics_template?branch=${branch}&sem=${sem}`;
+                    window.location.href = downloadUrl;
+                }
+            });
+
+            if (adminDepartment !== 'ALL_BRANCHES') {
+                checkTemplateButtonState();
+            }
+
+            // --- Shared Modal & Preview Logic ---
+            document.querySelectorAll('.preview-csv-btn').forEach(button => {
+                button.addEventListener('click', async function () {
+                    const filename = this.dataset.filename;
+                    previewModal.show();
+                    previewSpinner.style.display = 'block';
+                    previewContent.innerHTML = '';
+                    document.getElementById('previewModalLabel').textContent = `Preview: ${filename}`;
+                    try {
+                        const response = await fetch(`/admin/preview_analytics_data/${filename}`);
+                        const data = await response.json();
+                        if (data.error) {
+                            previewContent.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+                        } else {
+                            let tableHTML = '<div class="table-responsive"><table id="previewTable" class="table table-striped table-bordered"><thead><tr>';
+                            data.headers.forEach(header => { tableHTML += `<th>${header}</th>`; });
+                            tableHTML += '</tr></thead><tbody>';
+                            data.rows.forEach(row => {
+                                tableHTML += '<tr>';
+                                row.forEach(cell => { tableHTML += `<td>${cell}</td>`; });
+                                tableHTML += '</tr>';
+                            });
+                            tableHTML += '</tbody></table></div>';
+                            previewContent.innerHTML = tableHTML;
+                        }
+                    } catch (error) {
+                        previewContent.innerHTML = `<div class="alert alert-danger">Failed to load file preview.</div>`;
+                    } finally {
+                        previewSpinner.style.display = 'none';
+                    }
+                });
+            });
+
+            const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            const deleteForm = document.getElementById('deleteForm');
+            const confirmDeleteText = document.getElementById('confirmDeleteText');
+            document.querySelectorAll('.btn-delete').forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    confirmDeleteText.textContent = `Are you sure you want to permanently delete the file: ${this.dataset.itemName}?`;
+                    deleteForm.action = this.dataset.action;
+                    confirmDeleteModal.show();
+                });
+            });
         });
     </script>
 </body>

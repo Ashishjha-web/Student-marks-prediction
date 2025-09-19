@@ -141,6 +141,9 @@
 
         .user-name {
             font-weight: 600;
+            /* ⭐ ADDED: Word wrap for long names */
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
 
         .timestamp {
@@ -282,9 +285,17 @@
             color: var(--white-color);
         }
 
+        /* ⭐ ADDED: Responsive container for social icons */
+        .social-icons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
         .footer .social-icon {
             color: rgba(255, 255, 255, 0.7);
-            margin: 0 12px;
+            margin: 0; /* Use gap instead of margin */
             font-size: 1.5rem;
             transition: all 0.3s ease;
         }
@@ -300,6 +311,31 @@
             margin-top: 40px;
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* ⭐ ADDED: Media Queries for Responsiveness */
+        @media (max-width: 767.98px) {
+            .main-content {
+                padding: 40px 0;
+            }
+            .card {
+                padding: 20px;
+            }
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            .replies-section {
+                padding-left: 15px;
+            }
+            .nested-replies {
+                padding-left: 10px;
+            }
+            .query-header {
+                flex-wrap: wrap; /* Allows image and user info to stack if needed */
+            }
+            .footer .nav-link {
+                padding: 0.4rem 1rem; /* Add some vertical space when stacked */
+            }
         }
     </style>
 </head>
@@ -741,7 +777,8 @@
     <footer class="footer">
         <div class="container text-center">
             <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Vision<span class="ed">ED</span></a>
-            <ul class="nav justify-content-center my-4">
+            
+            <ul class="nav flex-column flex-md-row justify-content-md-center my-4">
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_admin') }}">Profile</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('registered_users') }}">Registered
                         Users</a>
@@ -753,7 +790,8 @@
                 </li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
-            <div class="mb-4">
+
+            <div class="mb-4 social-icons-container">
                 <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
                 <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
                 <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
@@ -875,7 +913,7 @@
             function handleToggleReplies(button) {
                 const targetDiv = button.nextElementSibling;
                 if (!targetDiv || (!targetDiv.classList.contains('nested-replies') && !targetDiv.classList.contains(
-                    'replies-section'))) {
+                        'replies-section'))) {
                     console.error("Could not find the correct replies div to toggle.");
                     return;
                 }

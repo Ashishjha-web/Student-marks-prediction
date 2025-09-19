@@ -125,6 +125,8 @@
             font-weight: 700;
             margin-bottom: 0.5rem;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            word-break: break-word;
+            /* NEW: Prevents text from overflowing its container */
         }
 
         .header-section p {
@@ -157,12 +159,16 @@
         }
 
         .announcement-card .card-header {
+            padding: 0;
             padding-bottom: 15px;
             margin-bottom: 15px;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: baseline;
+            background: none;
+            flex-wrap: wrap;
+            gap: 5px 15px;
         }
 
         .announcement-card .card-header h5 {
@@ -175,12 +181,19 @@
         .announcement-card .card-header small {
             color: var(--light-text-color);
             font-size: 0.9rem;
+            padding-left: 1rem;
+        }
+
+        .announcement-card .card-body {
+            padding: 0;
         }
 
         .announcement-card .card-body p {
             line-height: 1.6;
             color: var(--text-color);
             margin-bottom: 0;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
         }
 
         .no-announcements-message {
@@ -227,9 +240,20 @@
             color: var(--white-color);
         }
 
+        /* ⭐ ADDED: Container for social icons */
+        .social-icons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            /* Modern spacing */
+        }
+
+        /* ⭐ UPDATED: social icon margin is now handled by container gap */
         .footer .social-icon {
             color: rgba(255, 255, 255, 0.7);
-            margin: 0 12px;
+            margin: 0;
+            /* Set margin to 0 */
             font-size: 1.5rem;
             transition: all 0.3s ease;
         }
@@ -247,7 +271,6 @@
             color: rgba(255, 255, 255, 0.5);
         }
 
-        /* Styles for attached files section */
         .attached-files {
             margin-top: 15px;
             padding-top: 15px;
@@ -266,6 +289,13 @@
             margin-right: 10px;
             margin-bottom: 10px;
             transition: background-color 0.2s;
+            max-width: 100%;
+        }
+
+        .file-link span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .file-link:hover {
@@ -275,10 +305,65 @@
 
         .file-link i {
             margin-right: 8px;
+            flex-shrink: 0;
         }
 
         .file-link:hover i {
             color: var(--primary-color);
+        }
+
+        /* ------------------------- */
+        /* --- Responsive Styles --- */
+        /* ------------------------- */
+
+        @media (max-width: 768px) {
+            .header-section h1 {
+                font-size: 2.2rem;
+            }
+
+            .header-section p {
+                font-size: 1rem;
+            }
+
+            .content-card {
+                padding: 20px;
+            }
+
+            .announcement-card .card-header h5 {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+
+            .main-content {
+                padding: 20px 15px;
+            }
+
+            .header-section {
+                padding: 1.5rem;
+            }
+
+            .header-section h1 {
+                font-size: 1.8rem;
+            }
+
+            .announcement-card {
+                padding: 15px;
+            }
+
+            .announcement-card .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+
+            .announcement-card .card-header small {
+                padding-left: 0;
+            }
         }
     </style>
 </head>
@@ -352,43 +437,23 @@
                         <div class="attached-files">
                             {% for file in announcement.attached_files.split(',') %}
                             {% set file_extension = file.split('.')[-1] %}
-                            {% if file_extension == 'pdf' %}
                             <a href="{{ url_for('download_announcement_file', filename=file) }}" class="file-link"
-                                target="_blank">
+                                target="_blank" title="{{ file }}">
+                                {% if file_extension == 'pdf' %}
                                 <i class="fas fa-file-pdf"></i>
-                                <span>{{ file }}</span>
-                            </a>
-                            {% elif file_extension == 'doc' or file_extension == 'docx' %}
-                            <a href="{{ url_for('download_announcement_file', filename=file) }}" class="file-link"
-                                target="_blank">
+                                {% elif file_extension == 'doc' or file_extension == 'docx' %}
                                 <i class="fas fa-file-word"></i>
-                                <span>{{ file }}</span>
-                            </a>
-                            {% elif file_extension == 'ppt' or file_extension == 'pptx' %}
-                            <a href="{{ url_for('download_announcement_file', filename=file) }}" class="file-link"
-                                target="_blank">
+                                {% elif file_extension == 'ppt' or file_extension == 'pptx' %}
                                 <i class="fas fa-file-powerpoint"></i>
-                                <span>{{ file }}</span>
-                            </a>
-                            {% elif file_extension == 'xls' or file_extension == 'xlsx' %}
-                            <a href="{{ url_for('download_announcement_file', filename=file) }}" class="file-link"
-                                target="_blank">
+                                {% elif file_extension == 'xls' or file_extension == 'xlsx' %}
                                 <i class="fas fa-file-excel"></i>
-                                <span>{{ file }}</span>
-                            </a>
-                            {% elif file_extension in ['png', 'jpg', 'jpeg', 'gif'] %}
-                            <a href="{{ url_for('download_announcement_file', filename=file) }}" class="file-link"
-                                target="_blank">
+                                {% elif file_extension in ['png', 'jpg', 'jpeg', 'gif'] %}
                                 <i class="fas fa-image"></i>
-                                <span>{{ file }}</span>
-                            </a>
-                            {% else %}
-                            <a href="{{ url_for('download_announcement_file', filename=file) }}" class="file-link"
-                                target="_blank">
+                                {% else %}
                                 <i class="fas fa-file"></i>
+                                {% endif %}
                                 <span>{{ file }}</span>
                             </a>
-                            {% endif %}
                             {% endfor %}
                         </div>
                         {% endif %}
@@ -409,7 +474,7 @@
     <footer class="footer">
         <div class="container text-center">
             <a class="navbar-brand" href="{{ url_for('student_dashboard') }}">Vision<span class="ed">ED</span></a>
-            <ul class="nav justify-content-center my-4">
+            <ul class="nav flex-column flex-md-row justify-content-md-center my-4">
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_student') }}">Profile</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('my_courses') }}">My Courses</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('subject_entry') }}">Performance
@@ -419,7 +484,7 @@
                 </li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
-            <div class="mb-4">
+            <div class="mb-4 social-icons-container">
                 <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
                 <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
                 <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>

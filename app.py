@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify, send_from_directory, send_file
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -8,6 +8,7 @@ from sklearn.ensemble import RandomForestRegressor
 import os
 from functools import wraps
 from datetime import datetime
+import io
 import re
 import openpyxl
 from sqlalchemy import inspect, text, desc, String, Integer
@@ -1202,6 +1203,63 @@ def material_uploader():
                            uploaded_csvs=uploaded_csvs,
                            admin_department=admin_department)
 
+@app.route('/admin/download_analytics_template')
+@login_required
+@role_required("administrator")
+@admin_profile_required
+def download_analytics_template():
+    """Generates and serves a blank CSV template with correct headers."""
+    branch = request.args.get('branch')
+    sem_str = request.args.get('sem')
+
+    if not branch or not sem_str:
+        flash("Please select both a branch and a semester first.", "warning")
+        return redirect(url_for('material_uploader', _anchor='analytics-tab-pane'))
+
+    try:
+        sem = int(sem_str)
+        if not (1 <= sem <= 6):
+             raise ValueError("Semester out of range")
+    except (ValueError, TypeError):
+        flash("Invalid semester selected.", "danger")
+        return redirect(url_for('material_uploader', _anchor='analytics-tab-pane'))
+
+    # Get subject IDs for the previous and current semester
+    prev_sem = sem - 1
+    prev_subjects = [s['id'] for s in SUBJECTS.get(branch, {}).get(prev_sem, [])]
+    curr_subjects = [s['id'] for s in SUBJECTS.get(branch, {}).get(sem, [])]
+
+    # Ensure there are 5 subjects for each, pad if necessary (for robustness)
+    while len(prev_subjects) < 5:
+        prev_subjects.append(f'prev_subject_{len(prev_subjects)+1}_placeholder')
+    while len(curr_subjects) < 5:
+        curr_subjects.append(f'curr_subject_{len(curr_subjects)+1}_placeholder')
+
+    # Construct the exact header list the model expects (16 columns)
+    headers = (
+        prev_subjects[:5] +
+        [f"{s}_ct" for s in curr_subjects[:5]] +
+        ['prev_attendance'] +
+        [f"{s}_final" for s in curr_subjects[:5]]
+    )
+
+    # Create a blank DataFrame and then a CSV in memory
+    df = pd.DataFrame(columns=headers)
+    
+    buffer = io.BytesIO()
+    buffer.write(df.to_csv(index=False).encode('utf-8'))
+    buffer.seek(0)
+    
+    suffix = get_ordinal_suffix(sem)
+    filename = f"template_{branch}_{sem}{suffix}_sem.csv"
+
+    return send_file(
+        buffer,
+        as_attachment=True,
+        download_name=filename,
+        mimetype='text/csv'
+    )
+
 @app.route('/admin/upload_analytics_data', methods=['POST'])
 @login_required
 @role_required("administrator")
@@ -1223,6 +1281,25 @@ def upload_analytics_data():
 
     sem = int(sem_str)
     try:
+        # --- MODIFICATION START: Header validation logic ---
+        # 1. Generate the list of expected headers for the selected branch/semester
+        prev_sem = sem - 1
+        prev_subjects = [s['id'] for s in SUBJECTS.get(branch, {}).get(prev_sem, [])]
+        curr_subjects = [s['id'] for s in SUBJECTS.get(branch, {}).get(sem, [])]
+
+        while len(prev_subjects) < 5:
+            prev_subjects.append(f'prev_subject_{len(prev_subjects)+1}_placeholder')
+        while len(curr_subjects) < 5:
+            curr_subjects.append(f'curr_subject_{len(curr_subjects)+1}_placeholder')
+
+        expected_headers = (
+            prev_subjects[:5] +
+            [f"{s}_ct" for s in curr_subjects[:5]] +
+            ['prev_attendance'] +
+            [f"{s}_final" for s in curr_subjects[:5]]
+        )
+        # --- MODIFICATION END ---
+
         if file_extension == 'csv':
             try:
                 df = pd.read_csv(file)
@@ -1232,9 +1309,12 @@ def upload_analytics_data():
         else: # xlsx
             df = pd.read_excel(file)
 
-        if df.shape[1] != 16:
-            flash(f'Upload failed: The file must have exactly 16 columns, but it has {df.shape[1]}. Please correct the file.', 'danger')
+        # --- MODIFICATION START: Compare actual headers with expected headers ---
+        actual_headers = df.columns.tolist()
+        if actual_headers != expected_headers:
+            flash(f'Upload failed: The file columns do not match the required template for {branch} Semester {sem}. Please download and use the correct template.', 'danger')
             return redirect(url_for('material_uploader', _anchor='analytics-tab-pane'))
+        # --- MODIFICATION END ---
         
         file.seek(0)
 
@@ -1258,7 +1338,7 @@ def upload_analytics_data():
             db.session.add(new_file_record)
         db.session.commit()
         
-        flash(f'Successfully uploaded and converted analytics data for {branch} Semester {sem}.', 'success')
+        flash(f'Successfully uploaded and validated analytics data for {branch} Semester {sem}.', 'success')
     
     except pd.errors.ParserError as e:
         flash(f"CSV/Excel Formatting Error: {e}. Please check your file for issues like extra commas or incorrect line breaks.", 'danger')
@@ -1866,18 +1946,20 @@ def subject_entry():
     student_info = StudentInfo.query.filter_by(user_id=user_id).first()
     branch, sem = student_info.branch, student_info.sem
 
+    # --- MODIFICATION START ---
+    # Check if the model can be loaded. This implicitly checks for the CSV file.
+    semester_models = load_model(branch, sem)
+    if not semester_models:
+        # If the CSV/model is not available, render the handler page instead.
+        return render_template("student_data_handler.html", branch=branch, sem=sem)
+    # --- MODIFICATION END ---
+
     prev_sem = sem - 1
     prev_subjects = SUBJECTS.get(branch, {}).get(prev_sem, [])
     current_subjects = SUBJECTS.get(branch, {}).get(sem, [])
 
     current_user = db.session.get(User, user_id)
     is_user_blocked = current_user.is_forum_blocked
-    error_message = None
-
-    semester_models = load_model(branch, sem)
-    if not semester_models:
-        error_message = (f"The analytics data for {branch} (Semester {sem}) is currently unavailable or improperly formatted. "
-                         f"Please contact your administrator. You can still save your marks.")
 
     if request.method == "POST":
         _save_marks_from_form(request.form, user_id)
@@ -1917,7 +1999,6 @@ def subject_entry():
                 for s in current_subjects
             }
             
-            # PIE CHART MODIFICATION START
             total_predicted_marks = sum(raw_predictions.values())
             predictions = {}
             for subject, mark in raw_predictions.items():
@@ -1927,7 +2008,6 @@ def subject_entry():
                     "level": categorize_level((mark / 70) * 100),
                     "percentage": round(percentage, 2)
                 }
-            # PIE CHART MODIFICATION END
 
             avg_score = round(sum(raw_predictions.values()) / len(raw_predictions), 2) if raw_predictions else 0
             level = categorize_level((avg_score / 70) * 100)
@@ -1936,21 +2016,15 @@ def subject_entry():
             app.logger.error(f"Prediction error for user {user_id}: {e}")
             flash(f"An error occurred during prediction: {e}", "danger")
 
-   
-    # --- NEW CODE FOR ATTENDANCE PROJECTION START ---
+    
     projected_attendance = {}
-    # Use the 'saved_marks' dictionary for this view
     attendance_marks = {k: v for k, v in saved_marks.items() if k.startswith('prev_attendance_')}
     if attendance_marks:
-        # Get the keys (e.g., 'prev_attendance_1'), sort them numerically, and get the last one
         last_attendance_key = sorted(attendance_marks.keys(), key=lambda k: int(k.split('_')[-1]))[-1]
         last_attendance_value = attendance_marks[last_attendance_key]
         
-        # Project the next semester's attendance to be the same as the last
         last_sem_num = int(last_attendance_key.split('_')[-1])
         projected_attendance[f"Semester {last_sem_num + 1} (Proj.)"] = last_attendance_value
-    # --- NEW CODE FOR ATTENDANCE PROJECTION END ---
-
 
     return render_template("subject_entry.html",
                            student_info=student_info,
@@ -1962,8 +2036,8 @@ def subject_entry():
                            level=level,
                            tips=tips,
                            is_user_blocked=is_user_blocked,
-                           error=error_message,
-                           projected_attendance=projected_attendance # <-- ADD THIS
+                           error=None,  # Old error message is no longer needed here
+                           projected_attendance=projected_attendance
                            )
 
 @app.route("/student/courses")

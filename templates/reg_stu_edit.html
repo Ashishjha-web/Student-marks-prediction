@@ -7,9 +7,7 @@
     <title>Edit Student - VisionED</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -268,9 +266,16 @@
             color: var(--white-color);
         }
 
+        .social-icons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
         .footer .social-icon {
             color: rgba(255, 255, 255, 0.7);
-            margin: 0 12px;
+            margin: 0;
             font-size: 1.5rem;
             transition: all 0.3s ease;
         }
@@ -287,6 +292,53 @@
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.5);
         }
+
+        /* --- Responsive Styles --- */
+        @media (max-width: 767.98px) {
+            .main-content {
+                padding: 40px 15px;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .profile-card {
+                padding: 25px;
+            }
+
+            .btn-submit {
+                width: 100%;
+            }
+
+            .footer .container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+            }
+
+            .footer .my-4,
+            .footer .mb-4 {
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
+            }
+
+            .footer .nav {
+                flex-direction: column !important;
+                width: 100%;
+                gap: 0.5rem;
+            }
+
+            .footer .nav-item {
+                margin-bottom: 0.5rem;
+            }
+
+            .footer .copyright {
+                margin-top: 1.5rem;
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -302,7 +354,7 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="btn btn-back" href="{{ url_for('registered_users') }}">
-                            <i class="fas fa-arrow-left"></i> Back
+                            <i class="fas fa-arrow-left"></i> Back to Users
                         </a>
                     </li>
                 </ul>
@@ -449,7 +501,7 @@
                 </li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
-            <div class="mb-4">
+            <div class="mb-4 social-icons-container">
                 <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
                 <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
                 <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
@@ -519,3 +571,4 @@
 </body>
 
 </html>
+

@@ -17,10 +17,6 @@
             --primary-color: #17a2b8;
             --secondary-color: #2c3e50;
             --danger-color: #dc3545;
-            --success-color: #28a745;
-            --warning-color: #ffc107;
-            --admin-highlight-bg: #e8f7f9;
-            --pinned-highlight-bg: #fff8e1;
             --background-color: #f8f9fa;
             --text-color: #343a40;
             --light-text-color: #6c757d;
@@ -95,23 +91,23 @@
 
         .main-content {
             flex-grow: 1;
-            padding: 60px 0;
+            padding: 40px 0;
         }
 
         .header-section {
+            background-color: var(--secondary-color);
             background-image: linear-gradient(rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0.9)), url('https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=2670&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
             color: var(--white-color);
-            padding: 80px 20px;
+            padding: 60px 20px;
             text-align: center;
             border-radius: var(--border-radius);
             margin-bottom: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
         }
 
         .header-section h1 {
-            font-size: 3rem;
+            font-size: 2.8rem;
             font-weight: 700;
             margin-bottom: 10px;
         }
@@ -166,27 +162,37 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            padding: 15px;
+            padding: 20px;
+        }
+        
+        .announcement-list-item:not(:last-child) {
             border-bottom: 1px solid var(--border-color);
-            transition: background-color 0.2s;
         }
 
         .announcement-list-item:hover {
             background-color: #f1f7f9;
+            border-radius: 8px;
         }
-
-        .announcement-list-item:last-child {
-            border-bottom: none;
-        }
-
+        
         .announcement-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
+            gap: 16px;
         }
 
         .announcement-content {
             flex-grow: 1;
+            /* ⭐ ADDED: Ensure long words wrap */
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+        
+        .announcement-actions {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .announcement-content h6 {
@@ -199,37 +205,12 @@
             color: var(--light-text-color);
         }
 
-        .announcement-actions {
-            margin-left: 20px;
-        }
-
-        .announcement-actions button {
-            color: #dc3545;
-            background: none;
-            border: none;
-            padding: 5px;
-            opacity: 0.7;
-            transition: opacity 0.2s;
-        }
-
-        .announcement-actions button:hover {
-            opacity: 1;
-        }
-
         .no-announcements-message {
             text-align: center;
             padding: 60px 20px;
             background-color: #e9f5f7;
             border-radius: var(--border-radius);
             border: 1px dashed var(--primary-color);
-        }
-
-        .no-announcements-message h4 {
-            color: var(--primary-color);
-        }
-
-        .no-announcements-message p {
-            color: var(--light-text-color);
         }
 
         .footer {
@@ -252,9 +233,17 @@
             color: var(--white-color);
         }
 
+        /* ⭐ ADDED: Responsive container for social icons */
+        .social-icons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
         .footer .social-icon {
             color: rgba(255, 255, 255, 0.7);
-            margin: 0 12px;
+            margin: 0; /* Use gap instead of margin */
             font-size: 1.5rem;
             transition: all 0.3s ease;
         }
@@ -272,11 +261,14 @@
             color: rgba(255, 255, 255, 0.5);
         }
 
-        /* Styles for attached files section */
+        /* ⭐ MODIFIED: Use flexbox for better file attachment layout */
         .attached-files {
             margin-top: 15px;
             padding-top: 15px;
             border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .file-link {
@@ -288,9 +280,11 @@
             font-size: 0.9rem;
             color: var(--text-color);
             text-decoration: none;
-            margin-right: 10px;
-            margin-bottom: 10px;
             transition: background-color 0.2s;
+            /* ⭐ ADDED: Ensure long filenames wrap */
+            overflow-wrap: break-word;
+            word-break: break-word;
+            max-width: 100%;
         }
 
         .file-link:hover {
@@ -302,20 +296,80 @@
             margin-right: 8px;
         }
 
-        .file-link:hover i {
-            color: var(--primary-color);
+        /* --- Responsive Design Adjustments --- */
+        @media (max-width: 991.98px) {
+            .navbar .navbar-collapse {
+                margin-top: 0.5rem;
+                border-top: 1px solid var(--border-color);
+                padding-top: 0.5rem;
+            }
+            .navbar-nav .nav-item {
+                margin: 0.2rem 0;
+            }
+            .navbar-nav .nav-link {
+                padding: 0.75rem;
+            }
+             .navbar-nav .nav-link.active, .navbar-nav .nav-link:hover {
+                transform: none;
+            }
+            .navbar-nav .btn-logout {
+                 width: 100%;
+                 margin-top: 0.5rem;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .main-content {
+                padding: 0;
+            }
+
+            .main-content .container {
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            .header-section {
+                border-radius: 0;
+                margin-bottom: 0;
+                padding: 40px 20px;
+            }
+
+            .header-section h1 {
+                font-size: 2rem;
+            }
+            
+            .content-card {
+                 border-radius: 0;
+                 border-left: none;
+                 border-right: none;
+                 box-shadow: none;
+                 padding: 30px 20px;
+            }
+            
+            .announcement-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .announcement-meta small {
+                display: block;
+            }
+            .announcement-meta small:not(:last-child) {
+                 margin-bottom: 5px;
+            }
+
+            .announcement-meta .mx-2 {
+                display: none;
+            }
+
+            /* ⭐ ADDED: Vertical padding for stacked footer links */
+            .footer .nav-link {
+                padding-top: .4rem;
+                padding-bottom: .4rem;
+            }
         }
 
-        .btn-edit {
-            color: var(--secondary-color);
-            opacity: 0.7;
-            transition: color 0.2s, opacity 0.2s;
-        }
-
-        .btn-edit:hover {
-            color: var(--primary-color);
-            opacity: 1;
-        }
     </style>
 </head>
 
@@ -369,8 +423,8 @@
                         <input type="text" class="form-control" id="title" name="title" required>
                     </div>
 
-                    <div class="row mb-3">
-                        <div class="col-md-6">
+                    <div class="row mb-3 gy-3 gy-md-0">
+                        <div class="col-12 col-md-6">
                             <label for="department" class="form-label">Target Department</label>
                             <select class="form-select" id="department" name="department" required>
                                 {% if admin_department == 'ALL_BRANCHES' %}
@@ -383,7 +437,7 @@
                                 {% endif %}
                             </select>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="semester" class="form-label">Target Semester</label>
                             <select class="form-select" id="semester" name="semester" required>
                                 <option value="0" selected>All Semesters</option>
@@ -467,23 +521,21 @@
                                 </div>
                                 {% endif %}
                             </div>
-                            {% set is_super_admin = current_admin_info and current_admin_info.department ==
-                            'ALL_BRANCHES' %}
                             <div class="announcement-actions">
                                 {% if announcement.user_id == session['user_id'] %}
-                                <button type="button" class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal"
+                                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                                     data-bs-target="#editAnnouncementModal" data-announcement-id="{{ announcement.id }}"
                                     data-announcement-title="{{ announcement.title }}"
                                     data-announcement-content="{{ announcement.content }}"
                                     data-attached-files="{{ announcement.attached_files | default('') }}">
-                                    <i class="fas fa-edit me-1"></i> Edit
+                                    <i class="fas fa-edit"></i> <span class="d-none d-sm-inline">Edit</span>
                                 </button>
                                 {% endif %}
                                 {% if is_super_admin or announcement.user_id == session['user_id'] %}
-                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
                                     data-bs-target="#confirmDeleteModal"
                                     data-action="{{ url_for('delete_announcement', announcement_id=announcement.id) }}">
-                                    <i class="fas fa-trash me-1"></i> Delete
+                                    <i class="fas fa-trash"></i> <span class="d-none d-sm-inline">Delete</span>
                                 </button>
                                 {% endif %}
                             </div>
@@ -499,7 +551,7 @@
                                 Semester {{ announcement.semester }}
                                 {% endif %}
                             </small>
-                            <span class="mx-2">|</span>
+                            <span class="mx-2 d-none d-md-inline">|</span>
                             <small>
                                 <i class="fas fa-user-shield me-1"></i>
                                 <strong>Posted by:</strong> {{ announcement.user.fullname }}
@@ -548,7 +600,7 @@
                                 required></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="edit-file_upload" class="form-label">Currently Attached Files</label>
+                            <label class="form-label">Currently Attached Files</label>
                             <div id="current-attached-files" class="mb-2"></div>
                             <label for="edit-file_upload" class="form-label">Replace or Add New Files (Optional)</label>
                             <input type="file" class="form-control" id="edit-file_upload" name="files[]" multiple
@@ -588,7 +640,8 @@
     <footer class="footer">
         <div class="container text-center">
             <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Vision<span class="ed">ED</span></a>
-            <ul class="nav justify-content-center my-4">
+            
+            <ul class="nav flex-column flex-md-row justify-content-md-center my-4">
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_admin') }}">Profile</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('registered_users') }}">Registered Users</a>
                 </li>
@@ -599,7 +652,8 @@
                         href="{{ url_for('admin_announcements') }}">Announcements</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
-            <div class="mb-4">
+
+            <div class="mb-4 social-icons-container">
                 <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
                 <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
                 <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
@@ -633,23 +687,20 @@
                     const contentInput = document.getElementById('edit-content');
                     const currentFilesDiv = document.getElementById('current-attached-files');
 
-                    modalTitle.textContent = `Edit Announcement - ${announcementTitle}`; // Corrected title
+                    modalTitle.textContent = `Edit Announcement - ${announcementTitle}`;
                     form.action = `/admin/announcements/edit/${announcementId}`;
                     titleInput.value = announcementTitle;
                     contentInput.value = announcementContent;
 
-                    // Display currently attached files
                     currentFilesDiv.innerHTML = '';
-                    if (attachedFilesString) {
+                    if (attachedFilesString && attachedFilesString.length > 0) {
                         const files = attachedFilesString.split(',');
                         files.forEach(file => {
                             if (file) {
-                                const fileLink = document.createElement('a');
-                                fileLink.href = "{{ url_for('download_announcement_file', filename='') }}" + file;
-                                fileLink.target = "_blank";
-                                fileLink.classList.add('badge', 'bg-secondary', 'me-2');
-                                fileLink.textContent = file;
-                                currentFilesDiv.appendChild(fileLink);
+                                const fileBadge = document.createElement('span');
+                                fileBadge.classList.add('badge', 'bg-secondary', 'me-2');
+                                fileBadge.textContent = file;
+                                currentFilesDiv.appendChild(fileBadge);
                             }
                         });
                     } else {
@@ -677,6 +728,6 @@
             }
         });
     </script>
-</body>
+</body> 
 
 </html>

@@ -166,7 +166,7 @@
             border-color: var(--primary-color);
         }
 
-        /* --- Footer (Consistent with other pages) --- */
+        /* --- Footer (Updated Styling) --- */
         .footer {
             background-color: var(--secondary-color);
             color: var(--white-color);
@@ -187,9 +187,18 @@
             color: var(--white-color);
         }
 
+        /* ⭐ ADDED: Container for social icons */
+        .social-icons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px; /* Modern spacing */
+        }
+
+        /* ⭐ UPDATED: social icon margin is now handled by container gap */
         .footer .social-icon {
             color: rgba(255, 255, 255, 0.7);
-            margin: 0 12px;
+            margin: 0; /* Set margin to 0 */
             font-size: 1.5rem;
             transition: all 0.3s ease;
         }
@@ -206,6 +215,36 @@
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.5);
         }
+        
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 767.98px) {
+            .main-content {
+                padding: 40px 0;
+            }
+
+            .welcome-card {
+                padding: 30px 20px;
+                margin-bottom: 40px;
+            }
+
+            .welcome-card h1 {
+                font-size: 2rem;
+            }
+
+            .welcome-card p {
+                font-size: 1rem;
+            }
+
+            .dashboard-card {
+                padding: 25px;
+            }
+            
+            .dashboard-card .card-icon {
+                font-size: 2.5rem;
+                margin-bottom: 15px;
+            }
+        }
+
     </style>
 </head>
 
@@ -311,11 +350,11 @@
     <footer class="footer">
         <div class="container text-center">
             <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Vision<span class="ed">ED</span></a>
-            <ul class="nav justify-content-center my-4">
+            <ul class="nav flex-column flex-md-row justify-content-md-center my-4">
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
-            <div class="mb-4">
+            <div class="mb-4 social-icons-container">
                 <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
                 <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
                 <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>

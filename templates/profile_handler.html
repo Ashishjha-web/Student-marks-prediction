@@ -167,10 +167,19 @@
         .footer .nav-link:hover {
             color: var(--white-color);
         }
+        
+        /* ⭐ ADDED: Container for social icons */
+        .social-icons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
 
+        /* ⭐ UPDATED: social icon margin is now handled by container gap */
         .footer .social-icon {
             color: rgba(255, 255, 255, 0.7);
-            margin: 0 12px;
+            margin: 0;
             font-size: 1.5rem;
             transition: all 0.3s ease;
         }
@@ -186,6 +195,38 @@
             margin-top: 40px;
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* --- Responsive Styles --- */
+        @media (max-width: 767.98px) {
+            .main-content {
+                padding: 40px 15px;
+            }
+            .handler-card {
+                padding: 30px;
+            }
+            .handler-card h1 {
+                font-size: 1.8rem;
+            }
+            .handler-card .handler-icon {
+                font-size: 3.5rem;
+            }
+            .footer .nav {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .handler-card {
+                padding: 25px;
+            }
+            .handler-card h1 {
+                font-size: 1.5rem;
+            }
+            .handler-card p {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -203,9 +244,9 @@
                 <ul class="navbar-nav ms-auto">
                     <!-- The nav link will redirect based on the user's role -->
                     {% if user_role == 'student' %}
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_student') }}">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('student_dashboard') }}">Dashboard</a></li>
                     {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_admin') }}">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
                     {% endif %}
                     <li class="nav-item"><a class="btn btn-logout" href="{{ url_for('logout') }}">Logout</a></li>
                 </ul>
@@ -236,16 +277,17 @@
     <footer class="footer">
         <div class="container text-center">
             <a class="navbar-brand" href="{{ url_for('home') }}">Vision<span class="ed">ED</span></a>
-            <ul class="nav justify-content-center my-4">
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}">Home</a></li>
+            <ul class="nav flex-column flex-md-row justify-content-md-center my-4">
                 {% if user_role == 'student' %}
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('student_dashboard') }}">Dashboard</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_student') }}">Profile</a></li>
                 {% else %}
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_admin') }}">Profile</a></li>
                 {% endif %}
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
-            <div class="mb-4">
+            <div class="mb-4 social-icons-container">
                 <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
                 <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
                 <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
@@ -262,3 +304,4 @@
 </body>
 
 </html>
+

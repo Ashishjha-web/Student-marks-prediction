@@ -162,9 +162,10 @@
 
         th,
         td {
-            padding: 12px 5px;
+            padding: 12px 15px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
         }
 
         th {
@@ -183,35 +184,15 @@
             font-weight: 700;
         }
 
-        .level-Top {
-            color: var(--primary-color);
-        }
-
-        .level-Good {
-            color: #28a745;
-        }
-
-        .level-Average {
-            color: #ffc107;
-        }
-
-        .level-Below {
-            color: #dc3545;
-        }
+        .level-Top { color: var(--primary-color); }
+        .level-Good { color: #28a745; }
+        .level-Average { color: #ffc107; }
+        .level-Below { color: #dc3545; }
 
         .analysis-card p {
             font-size: 1em;
             line-height: 1.6;
             color: var(--light-text-color);
-        }
-
-        @media (max-width: 992px) {
-
-            .results-grid,
-            .charts-container-grid,
-            .attendance-charts-grid {
-                grid-template-columns: 1fr;
-            }
         }
 
         .modal-body h2 {
@@ -315,15 +296,8 @@
         }
 
         @keyframes fadeInScale {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .custom-modal-backdrop {
@@ -367,6 +341,7 @@
             margin-bottom: 1.5rem;
         }
 
+        /* --- Footer (Updated Styling) --- */
         .footer {
             background-color: var(--secondary-color);
             color: var(--white-color);
@@ -387,9 +362,18 @@
             color: var(--white-color);
         }
 
+        /* ⭐ ADDED: Container for social icons */
+        .social-icons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px; /* Modern spacing */
+        }
+
+        /* ⭐ UPDATED: social icon margin is now handled by container gap */
         .footer .social-icon {
             color: rgba(255, 255, 255, 0.7);
-            margin: 0 12px;
+            margin: 0; /* Set margin to 0 */
             font-size: 1.5rem;
             transition: all 0.3s ease;
         }
@@ -406,6 +390,93 @@
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.5);
         }
+
+        /* --- Responsive Styles --- */
+
+        @media (max-width: 992px) {
+            .results-grid,
+            .charts-container-grid,
+            .attendance-charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 40px 0;
+            }
+            .results-container {
+                padding: 25px;
+            }
+            .results-header h1, .form-header h1 {
+                font-size: 1.8rem;
+            }
+            .chart-container {
+                height: 300px;
+            }
+
+            .chart-wrapper {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch; 
+            }
+            
+            .chart-wrapper .chart-container {
+                min-width: 500px; 
+            }
+            
+            .modal-body h2 {
+                font-size: 1.3rem;
+                margin-top: 1.5rem;
+            }
+            
+            /* ⭐ REMOVED: Redundant footer styles are now handled by Bootstrap classes */
+        }
+
+        @media (max-width: 576px) {
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+            .navbar-nav .nav-link {
+                margin: 0.25rem 0;
+                text-align: center;
+            }
+            .navbar-nav .nav-item:last-child {
+                padding-top: 0.5rem;
+            }
+            .main-content {
+                padding: 20px 0;
+            }
+            .results-container {
+                padding: 15px;
+            }
+            .card {
+                padding: 15px;
+            }
+            .results-header h1, .form-header h1 {
+                font-size: 1.5rem;
+                margin-bottom: 25px;
+            }
+            .analysis-card h3 {
+                font-size: 1.3em;
+            }
+            .chart-container {
+                height: 280px;
+            }
+            th, td {
+                padding: 10px 8px;
+                font-size: 0.9rem;
+            }
+            .footer {
+                padding: 40px 0 20px;
+            }
+            .footer .social-icon {
+                font-size: 1.3rem;
+            }
+            .custom-modal-content {
+                padding: 20px;
+            }
+        }
+
     </style>
 </head>
 
@@ -417,7 +488,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_student') }}">Profile</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('my_courses') }}">My Courses</a></li>
                     <li class="nav-item"><a class="nav-link active" href="{{ url_for('subject_entry') }}">Performance
@@ -453,33 +524,42 @@
                 <div class="charts-container-grid">
                     <div class="card">
                         <h2>Predicted Marks Overview</h2>
-                        <div class="chart-container">
-                            <canvas id="marksChart"></canvas>
+                        <div class="chart-wrapper">
+                            <div class="chart-container">
+                                <canvas id="marksChart"></canvas>
+                            </div>
                         </div>
                     </div>
                     <div class="card">
                         <h2>Subject Contribution (%)</h2>
-                        <div class="chart-container">
-                            <canvas id="contributionChart"></canvas>
+                        <div class="chart-wrapper">
+                            <div class="chart-container">
+                                <canvas id="contributionChart"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
+                {% if projected_attendance and projected_attendance|length > 0 %}
                 <div class="attendance-charts-grid">
                     <div class="card">
                         <h2>Previous Semester Attendance (%)</h2>
-                        <div class="chart-container">
-                            <canvas id="prevAttendanceChart"></canvas>
+                        <div class="chart-wrapper">
+                            <div class="chart-container">
+                                <canvas id="prevAttendanceChart"></canvas>
+                            </div>
                         </div>
                     </div>
                     <div class="card">
                         <h2>Predicted Attendance Trend (%)</h2>
-                        <div class="chart-container">
-                            <canvas id="predictedAttendanceChart"></canvas>
+                        <div class="chart-wrapper">
+                            <div class="chart-container">
+                                <canvas id="predictedAttendanceChart"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
-
+                {% endif %}
                 <div class="results-grid">
                     <div class="card analysis-card">
                         <h2>Overall Analysis</h2>
@@ -494,26 +574,28 @@
 
                 <div class="card" style="margin-top: 30px;">
                     <h2>Detailed Subject Breakdown</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Subject</th>
-                                <th>Expected Marks (out of 70)</th>
-                                <th>Performance Level</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if predictions %}
-                            {% for subject, data in predictions.items() %}
-                            <tr>
-                                <td>{{ subject }}</td>
-                                <td><b>{{ data.mark }}</b></td>
-                                <td><span class="level-{{ data.level.split(' ')[0] }}">{{ data.level }}</span></td>
-                            </tr>
-                            {% endfor %}
-                            {% endif %}
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Expected Marks (out of 70)</th>
+                                    <th>Performance Level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if predictions %}
+                                {% for subject, data in predictions.items() %}
+                                <tr>
+                                    <td>{{ subject }}</td>
+                                    <td><b>{{ data.mark }}</b></td>
+                                    <td><span class="level-{{ data.level.split(' ')[0] }}">{{ data.level }}</span></td>
+                                </tr>
+                                {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div class="text-center mt-4">
@@ -632,7 +714,7 @@
     <footer class="footer">
         <div class="container text-center">
             <a class="navbar-brand" href="{{ url_for('student_dashboard') }}">Vision<span class="ed">ED</span></a>
-            <ul class="nav justify-content-center my-4">
+            <ul class="nav flex-column flex-md-row justify-content-md-center my-4">
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_student') }}">Profile</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('my_courses') }}">My Courses</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('subject_entry') }}">Performance Analytics</a>
@@ -643,7 +725,7 @@
                 </li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
-            <div class="mb-4">
+            <div class="mb-4 social-icons-container">
                 <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
                 <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
                 <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
@@ -800,27 +882,33 @@
         }
         
         function renderPredictedAttendanceChart() {
-             {% set attendance_data = {} %}
+            {% set attendance_data = {} %}
             {% for key, value in saved_marks.items() %}
                 {% if key.startswith('prev_attendance_') and value %}
                     {% set num = key.split('_')[-1] | int %}
                     {% set _ = attendance_data.update({num: value | int}) %}
                 {% endif %}
             {% endfor %}
-            const attendanceValues = Object.values({{ attendance_data | tojson | safe }});
+            const attendanceData = {{ attendance_data | tojson | safe }};
+            const sortedKeys = Object.keys(attendanceData).map(Number).sort((a, b) => a - b);
+            
+            if(sortedKeys.length === 0) return;
 
-            if(attendanceValues.length === 0) return;
+            const lastSemNum = sortedKeys[sortedKeys.length - 1];
+            const lastAttendanceValue = attendanceData[lastSemNum];
+            const lastAttendanceLabel = `Semester ${lastSemNum}`;
 
-            const lastAttendance = attendanceValues[attendanceValues.length - 1];
-            const avgAttendance = attendanceValues.reduce((a, b) => a + b, 0) / attendanceValues.length;
-            const isUpwardTrend = avgAttendance >= lastAttendance;
+            const projectedAttendanceData = {{ projected_attendance | tojson | safe }};
+            const projectedLabel = Object.keys(projectedAttendanceData)[0];
+            const projectedValue = projectedAttendanceData[projectedLabel];
+
+            const isUpwardTrend = projectedValue >= lastAttendanceValue;
 
             const ctx = document.getElementById('predictedAttendanceChart').getContext('2d');
-
             if (predictedAttendanceChart) predictedAttendanceChart.destroy();
 
             const gradient = ctx.createLinearGradient(0, 0, 0, 350);
-             if (isUpwardTrend) {
+            if (isUpwardTrend) {
                 gradient.addColorStop(0, 'rgba(46, 204, 113, 0.6)');
                 gradient.addColorStop(1, 'rgba(46, 204, 113, 0)');
             } else {
@@ -829,14 +917,13 @@
             }
             const borderColor = isUpwardTrend ? 'rgba(46, 204, 113, 1)' : 'rgba(231, 76, 60, 1)';
 
-
             predictedAttendanceChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: [`Semester ${attendanceValues.length}`, `Predicted Sem ${attendanceValues.length + 1}`],
+                    labels: [lastAttendanceLabel, projectedLabel],
                     datasets: [{
                         label: 'Attendance %',
-                        data: [lastAttendance, avgAttendance],
+                        data: [lastAttendanceValue, projectedValue],
                         borderColor: borderColor,
                         backgroundColor: gradient,
                         fill: true,
@@ -889,14 +976,18 @@
         document.addEventListener('DOMContentLoaded', function () {
             const hasPredictions = {{ (predictions and predictions | length > 0) | tojson }};
             const hasSavedMarks = {{ (saved_marks and saved_marks | length > 0) | tojson }};
+            const hasAttendance = {{ (projected_attendance and projected_attendance|length > 0) | tojson }};
 
             if (hasPredictions) {
                 document.getElementById('predictionResults').style.display = 'block';
                 document.getElementById('noDataMessage').style.display = 'none';
                 renderPredictionChart();
                 renderContributionChart();
-                renderPrevAttendanceChart();
-                renderPredictedAttendanceChart();
+                
+                if (hasAttendance) {
+                    renderPrevAttendanceChart();
+                    renderPredictedAttendanceChart();
+                }
             } else {
                 document.getElementById('predictionResults').style.display = 'none';
                 document.getElementById('noDataMessage').style.display = 'block';
@@ -949,7 +1040,7 @@
 
             const entries = container.getElementsByClassName('dynamic-entry');
             const isAttendance = containerId.includes('attendance');
-            const placeholderText = isAttendance ? 'Semester Attendance %' : 'Class Test Score';
+            const placeholderText = isAttendance ? `Semester Attendance %` : 'Class Test Score';
             const namePrefix = isAttendance ? 'prev_attendance' : containerId.replace('_tests', '_ct');
 
             for (let i = 0; i < entries.length; i++) {
@@ -959,7 +1050,7 @@
 
                 if (input) {
                     input.name = `${namePrefix}_${newIndex}`;
-                    input.placeholder = `${placeholderText} ${newIndex}`;
+                    input.placeholder = isAttendance ? `Semester ${newIndex} Attendance %` : `${placeholderText} ${newIndex}`;
                 }
                 if (removeBtn) {
                     removeBtn.classList.toggle('is-hidden', entries.length <= 1);
@@ -979,4 +1070,3 @@
 </body>
 
 </html>
-

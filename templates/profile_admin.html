@@ -255,13 +255,29 @@
             padding: 0.5rem 1rem;
         }
 
+        /* On mobile (flex-column), add some vertical padding */
+        @media (max-width: 767.98px) {
+            .footer .nav-link {
+                padding: 0.3rem 1rem;
+            }
+        }
+
         .footer .nav-link:hover {
             color: var(--white-color);
+        }
+        
+        /* ⭐ ADDED: Container for social icons */
+        .social-icons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px; /* Modern spacing, replaces margin */
         }
 
         .footer .social-icon {
             color: rgba(255, 255, 255, 0.7);
-            margin: 0 12px;
+            /* margin: 0 12px; */ /* <-- REMOVED this */
+            margin: 0; /* Set margin to 0, gap handles spacing */
             font-size: 1.5rem;
             transition: all 0.3s ease;
         }
@@ -277,6 +293,40 @@
             margin-top: 40px;
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 767.98px) {
+            .main-content {
+                padding: 40px 0;
+                /* Reduce vertical padding on mobile */
+            }
+
+            .profile-card {
+                padding: 20px;
+                /* Reduce card padding on mobile */
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+                /* Adjust heading size for smaller screens */
+            }
+
+            /* Adjust layout for stacked view on mobile */
+            .row .col-md-4 {
+                margin-bottom: 30px;
+                /* Add space between picture and form when stacked */
+            }
+
+            .profile-picture-section {
+                margin-bottom: 0;
+                /* Remove original margin to avoid double spacing */
+            }
+
+            .btn-submit {
+                width: 100%;
+                /* Make button full-width for better mobile UX */
+            }
         }
     </style>
 </head>
@@ -472,7 +522,8 @@
     <footer class="footer">
         <div class="container text-center">
             <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Vision<span class="ed">ED</span></a>
-            <ul class="nav justify-content-center my-4">
+            
+            <ul class="nav flex-column flex-md-row justify-content-md-center my-4">
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_admin') }}">Profile</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('registered_users') }}">Registered Users</a>
                 </li>
@@ -483,7 +534,8 @@
                 </li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
-            <div class="mb-4">
+            
+            <div class="mb-4 social-icons-container">
                 <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
                 <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
                 <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>

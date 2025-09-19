@@ -6,13 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VisionED - Our Team</title>
 
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Font Awesome Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-    <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -20,9 +17,7 @@
     <style>
         :root {
             --primary-color: #17a2b8;
-            /* A modern teal */
             --secondary-color: #2c3e50;
-            /* A deep, professional blue-gray */
             --background-color: #f8f9fa;
             --text-color: #343a40;
             --light-text-color: #6c757d;
@@ -88,16 +83,18 @@
         }
 
         /* --- Section Title --- */
-        .section-title h1, .section-title h2 {
+        .section-title h1,
+        .section-title h2 {
             font-weight: 700;
         }
+
         .section-title p {
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
         }
 
-        /* --- Team Section (REDESIGNED) --- */
+        /* --- Team Section --- */
         .team-card {
             background: var(--white-color);
             border-radius: var(--border-radius);
@@ -121,17 +118,17 @@
             position: relative;
             margin-bottom: 20px;
         }
-        
+
         .team-card img {
             width: 140px;
             height: 140px;
             border-radius: 50%;
             object-fit: cover;
             border: 5px solid var(--background-color);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             transition: all 0.4s ease;
         }
-        
+
         .team-card:hover img {
             transform: scale(1.05);
         }
@@ -143,13 +140,13 @@
             margin-bottom: 10px;
             font-size: 0.9rem;
         }
-        
+
         .team-card .card-content {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
         }
-        
+
         .team-card .card-content p {
             flex-grow: 1;
         }
@@ -166,6 +163,7 @@
             height: 40px;
             border-radius: 50%;
             background-color: #f0f2f5;
+            text-decoration: none; /* ADDED: Removes the underline */
         }
 
         .team-card .social-links a:hover {
@@ -184,10 +182,8 @@
 
         .footer .navbar-brand {
             color: var(--white-color) !important;
-            font-size: 1.8rem;
-            font-weight: 700;
         }
-        
+
         .footer h5 {
             font-weight: 600;
             margin-bottom: 1rem;
@@ -201,7 +197,7 @@
             text-decoration: none;
             transition: all 0.3s ease;
         }
-        
+
         .footer .footer-link:hover {
             color: var(--primary-color);
             padding-left: 5px;
@@ -214,7 +210,7 @@
             transition: all 0.3s ease;
             text-decoration: none;
         }
-        
+
         .footer .social-icon:hover {
             color: var(--primary-color);
             transform: translateY(-3px);
@@ -227,11 +223,48 @@
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.6);
         }
+
+        /* =================================================== */
+        /* Responsive Styles for All Devices                   */
+        /* =================================================== */
+        
+        /* For Tablets and Mobiles (screens smaller than 992px) */
+        @media (max-width: 991.98px) {
+            .main-content {
+                padding: 60px 0;
+            }
+            .section-title h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* For Small Mobile Devices (screens smaller than 768px) */
+        @media (max-width: 767.98px) {
+            .main-content {
+                padding: 40px 15px;
+            }
+            .section-title h1 {
+                font-size: 2.2rem;
+            }
+            .team-card {
+                padding: 20px;
+            }
+            .team-card img {
+                width: 120px;
+                height: 120px;
+            }
+        }
+        
+        /* For Extra Large Desktop Screens */
+        @media (min-width: 1400px) {
+            .container {
+                max-width: 1320px;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
             <a class="navbar-brand" href="/">Vision<span class="ed">ED</span></a>
@@ -250,18 +283,14 @@
         </div>
     </nav>
 
-    <!-- Main Content Area -->
     <main class="main-content">
         <div class="container">
-            <!-- Title -->
             <div class="text-center mb-5 section-title">
                 <h1>Meet Our Team</h1>
                 <p class="lead text-muted">The passionate minds behind VisionED, dedicated to revolutionizing education.</p>
             </div>
-            
-            <!-- Core Team -->
+
             <div class="row g-4 justify-content-center">
-                <!-- Team Member 1: Ashish Jha -->
                 <div class="col-lg-3 col-md-6">
                     <div class="team-card">
                         <div class="profile-wrapper">
@@ -272,15 +301,14 @@
                             <span class="role">Team Leader | Backend & ML Lead</span>
                             <p class="text-muted small">Manages backend logic, trains our predictive models, and contributes to frontend development.</p>
                             <div class="social-links mt-3">
-                                <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                                <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
-                                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                                <a href="https://www.linkedin.com/in/ashish-jha-20384029b" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                                <a href="https://github.com/Ashishjha-web" title="GitHub"><i class="fab fa-github"></i></a>
+                                <a href="https://www.instagram.com/ashishjha9546" title="Instagram"><i class="fab fa-instagram"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Team Member 2: Sagar Raj -->
                 <div class="col-lg-3 col-md-6">
                     <div class="team-card">
                          <div class="profile-wrapper">
@@ -291,34 +319,32 @@
                             <span class="role">Backend & Frontend Developer</span>
                             <p class="text-muted small">Works on the Python backend, assists in model training, and specializes in frontend UI/UX design.</p>
                             <div class="social-links mt-3">
-                                <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                                <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
-                                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                                <a href="https://www.linkedin.com/in/sagar-raj-295443383" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                                <a href="https://github.com/SrRaj-code" title="GitHub"><i class="fab fa-github"></i></a>
+                                <a href="https://www.instagram.com/sr.cse818" title="Instagram"><i class="fab fa-instagram"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Team Member 3: Jyesh Kumar Bharat -->
                 <div class="col-lg-3 col-md-6">
                     <div class="team-card">
                          <div class="profile-wrapper">
-                           <img src="{{ url_for('static', filename='uploads/images/jyesh.jpg') }}" alt="Profile picture of Jyesh Kumar Bharat">
+                            <img src="{{ url_for('static', filename='uploads/images/jyesh.jpg') }}" alt="Profile picture of Jyesh Kumar Bharat">
                          </div>
                         <div class="card-content">
                             <h5 class="fw-bold">Jyesh Kumar Bharat</h5>
                             <span class="role">Frontend & Data Specialist</span>
                             <p class="text-muted small">Focuses on frontend implementation, data collection, and managing the data upload process.</p>
                             <div class="social-links mt-3">
-                                <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                                <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
-                                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                                <a href="https://www.linkedin.com/in/jyesh-kumar-bharat-963171385/" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                                <a href="https://github.com/jyeshkumarbharat" title="GitHub"><i class="fab fa-github"></i></a>
+                                <a href="https://www.instagram.com/jyesh_kr_bharat001" title="Instagram"><i class="fab fa-instagram"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Team Member 4: Ritika Kumari -->
                 <div class="col-lg-3 col-md-6">
                     <div class="team-card">
                         <div class="profile-wrapper">
@@ -331,7 +357,7 @@
                             <div class="social-links mt-3">
                                 <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
                                 <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
-                                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                                <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
                             </div>
                         </div>
                     </div>
@@ -340,11 +366,9 @@
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="row gy-4 text-center text-md-start">
-                <!-- Column 1: Brand & About -->
                 <div class="col-lg-4 col-md-12 mb-3 mb-lg-0">
                     <a class="navbar-brand" href="/">Vision<span class="ed">ED</span></a>
                     <p class="mt-2" style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">
@@ -352,7 +376,6 @@
                     </p>
                 </div>
 
-                <!-- Column 2: Quick Links -->
                 <div class="col-lg-2 col-md-4 col-6">
                     <h5 class="mb-3">Links</h5>
                     <ul class="list-unstyled">
@@ -363,7 +386,6 @@
                     </ul>
                 </div>
 
-                <!-- Column 3: Resources -->
                 <div class="col-lg-3 col-md-4 col-6">
                     <h5 class="mb-3">Resources</h5>
                     <ul class="list-unstyled">
@@ -374,7 +396,6 @@
                     </ul>
                 </div>
 
-                <!-- Column 4: Follow Us -->
                 <div class="col-lg-3 col-md-4">
                     <h5 class="mb-3">Follow Us</h5>
                     <div class="d-flex justify-content-center justify-content-md-start">
@@ -388,7 +409,6 @@
                 </div>
             </div>
 
-            <!-- Copyright -->
             <div class="row">
                 <div class="col-12">
                     <div class="copyright text-center">
@@ -399,9 +419,7 @@
         </div>
     </footer>
 
-    <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
-

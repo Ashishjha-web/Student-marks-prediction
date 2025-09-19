@@ -7,9 +7,7 @@
     <title>VisionED - Edit Admin</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -270,9 +268,16 @@
             color: var(--white-color);
         }
 
+        .social-icons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
         .footer .social-icon {
             color: rgba(255, 255, 255, 0.7);
-            margin: 0 12px;
+            margin: 0;
             font-size: 1.5rem;
             transition: all 0.3s ease;
         }
@@ -289,6 +294,53 @@
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.5);
         }
+
+        /* --- Responsive Styles --- */
+        @media (max-width: 767.98px) {
+            .main-content {
+                padding: 40px 15px;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .profile-card {
+                padding: 25px;
+            }
+
+            .btn-submit {
+                width: 100%;
+            }
+
+            /* ⭐ FINAL FIX: Force vertical alignment for all footer content and navigation links */
+            .footer .container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+            }
+
+            .footer .my-4, .footer .mb-4 {
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
+            }
+            
+            /* This is the new, more specific rule that will force the links to stack vertically */
+            .footer .nav {
+                flex-direction: column !important; /* Force column layout */
+                width: 100%;
+            }
+
+            .footer .nav-item {
+                 margin-bottom: 0.5rem; /* Add some space between links */
+            }
+
+            .footer .copyright {
+                 margin-top: 1.5rem;
+                 width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -304,7 +356,7 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="btn btn-back" href="{{ url_for('registered_users') }}?view_as=admins">
-                            <i class="fas fa-arrow-left"></i> Back
+                            <i class="fas fa-arrow-left"></i> Back to Users
                         </a>
                     </li>
                 </ul>
@@ -322,7 +374,7 @@
 
             <div class="row justify-content-center">
                 <div class="col-lg-8">
-                    <div class="profile-card">
+                    <div class="card profile-card">
                         {% with messages = get_flashed_messages(with_categories=true) %}
                         {% if messages %}
                         {% for category, message in messages %}
@@ -425,6 +477,7 @@
     <footer class="footer">
         <div class="container text-center">
             <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Vision<span class="ed">ED</span></a>
+
             <ul class="nav justify-content-center my-4">
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('registered_users') }}">Registered Users</a>
@@ -436,7 +489,8 @@
                 </li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
-            <div class="mb-4">
+
+            <div class="mb-4 social-icons-container">
                 <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
                 <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
                 <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
@@ -471,30 +525,25 @@
                     }
                     reader.readAsDataURL(file);
                 } else {
-                    // Revert to default image if file is cleared
                     profilePicPreview.src = defaultImagePath;
                 }
             });
 
-            // Initial check to display default image if none is set
             if (!profilePicPreview.src || profilePicPreview.src.includes('None')) {
                 profilePicPreview.src = defaultImagePath;
             }
         });
 
-        // Custom validation and alert functions
         function validateForm() {
             const phoneInput = document.getElementById('phone').value;
             const newPassword = document.getElementById('new_password').value;
             const confirmPassword = document.getElementById('confirm_password').value;
 
-            // --- Phone Number Validation ---
             if (phoneInput && !/^\d{10}$/.test(phoneInput)) {
                 showCustomAlert('Please enter a valid 10-digit phone number.');
                 return false;
             }
 
-            // --- Password Validation (optional for this form) ---
             if (newPassword || confirmPassword) {
                 if (newPassword.length < 6) {
                     showCustomAlert('New password must be at least 6 characters long.');
@@ -505,8 +554,7 @@
                     return false;
                 }
             }
-
-            return true; // All checks passed
+            return true;
         }
 
         function showCustomAlert(message) {
