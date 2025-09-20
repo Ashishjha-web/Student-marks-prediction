@@ -442,12 +442,9 @@ def admin_profile_required(f):
 def home():
     return render_template("index.html")
 
-@app.route("/contact", methods=["GET", "POST"])
+@app.route("/contact")
 def contact():
-    if request.method == "POST":
-        name = request.form.get("name")
-        flash(f"Thank you for your message, {name}! We will get back to you shortly.", "success")
-        return redirect(url_for("contact"))
+    """Renders the contact page. The form submission is handled by client-side JavaScript."""
     return render_template("contact.html")
 
 @app.route("/team")
