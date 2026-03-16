@@ -626,7 +626,7 @@
             const confirmAdminCode = document.getElementById('confirm_admin_code').value;
 
             if (phoneInput) {
-                const phoneRegex = /^(?:\+91)?[789]\d{9}$/;
+                const phoneRegex = /^(?:\+91)?[6-9]\d{9}$/;
                 if (!phoneRegex.test(phoneInput)) {
                     showCustomAlert('Please enter a valid 10-digit Indian phone number.');
                     return false;

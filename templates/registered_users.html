@@ -171,12 +171,14 @@
         .footer .nav-link {
             color: rgba(255, 255, 255, 0.7);
             padding: 0.5rem 1rem;
+            transition: color 0.3s ease;
         }
 
         .footer .nav-link:hover {
             color: var(--white-color);
         }
-        
+
+        /* Social Icons */
         .social-icons-container {
             display: flex;
             flex-wrap: wrap;
@@ -186,7 +188,6 @@
 
         .footer .social-icon {
             color: rgba(255, 255, 255, 0.7);
-            margin: 0;
             font-size: 1.5rem;
             transition: all 0.3s ease;
         }
@@ -196,6 +197,7 @@
             transform: scale(1.2);
         }
 
+        /* Copyright */
         .footer .copyright {
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding-top: 20px;
@@ -225,29 +227,36 @@
             .page-header h1 {
                 font-size: 1.8rem;
             }
-            /* --- ⭐ CORRECTED: Responsive Footer Styles --- */
-            .footer .container {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 1.5rem;
+            /* Reduce overall footer vertical space */
+            .footer {
+                padding: 35px 0 15px 0;
+                text-align: center;
             }
-            .footer .my-4,
-            .footer .mb-4 {
-                margin-top: 0 !important;
-                margin-bottom: 0 !important;
-            }
+
+            /* Reduce nav spacing */
             .footer .nav {
                 flex-direction: column !important;
-                width: 100%;
-                gap: 0.5rem;
             }
-            .footer .nav-item {
-                margin-bottom: 0.5rem;
+
+            .footer .nav-link {
+                padding: 0.3rem 0;
             }
+
+            /* Reduce bootstrap spacing safely */
+            .footer .my-4 {
+                margin-top: 1rem !important;
+                margin-bottom: 1rem !important;
+            }
+
+            .footer .mb-4 {
+                margin-bottom: 1rem !important;
+            }
+
+            /* Reduce copyright top space */
             .footer .copyright {
-                margin-top: 1.5rem;
-                width: 100%;
+                margin-top: 20px;
+                padding-top: 15px;
+                font-size: 0.8rem;
             }
         }
         
@@ -505,7 +514,8 @@
     <footer class="footer">
         <div class="container text-center">
             <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Vision<span class="ed">ED</span></a>
-            <ul class="nav justify-content-center my-4">
+            
+            <ul class="nav flex-column flex-md-row justify-content-md-center my-4">
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_admin') }}">Profile</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('registered_users') }}">Registered Users</a>
                 </li>
@@ -516,6 +526,7 @@
                 </li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
+            
             <div class="mb-4 social-icons-container">
                 <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook"></i></a>
                 <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
@@ -614,24 +625,51 @@
                                 <td class="text-center">${actionsHtml}</td>
                             `;
                         } else { // Admins
-                            const actionsHtml = `
-                                <div class="d-flex justify-content-center gap-2">
-                                    <a href="${item.edit_url}" class="btn btn-sm btn-outline-primary btn-icon-text" title="Edit">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </a>
-                                    <button type="button" class="btn btn-sm btn-outline-danger btn-icon-text"
-                                        data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-                                        data-action="${item.delete_url}" title="Delete">
-                                        <i class="fas fa-trash-alt"></i> Delete
-                                    </button>
-                                </div>
-                            `;
+
+                            let actionsHtml = '';
+
+                            const currentUserId = "{{ session['user_id'] }}";
+
+                            // Make sure we compare correct id field
+                            const rowUserId = item.user_id || item.id || item.admin_id;
+
+                            // Show Edit/Delete if:
+                            // 1. It is NOT a Super Admin (department !== 'ALL_BRANCHES')
+                            // OR
+                            // 2. It is the currently logged-in user
+
+                            if (item.department !== 'ALL_BRANCHES' || String(rowUserId) === String(currentUserId)) {
+
+                                actionsHtml = `
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="${item.edit_url}" 
+                                        class="btn btn-sm btn-outline-primary btn-icon-text" 
+                                        title="Edit">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+
+                                        <button type="button" 
+                                            class="btn btn-sm btn-outline-danger btn-icon-text"
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#confirmDeleteModal"
+                                            data-action="${item.delete_url}" 
+                                            title="Delete">
+                                            <i class="fas fa-trash-alt"></i> Delete
+                                        </button>
+                                    </div>
+                                `;
+                            }
+
                             row.innerHTML = `
                                 <td>${index + 1}</td>
-                                <td><img src="/static/uploads/${photoPath}" class="table-profile-img" alt="Profile Photo"></td>
+                                <td>
+                                    <img src="/static/uploads/${photoPath}" 
+                                        class="table-profile-img" 
+                                        alt="Profile Photo">
+                                </td>
                                 <td>${item.name}</td>
                                 <td>${item.department}</td>
-                                <td>${item.phone}</td>
+                                <td>${item.phone || '-'}</td>
                                 <td>${item.email}</td>
                                 <td class="text-center">${actionsHtml}</td>
                             `;

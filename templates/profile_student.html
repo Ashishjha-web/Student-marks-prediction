@@ -493,7 +493,7 @@
             const confirmPassword = document.getElementById('confirm_password').value;
 
             if (phoneInput) {
-                const phoneRegex = /^(?:\+91)?[789]\d{9}$/;
+                const phoneRegex = /^(?:\+91)?[6-9]\d{9}$/;
                 if (!phoneRegex.test(phoneInput)) {
                     showCustomAlert('Please enter a valid 10-digit Indian phone number (e.g., 9876543210 or +919876543210).');
                     return false;
